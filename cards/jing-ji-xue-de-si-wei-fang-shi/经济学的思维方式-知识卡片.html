@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《经济学的思维方式》· 白板手绘逻辑图</title>
+<style>
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .item-title{font-size:31px;font-weight:400;color:var(--ink);line-height:1.25}
+  .item-desc{margin-top:10px;font-size:23px;color:var(--muted);line-height:1.5}
+  .red{color:var(--accent);font-weight:400}
+  .strike{position:relative;display:inline-block;color:var(--muted);font-weight:400}
+  .strike::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:4px;background:var(--accent);border-radius:3px;transform:rotate(-2deg)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:260px;margin-left:auto;margin-right:auto}
+
+  .concept-list{margin-top:28px;display:flex;flex-direction:column;gap:22px}
+  .concept{background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:3px 4px 0 rgba(0,0,0,.06)}
+  .concept .chead{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+  .concept .cnum{flex:0 0 46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center}
+  .concept .cmeta{flex:1;min-width:260px}
+  .concept .cname{font-size:29px;color:var(--accent);line-height:1.2}
+  .concept .cone{font-size:20px;color:var(--muted);margin-top:4px;line-height:1.45}
+  .concept .cbody{margin-top:18px}
+  .concept .cbody p{font-size:23px;line-height:1.55;color:var(--ink);margin-top:10px}
+  .concept .cbody p:first-child{margin-top:0}
+  .concept .cbody b{font-weight:400;color:var(--accent)}
+  .concept .cline{margin-top:18px;padding:16px 18px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:10px}
+  .concept .cline .lab{font-size:19px;color:var(--accent);font-weight:400}
+  .concept .cline p{font-size:22px;color:var(--ink);line-height:1.5;margin-top:6px}
+
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .tagx{font-size:18px;color:var(--ink);background:rgba(106,96,88,.10);border:2px solid var(--line);border-radius:20px;padding:5px 12px;white-space:nowrap}
+
+  .mini-vs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  .mini-vs .mcol{padding:14px 16px;border-radius:12px;background:rgba(106,96,88,.08)}
+  .mini-vs .mcol.good{background:rgba(224,67,46,.08);border:2px solid var(--accent)}
+  .mini-vs .mt{font-size:20px;color:var(--accent);margin-bottom:6px}
+  .mini-vs .mp{font-size:21px;color:var(--ink);line-height:1.5}
+
+  .levels{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .lv{display:flex;gap:12px;align-items:flex-start}
+  .lv .lvn{flex:0 0 30px;height:30px;border-radius:50%;background:var(--line);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center}
+  .lv .lvc{font-size:22px;color:var(--ink);line-height:1.5;flex:1}
+  .lv .lvc b{color:var(--accent);font-weight:400}
+
+  .example{margin-top:16px;padding:14px 18px;border:2px dashed var(--line);border-radius:12px;background:rgba(251,246,240,.7)}
+  .example .ex-title{font-size:19px;color:var(--muted);margin-bottom:6px}
+  .example p{font-size:22px;color:var(--ink);line-height:1.5}
+
+  .fig-center{margin-top:20px;text-align:center}
+  .fig-center svg{max-width:100%;height:auto}
+
+  .ext-title{margin-top:40px;font-size:30px;color:var(--ink);display:flex;align-items:center;gap:12px}
+  .ext-title::before{content:"";display:block;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:38px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+    .mini-vs{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero" style="text-align:center;padding:4px 0 0">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《经济学的思维方式》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">保罗·海恩 等 · 2023</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">浙江文艺出版社（鲁冬旭 译）</div>
+    <div style="margin-top:18px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent);max-width:920px;margin-left:auto;margin-right:auto">天下没有免费的午餐，任何选择都是有成本的</div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 常见误解</a>
+    <a href="#s3" class="tab">③ 核心主张</a>
+    <a href="#s4" class="tab">④ 核心内容</a>
+    <a href="#s5" class="tab">⑤ 核心价值</a>
+  </nav>
+
+  <section class="section" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="prose">
+      <p><b>经济学是一门关于选择的学问。</b>它研究的是：当资源有限、欲望无限时，人怎么权衡、怎么决策。</p>
+      <p>这本书要回答的核心问题只有一个：<span class="red">资源不够时，人是怎么做出选择的？</span></p>
+      <p>一句话：它给的不是标准答案，而是一种看选择的方式。你会发现涨价、排队、稀缺、交换，背后都是同一套“成本—收益”的权衡逻辑。</p>
+    </div>
+  </section>
+
+  <section class="section" id="s2">
+    <div class="sec-title">二 · 大家容易误会的地方</div>
+    <div class="sec-sub">提到经济学，很多人会先想到宏观经济、股市涨跌、国家统计数字——其实那只是一小块。</div>
+    <div class="vs">
+      <div class="col">
+        <span class="tag">常见误会</span>
+        <div class="vt">经济学 = 宏观经济 / 股市 / 国家数字 / 跟我没关系</div>
+        <div class="vd">以为经济学只讲国家大事、货币政策、贸易争端，是电视上专家讨论的东西，普通人听听就好。</div>
+        <div class="ve">后果：觉得这门学问离自己很远，错过了一套理解日常选择的工具。</div>
+      </div>
+      <div class="col">
+        <span class="tag">这本书的视角</span>
+        <div class="vt">经济学 = 每个人每天都在做的选择</div>
+        <div class="vd">加班还是陪家人、买房还是租房、学习还是刷短视频——这些全是经济学要研究的“稀缺下的选择”。宏观经济只是这些个体选择放大后的结果。</div>
+        <div class="ve">关键转变：从“那是专家的事”转向“它直接影响我怎么分配时间和钱”。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="s3">
+    <div class="sec-title">三 · 核心主张</div>
+    <div class="sec-sub">先破除误会，再立起四个支点。这四个支点，就是全书的方法论骨架。</div>
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>世上没有免费的午餐，任何选择都有成本。</b>成本不是你花了多少钱，而是你为了这个选择放弃了什么，你付出了什么样的代价。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>人是根据预期收益和预期成本做决定的。</b>所有社会现象，都产生于一个个普通人的行动和相互作用。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>自愿交换不是等价交换，而是双方都觉得自己赚了。</b>贸易创造财富，因为它让每个人做自己更擅长的事，再互通有无。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>价格反映了稀缺程度。</b>当某种东西变少，价格就会上涨，把人、资源和生产引导到缺口里去。但市场也有失灵的时候，产权、外部性、政府角色需要另作分析。</p></div>
+    </div>
+
+    <div class="quote">
+      <span class="mark">“</span>
+      <blockquote>所有社会现象都产生于个体的行动和相互作用，而个体根据行为给自身带来的预期收益和预期成本进行选择。</blockquote>
+      <div class="ex">经济社会不是一台被设计好的机器，而是无数普通人各自算账之后，自发形成的秩序。</div>
+    </div>
+  </section>
+
+  <section class="section" id="s4">
+    <div class="sec-title">四 · 核心内容</div>
+    <div class="sec-sub">九组看问题的习惯，每组都是普通人生活里常用得着的逻辑工具。</div>
+
+    <div class="core-cards">
+      <div class="ccard">
+        <div class="ctitle">机会成本</div>
+        <div class="ctag">你放弃的那个，才是真成本</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <rect x="30" y="40" width="70" height="90" rx="6" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2.5"/>
+            <text x="65" y="78" font-size="15" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">选择 A</text>
+            <text x="65" y="96" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">你走了这条路</text>
+            <rect x="120" y="40" width="70" height="90" rx="6" fill="rgba(106,96,88,.10)" stroke="#6A6058" stroke-width="2.5"/>
+            <text x="155" y="78" font-size="15" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">选择 B</text>
+            <text x="155" y="96" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">这才是成本</text>
+            <circle cx="110" cy="120" r="8" fill="#E0432E"/>
+            <text x="110" y="24" font-size="14" fill="#201914" text-anchor="middle" font-family="LXGW WenKai">一个路口，只能走一条</text>
+          </svg>
+        </div>
+        <div class="cdesc">选了 A，B 就是你付出的代价；成本不是钱，而是被放弃的机会。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">沉没成本</div>
+        <div class="ctag">已经沉了，就别让它替你做决定</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,80 Q60,80 110,80 Q160,80 210,80" stroke="#6A6058" stroke-width="2" fill="none"/>
+            <path d="M10,80 Q60,110 110,110 Q160,110 210,80" fill="rgba(106,96,88,.12)"/>
+            <rect x="95" y="88" width="30" height="24" rx="4" fill="rgba(106,96,88,.3)" stroke="#6A6058" stroke-width="2"/>
+            <text x="110" y="104" font-size="12" fill="#FFFDFA" text-anchor="middle" font-family="LXGW WenKai">钱</text>
+            <text x="110" y="70" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">已沉水底</text>
+            <path d="M145,55 L125,85" stroke="#E0432E" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="165" y="50" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">别再捞</text>
+          </svg>
+        </div>
+        <div class="cdesc">已经发生、收不回来的成本，不是成本，只是人生里的一个教训。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">交易成本</div>
+        <div class="ctag">做成一件事，花的不仅是钱</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40,60 Q110,50 180,60 L180,130 Q110,140 40,130 Z" fill="rgba(106,96,88,.12)" stroke="#6A6058" stroke-width="2"/>
+            <path d="M40,60 Q110,50 180,60" stroke="#6A6058" stroke-width="2" fill="none"/>
+            <text x="110" y="40" font-size="14" fill="#201914" text-anchor="middle" font-family="LXGW WenKai">看得见的成本</text>
+            <rect x="95" y="70" width="30" height="20" rx="3" fill="rgba(224,67,46,.15)" stroke="#E0432E" stroke-width="1.5"/>
+            <text x="110" y="84" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">钱</text>
+            <text x="110" y="108" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">时间 · 精力 · 人情 · 信息</text>
+            <text x="110" y="126" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">看不见的成本</text>
+          </svg>
+        </div>
+        <div class="cdesc">时间、精力、人情、信息，这些隐性成本常常被忽略。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">稀缺性</div>
+        <div class="ctag">资源有限，欲望无限</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="110" cy="80" r="45" fill="rgba(106,96,88,.12)" stroke="#6A6058" stroke-width="2.5"/>
+            <text x="110" y="85" font-size="15" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">有限资源</text>
+            <path d="M110,20 L110,35" stroke="#E0432E" stroke-width="2"/>
+            <path d="M110,20 L105,32" stroke="#E0432E" stroke-width="2"/>
+            <path d="M110,20 L115,32" stroke="#E0432E" stroke-width="2"/>
+            <text x="110" y="14" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">欲望</text>
+            <path d="M170,80 L185,80" stroke="#E0432E" stroke-width="2"/>
+            <path d="M185,80 L173,75" stroke="#E0432E" stroke-width="2"/>
+            <path d="M185,80 L173,85" stroke="#E0432E" stroke-width="2"/>
+            <text x="198" y="85" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">欲望</text>
+            <path d="M50,80 L35,80" stroke="#E0432E" stroke-width="2"/>
+            <path d="M35,80 L47,75" stroke="#E0432E" stroke-width="2"/>
+            <path d="M35,80 L47,85" stroke="#E0432E" stroke-width="2"/>
+            <text x="22" y="85" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">欲望</text>
+          </svg>
+        </div>
+        <div class="cdesc">因为稀缺，我们才要做减法，聚焦于真正重要的事。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">供需关系</div>
+        <div class="ctag">价格涨，买的人少；价格落，买的人多</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <line x1="35" y1="120" x2="185" y2="120" stroke="#6A6058" stroke-width="2"/>
+            <line x1="35" y1="120" x2="35" y2="25" stroke="#6A6058" stroke-width="2"/>
+            <path d="M45,105 Q80,75 120,45" fill="none" stroke="#E0432E" stroke-width="2.5"/>
+            <text x="135" y="35" font-size="13" fill="#E0432E" font-family="LXGW WenKai">供给</text>
+            <path d="M45,40 Q80,70 120,100" fill="none" stroke="#6A6058" stroke-width="2.5"/>
+            <text x="135" y="110" font-size="13" fill="#6A6058" font-family="LXGW WenKai">需求</text>
+            <circle cx="82" cy="73" r="5" fill="#E0432E"/>
+            <text x="82" y="138" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">平衡点</text>
+          </svg>
+        </div>
+        <div class="cdesc">做人做事也一样，把握尺度，别走极端。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">边际效用递减</div>
+        <div class="ctag">同一东西用多了，效果会变差</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <line x1="30" y1="120" x2="190" y2="120" stroke="#6A6058" stroke-width="2"/>
+            <line x1="30" y1="120" x2="30" y2="25" stroke="#6A6058" stroke-width="2"/>
+            <path d="M35,35 C70,35 100,60 130,85 C155,105 175,112 190,116" fill="none" stroke="#E0432E" stroke-width="2.5"/>
+            <text x="160" y="45" font-size="13" fill="#E0432E" font-family="LXGW WenKai">满足感</text>
+            <rect x="50" y="85" width="22" height="35" rx="3" fill="rgba(106,96,88,.2)" stroke="#6A6058" stroke-width="1.5"/>
+            <rect x="82" y="62" width="22" height="58" rx="3" fill="rgba(106,96,88,.2)" stroke="#6A6058" stroke-width="1.5"/>
+            <rect x="114" y="95" width="22" height="25" rx="3" fill="rgba(106,96,88,.2)" stroke="#6A6058" stroke-width="1.5"/>
+            <text x="63" y="138" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">1</text>
+            <text x="95" y="138" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">2</text>
+            <text x="127" y="138" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">3</text>
+            <text x="160" y="138" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">馒头</text>
+          </svg>
+        </div>
+        <div class="cdesc">吃第一个馒头很香，第三个就撑了。关键看“再多一个”值不值。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">比较优势</div>
+        <div class="ctag">用优势打别人的弱点，而不是拿弱点比优势</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="m7a" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker>
+              <marker id="m7b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#6A6058"/></marker>
+            </defs>
+            <rect x="20" y="50" width="56" height="46" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="48" y="70" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">你</text>
+            <text x="48" y="86" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">擅长 A</text>
+            <rect x="144" y="50" width="56" height="46" rx="5" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="172" y="70" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">我</text>
+            <text x="172" y="86" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">擅长 B</text>
+            <path d="M76,62 L138,62" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m7a)"/>
+            <path d="M138,84 L76,84" fill="none" stroke="#6A6058" stroke-width="2" marker-end="url(#m7b)"/>
+            <text x="107" y="56" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">换 B</text>
+            <text x="107" y="100" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">换 A</text>
+          </svg>
+        </div>
+        <div class="cdesc">不是样样都要比别人强，而是把长板拉得足够长。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">价值交换</div>
+        <div class="ctag">交换不是等价，而是各自觉得赚了</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="m8a" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker>
+              <marker id="m8b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#6A6058"/></marker>
+            </defs>
+            <rect x="25" y="55" width="48" height="38" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="49" y="72" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">苹果</text>
+            <text x="49" y="86" font-size="10" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">你有</text>
+            <rect x="147" y="55" width="48" height="38" rx="5" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="171" y="72" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">梨</text>
+            <text x="171" y="86" font-size="10" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">我有</text>
+            <path d="M73,66 L139,66" fill="none" stroke="#E0432E" stroke-width="2.5" marker-end="url(#m8a)"/>
+            <path d="M139,82 L73,82" fill="none" stroke="#6A6058" stroke-width="2.5" marker-end="url(#m8b)"/>
+            <text x="106" y="55" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">你给我梨</text>
+            <text x="106" y="105" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">我给你苹果</text>
+          </svg>
+        </div>
+        <div class="cdesc">如果两样东西价值完全相等，交换就失去了意义。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">价格与价值</div>
+        <div class="ctag">价格只是锚，价值是主观赋予的</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <rect x="25" y="35" width="62" height="62" rx="5" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="56" y="60" font-size="14" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">水</text>
+            <text x="56" y="78" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">用处大</text>
+            <text x="56" y="92" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">便宜</text>
+            <rect x="133" y="35" width="62" height="62" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="164" y="60" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">钻石</text>
+            <text x="164" y="78" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">用处小</text>
+            <text x="164" y="92" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">很贵</text>
+            <text x="110" y="125" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">价格 ≠ 价值</text>
+          </svg>
+        </div>
+        <div class="cdesc">贵不等于好，便宜不等于差。别让价签替你判断。</div>
+      </div>
+    </div>
+
+    <div class="concept-list">
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">1</div>
+          <div class="cmeta">
+            <div class="cname">机会成本</div>
+            <div class="cone">选了 A，就放弃了 B；B 才是你真正的成本</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>成本永远不是“你花了多少钱”，而是“你为了这个选择，放弃了什么”。在那些被放弃的选择里，说不定有更好的机会。</p>
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">通常理解</div>
+              <div class="mp">成本 = 我掏出去的钱、花掉的时间。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">经济学的理解</div>
+              <div class="mp">成本 = 被放弃的最佳选项。所有成本都是主观的，只存在行为或决策的成本，“东西”本身没有成本。</div>
+            </div>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>晚上有两小时空闲，你选择刷短视频、玩游戏，那你的机会成本可能是“用这两小时学一个能搞钱的技能”。钱没花，但更好的机会错过了。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">2</div>
+          <div class="cmeta">
+            <div class="cname">沉没成本</div>
+            <div class="cone">已经发生、收不回来的钱或精力，不是成本</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>已经发生、收不回来的成本，不是成本，只是人生里的一个教训。<b>沉没成本不参与重大决策</b>：做重大决策时，只考虑未来的收益和未来的成本，别让已经沉掉的东西绑架你。</p>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>花 100 块买了电影票，看了十分钟发现是烂片。票钱已经沉了，继续坐下去的成本是“这两小时本可以做的事”。离场反而更划算，这就叫及时止损。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">3</div>
+          <div class="cmeta">
+            <div class="cname">交易成本</div>
+            <div class="cone">做成一件事，花的不仅是钱，还有时间、精力、人情和信息</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>我们经常为了做成某件事，只算投入了多少钱，却忽视了为它付出的隐性成本。做事不能只看投了多少钱，还得看投入了哪些时间、精力、人情和信息。</p>
+          <div class="tags">
+            <span class="tagx">时间成本</span>
+            <span class="tagx">精力成本</span>
+            <span class="tagx">人情成本</span>
+            <span class="tagx">信息成本</span>
+            <span class="tagx">谈判成本</span>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>为了省 200 块房租搬到很远的地方，结果每天通勤多花两小时、一年下来身体和精神都疲惫。省下的钱是明的，时间和精力的消耗是隐的，合在一起可能更亏。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">4</div>
+          <div class="cmeta">
+            <div class="cname">稀缺性</div>
+            <div class="cone">资源有限，欲望无限，所以必须做减法</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>经济学的起点就是稀缺——资源是有限的，而人的欲望是无限的。正因为东西不够，我们才要做选择；正因为要做选择，才需要权衡和取舍。</p>
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">错误做法</div>
+              <div class="mp">什么都想要，结果精力被摊薄，每件事都做得平庸。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">正确做法</div>
+              <div class="mp">承认稀缺，主动给自己做减法，把有限资源集中在真正重要的事上。</div>
+            </div>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>你一天只有 24 小时，想学剪辑、学写作、学英语、学投资——全学等于都没学。稀缺性逼你回答：现阶段哪一项回报最高？先集中火力攻它。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">5</div>
+          <div class="cmeta">
+            <div class="cname">供需关系</div>
+            <div class="cone">价格涨，买的人少；价格落，买的人多</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>当其他条件保持不变，某种东西价格上升，想买它的人就会减少；价格下降，想买它的人就会增加。供给和需求交叉的那个点，就是市场的平衡点。</p>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>春节机票贵、淡季酒店便宜，这都是供需在调价。你如果对时间有弹性，错峰出行就能用更低成本买到同样的服务。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">6</div>
+          <div class="cmeta">
+            <div class="cname">边际效用递减</div>
+            <div class="cone">同一东西用多了，额外的满足感会越来越小</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>在一定时间里，如果你一直不停地“用”某个东西，它的效果就会慢慢变差。关键不是“这东西有没有用”，而是“再多一个，还值不值”。</p>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>饿的时候吃第一个馒头，感觉很好吃；第二个勉强吃下；第三个就撑了。每个馒头带来的满足感依次递减。所以投资决策、消费习惯、甚至感情投入，都要看“边际上”还值不值，而不是“总量上”有没有。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">7</div>
+          <div class="cmeta">
+            <div class="cname">比较优势</div>
+            <div class="cone">不是样样比别人强，而是把长板拉得足够长</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>每个人都有自己的优势，但我们老爱拿自己的劣势跟别人的优势比，结果自卑、自我否定。市场竞争的真相是：所有成功的企业和个体，都是在利用自己的优势去攻击别人的弱点。</p>
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">常见误区</div>
+              <div class="mp">样样都要比别人强；短板补不完，长处也被耽误了。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">比较优势思维</div>
+              <div class="mp">即使你在每件事上都不如别人，只要找到相对成本最低的领域，专注做它，再通过交换获取其他东西，整体收益就更高。</div>
+            </div>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>一个老板打字比秘书快、算账比会计准、谈判比销售强，但他最该做的是战略决策——因为他的时间最值钱，做别人替代不了的事才能创造最大价值。把专业的事交给别人，自己只做别人替代不了的事，这才是比较优势。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">8</div>
+          <div class="cmeta">
+            <div class="cname">价值交换</div>
+            <div class="cone">交换从来不是等价交换，而是双方都觉得自己赚了</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>自愿交换的基础是“主观价值不同”：同一样东西，在不同人心里值多少不一样。我们交换不是因为两件物品价格相等，而是因为双方都觉得换到手的东西比原来的更值；如果价值完全相等，交换反而没意义。</p>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>你有多余的苹果，我有富余的梨。你觉得梨更想吃，我觉得苹果更想吃——一换，两人都比原来更满意。财富没有增加，但双方的满足感增加了。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">9</div>
+          <div class="cmeta">
+            <div class="cname">价格与价值</div>
+            <div class="cone">价格是主观的锚，价值是你心里觉得值多少</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>“价格”常常会作为我们锚定一个商品的因素，导致我们做出错误判断，认为“贵的就是好的”。但价格不等于价值，价值是主观赋予的。</p>
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">通常错觉</div>
+              <div class="mp">贵 = 好，便宜 = 差。买奢侈品、报高价课、吃网红店，都容易被价格牵着走。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">经济学的视角</div>
+              <div class="mp">价格只是市场供需的信号，不是价值的唯一标准。水用处很大却很便宜，钻石用处不大却很贵——因为价格还取决于稀缺程度和获取成本。</div>
+            </div>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>一款包卖两万，不代表它对你的价值就是两万。如果你买它是为了面子，那是情绪价值；如果你买它是为了实用，那可能一千块的包就够了。别让价签替你决定什么叫“值”。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ext-title">还有三个本书中很重、但容易被忽略的工具</div>
+    <div class="core-cards" style="margin-top:18px">
+      <div class="ccard">
+        <div class="ctitle">产权与外部性</div>
+        <div class="ctag">没有清晰的规则，市场就会失灵</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="55" cy="75" r="28" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="55" y="82" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">我做事</text>
+            <path d="M83,75 L130,75" stroke="#E0432E" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="107" y="65" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">成本/好处</text>
+            <text x="107" y="92" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">外溢给你</text>
+            <circle cx="165" cy="75" r="28" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="165" y="82" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">你承担</text>
+          </svg>
+        </div>
+        <div class="cdesc">工厂排污、邻居装修，都是“外部成本”；清晰的产权和规则才能把它算进决策。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">货币与银行</div>
+        <div class="ctag">钱是一种降低交易成本的社会制度</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m11a" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#6A6058"/></marker></defs>
+            <rect x="80" y="55" width="60" height="40" rx="5" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="110" y="80" font-size="14" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">银行</text>
+            <rect x="25" y="60" width="42" height="30" rx="4" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="1.5"/>
+            <text x="46" y="80" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">存款</text>
+            <rect x="153" y="60" width="42" height="30" rx="4" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="1.5"/>
+            <text x="174" y="80" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">贷款</text>
+            <path d="M67,75 L80,75" stroke="#6A6058" stroke-width="2" marker-end="url(#m11a)"/>
+            <path d="M140,75 L153,75" stroke="#6A6058" stroke-width="2" marker-end="url(#m11a)"/>
+            <text x="110" y="125" font-size="12" fill="#201914" text-anchor="middle" font-family="LXGW WenKai">让分工和交换更容易</text>
+          </svg>
+        </div>
+        <div class="cdesc">货币让交换不用“以物易物”；银行把闲钱变成贷款，推动整个经济运转。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">政府与经济波动</div>
+        <div class="ctag">市场不是万能的，政府也有边界</div>
+        <div class="cfig">
+          <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20,100 Q60,100 90,70 Q120,40 160,60 Q190,75 200,50" fill="none" stroke="#6A6058" stroke-width="2"/>
+            <circle cx="90" cy="70" r="5" fill="#E0432E"/>
+            <text x="90" y="55" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">萧条</text>
+            <circle cx="160" cy="60" r="5" fill="#E0432E"/>
+            <text x="160" y="45" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">过热</text>
+            <rect x="75" y="110" width="70" height="26" rx="4" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="1.5"/>
+            <text x="110" y="128" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">政策调节</text>
+            <path d="M110,110 L110,95" stroke="#6A6058" stroke-width="1.5" stroke-dasharray="3 2"/>
+          </svg>
+        </div>
+        <div class="cdesc">财政和货币政策能平抑波动，但用不好也会制造新的错误。</div>
+      </div>
+    </div>
+
+    <div class="concept-list" style="margin-top:22px">
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">10</div>
+          <div class="cmeta">
+            <div class="cname">产权与外部性</div>
+            <div class="cone">规则不清，好事没人做，坏事没人管</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>当一个人做决策时，没把对别人的影响算进去，就会产生“外部性”。好的影响叫正外部性，坏的影响叫负外部性。产权就是把“谁有权做什么”说清楚的游戏规则。</p>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>工厂排污影响了下游居民，但工厂决策时没算这笔账，这叫“外部成本”。如果产权清晰、规则明确，排污者就要付出代价，居民也能索赔，问题才会被“内部化”。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">11</div>
+          <div class="cmeta">
+            <div class="cname">货币与银行</div>
+            <div class="cone">钱不只是纸，它让复杂分工成为可能</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>货币是一种社会制度，它降低了交易成本，让人们可以按照自己的比较优势分工。银行则把存款变成贷款，让钱流动到最有价值的地方。</p>
+          <div class="cline">
+            <div class="lab">关键逻辑</div>
+            <p>货币的价值来自“人们相信它未来还能被接受”。只要供应有限、大家有信心，它就能发挥作用。银行通过放贷创造货币，但也可能因过度放贷引发通胀或泡沫。</p>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>没有货币时，你养鸡的人想换鞋，得先找到一个既需要鸡又有鞋的人。有了钱，你卖鸡换钱、再拿钱买鞋，交易成本大幅降低，分工也更细。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">12</div>
+          <div class="cmeta">
+            <div class="cname">政府与经济波动</div>
+            <div class="cone">政府能补短板，但不能替代市场</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>市场会失灵，政府可以通过税收、支出、货币供应等手段调节经济。但政策也有边界：信息有限、时机难把握，好心也可能办坏事。</p>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>经济衰退时，政府增加支出、降低利率，理论上能刺激消费和投资。但如果用力过猛，可能先引发通胀，甚至让错误的投资继续膨胀，最后酿成更大的危机。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="s5">
+    <div class="sec-title">五 · 对普通人的价值</div>
+    <div class="sec-sub">书合上之后，能直接拿来用的四件事。</div>
+    <div class="points">
+      <div class="pt" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="n">①</div>
+          <div style="font-size:26px;color:var(--accent);line-height:1.3">做决定时，先算机会成本</div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:6px">选了 A，就放弃了 B。真正贵的不是花出去的钱，而是那个更好的机会。刷短视频的时候，想想这两小时本可以做什么。</p>
+      </div>
+
+      <div class="pt" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="n">②</div>
+          <div style="font-size:26px;color:var(--accent);line-height:1.3">别让沉没成本绑架你</div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:6px">已经花掉的钱、已经付出的感情、已经浪费的时间，都收不回来了。继续追加只会越陷越深，及时止损才是理性的选择。</p>
+      </div>
+
+      <div class="pt" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="n">③</div>
+          <div style="font-size:26px;color:var(--accent);line-height:1.3">涨价反映了稀缺</div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:6px">当某种东西变少，价格就会上涨，把人、资源和生产引导到缺口里去。看懂这个信号，比单纯抱怨更有用——你可以选择错峰、替代或等待。</p>
+      </div>
+
+      <div class="pt" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="n">④</div>
+          <div style="font-size:26px;color:var(--accent);line-height:1.3">价格不等于价值，贵不等于好</div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:6px">买任何东西之前，先问自己：我付的钱，换到的是我真正需要的价值，还是我被价签锚定了？</p>
+      </div>
+    </div>
+    <div class="indent" style="margin-top:22px">
+      这本书也有边界。它讲的是个人怎么思考、怎么做决策的，属于微观经济学的视角，不是用来判断或预测宏观经济环境变化的。把它当作一套分析日常选择的工具来用就好。
+    </div>
+  </section>
+
+</div>
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  var spy=new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]});
+  sections.forEach(function(s){spy.observe(s);});
+</script>
+</body>
+</html>

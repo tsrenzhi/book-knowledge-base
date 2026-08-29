@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《列奥纳多·达·芬奇传》· 知识卡片</title>
+<style>
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .item-title{font-size:31px;font-weight:400;color:var(--ink);line-height:1.25}
+  .item-desc{margin-top:10px;font-size:23px;color:var(--muted);line-height:1.5}
+  .red{color:var(--accent);font-weight:400}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 0 0 2px var(--accent)}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  /* 成就概览：头像 + 标签云 + 两侧名作小图 */
+  .achieve-hub{background:var(--card);border:2.5px solid var(--line);border-radius:18px;padding:22px 16px;box-shadow:3px 4px 0 rgba(0,0,0,.06);margin-top:26px}
+  .achieve-hub .hub-row{display:flex;justify-content:center;align-items:center;gap:7px;flex-wrap:wrap;margin:4px 0}
+  .achieve-hub .hub-visual{display:flex;justify-content:center;align-items:stretch;gap:22px;margin:10px 0;flex-wrap:nowrap}
+  .achieve-hub .hub-side{display:flex;flex-direction:column;justify-content:center;gap:14px;flex:0 0 auto;min-height:100%}
+  .achieve-hub .hub-side>div{display:flex;flex-direction:column;align-items:center}
+  .achieve-hub .hub-side img{height:auto;border-radius:8px;border:2px solid var(--line);display:block;box-shadow:2px 2px 0 rgba(0,0,0,.06);margin:0 auto}
+  .achieve-hub .hub-side img.tall{width:120px}
+  .achieve-hub .hub-side img.sq{width:120px}
+  .achieve-hub .hub-side img.wide{width:190px}
+  .achieve-hub .hub-side .wf-cap{font-size:14px;color:var(--muted);text-align:center;line-height:1.3;margin-top:3px}
+  .achieve-hub .hub-center{text-align:center;flex:1;min-width:260px;max-width:380px;display:flex;flex-direction:column;justify-content:center}
+  .achieve-hub .portrait{width:150px;height:188px;object-fit:cover;border-radius:10px;border:2.5px solid var(--line)}
+  .achieve-hub .portrait-caption{margin-top:6px;font-size:17px;color:var(--muted);line-height:1.4}
+  .cloud-tag{font-size:15px;font-weight:400;color:var(--accent);background:var(--card);border:2px solid var(--accent);border-radius:999px;padding:5px 12px;white-space:nowrap;display:inline-block}
+
+  .stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+  .stat{flex:1;min-width:130px;background:var(--card);border:2.5px solid var(--line);border-radius:14px;padding:16px 10px;text-align:center;box-shadow:3px 4px 0 rgba(0,0,0,.05)}
+  .stat .num{font-size:36px;font-weight:400;color:var(--accent);line-height:1}
+  .stat .lab{font-size:18px;color:var(--muted);margin-top:7px;line-height:1.35}
+
+  /* 时间线故事 */
+  .timeline{position:relative;padding-left:44px;margin-top:28px}
+  .timeline::before{content:"";position:absolute;left:15px;top:8px;bottom:8px;width:3px;background:var(--line);border-radius:2px}
+  .tnode{position:relative;margin-top:26px;background:var(--card);border:2.5px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.05)}
+  .tnode:first-child{margin-top:0}
+  .tnode .dot{position:absolute;left:-36px;top:22px;width:18px;height:18px;border-radius:50%;background:var(--accent);border:3px solid var(--paper);box-shadow:0 0 0 2px var(--line)}
+  .tnode .ty{font-size:21px;font-weight:400;color:var(--accent);letter-spacing:1px}
+  .tnode .tt{font-size:28px;font-weight:400;color:var(--ink);margin-top:3px;line-height:1.25}
+  .story-parts{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+  .story-part{display:flex;gap:12px;align-items:flex-start}
+  .story-part .sp-num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center}
+  .story-part .sp-body{font-size:22px;line-height:1.55;color:var(--ink);padding-top:4px}
+  .story-part .sp-body b{color:var(--accent);font-weight:400}
+  .tnode .thumb-row{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
+  .tnode .thumb-row .thumb{background:#EDE8E2;border:2px solid var(--line);border-radius:8px;height:auto;width:160px;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:2px 3px 0 rgba(0,0,0,.06)}
+  .tnode .thumb-row .thumb img{width:100%;height:auto;object-fit:contain;display:block}
+  .tnode .thumb-row .cap{font-size:17px;color:var(--muted);margin-top:6px}
+
+  .tnode .plain-body{font-size:22px;line-height:1.6;color:var(--ink);margin-top:10px}
+
+  @media (max-width:900px){
+    .achieve-hub .hub-visual{gap:14px}
+    .achieve-hub .hub-side img.tall,.achieve-hub .hub-side img.sq{width:90px}
+    .achieve-hub .hub-side img.wide{width:140px}
+    .achieve-hub .portrait{width:130px;height:163px}
+  }
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .achieve-hub .hub-row{gap:7px}
+    .achieve-hub .hub-side{display:none}
+    .cloud-tag{font-size:14px;padding:5px 10px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero rise">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《列奥纳多·达·芬奇传》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">沃尔特·艾萨克森 · 2018</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">中信出版集团出版 · 汪冰 译 · 副标题《从凡人到天才的创造力密码》</div>
+    <div class="bigq" style="margin-top:18px">一个容易分心、总拖稿的人，凭什么影响了世界 500 年？</div>
+  </header>
+
+  <!-- tabs -->
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 他一生的成就</a>
+    <a href="#s3" class="tab">③ 时代与处境</a>
+    <a href="#s4" class="tab">④ 一生时间线</a>
+    <a href="#s5" class="tab">⑤ 能学到什么</a>
+  </nav>
+
+  <!-- 一、书籍定位 -->
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="sec-sub">它不是艺术史，而是一个"好奇心特别旺的人"怎么活了一辈子。</div>
+    <div class="prose">
+      <p>这本书写的是列奥纳多·达·芬奇——文艺复兴时把艺术、科学、技术混在一起玩的天才，也是影响了后世 500 多年的"网红"。</p>
+      <p>作者艾萨克森写他，起点不是那些名画，而是他留下来的约 <span class="red">7200 页笔记</span>。他想用这些笔记回答一个问题：一个没怎么上过学、还老是拖稿的人，凭什么有那么强的创造力？所以这本书最后一章直接就叫"创造力密码"。</p>
+      <p style="margin-top:12px">艾萨克森给出的答案很简单：<span class="red">不是天赋异禀，而是他把"对世界充满好奇"这件事做到了极致</span>。所以他一边画《蒙娜丽莎》，一边研究解剖、飞行、水流和地质。看完你会发现，他的厉害不在某一项手艺，而在那股一直问"为什么"的劲儿。</p>
+    </div>
+  </section>
+
+  <!-- 二、他一生的成就：肖像 + 标签云 + 作品画廊 -->
+  <section class="section rise" id="s2">
+    <div class="sec-title">二 · 他一生的成就</div>
+    <div class="sec-sub">别只叫他"画家"——他横跨十几门手艺，留下的完整画作却只有十几幅。</div>
+
+    <div class="achieve-hub">
+      <div class="hub-row">
+        <span class="cloud-tag">画家</span>
+        <span class="cloud-tag">雕塑家</span>
+        <span class="cloud-tag">建筑师</span>
+        <span class="cloud-tag">音乐家</span>
+        <span class="cloud-tag">数学家</span>
+      </div>
+      <div class="hub-visual">
+        <div class="hub-side">
+          <div><img class="tall" src="assets/mona-lisa.jpg" alt="《蒙娜丽莎》" /><div class="wf-cap">《蒙娜丽莎》</div></div>
+          <div><img class="sq" src="assets/flying-machine.jpg" alt="飞行器手稿" /><div class="wf-cap">飞行器手稿</div></div>
+        </div>
+        <div class="hub-center">
+          <div class="hub-row">
+            <span class="cloud-tag">即兴诗人</span>
+            <span class="cloud-tag">军事工程师</span>
+            <span class="cloud-tag">水利工程师</span>
+          </div>
+          <div style="margin:10px 0">
+            <img class="portrait" src="assets/leonardo-portrait.jpg" alt="列奥纳多·达·芬奇画像" />
+            <div class="portrait-caption">列奥纳多·达·芬奇<br/>1452 — 1519</div>
+          </div>
+          <div class="hub-row">
+            <span class="cloud-tag">解剖学家</span>
+            <span class="cloud-tag">生理学家</span>
+            <span class="cloud-tag">发明家</span>
+          </div>
+        </div>
+        <div class="hub-side">
+          <div><img class="wide" src="assets/last-supper.jpg" alt="《最后的晚餐》" /><div class="wf-cap">《最后的晚餐》</div></div>
+          <div><img class="sq" src="assets/vitruvian.jpg" alt="《维特鲁威人》" /><div class="wf-cap">《维特鲁威人》</div></div>
+        </div>
+      </div>
+      <div class="hub-row">
+        <span class="cloud-tag">植物学家</span>
+        <span class="cloud-tag">动物学家</span>
+        <span class="cloud-tag">天文学家</span>
+        <span class="cloud-tag">地理制图师</span>
+        <span class="cloud-tag">物理学家</span>
+        <span class="cloud-tag">作家 / 笔记作者</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="num">7200<span style="font-size:22px">页</span></div><div class="lab">留存笔记手稿</div></div>
+      <div class="stat"><div class="num">约30<span style="font-size:22px">具</span></div><div class="lab">亲手解剖的人体</div></div>
+      <div class="stat"><div class="num">约15<span style="font-size:22px">幅</span></div><div class="lab">现存完整画作</div></div>
+      <div class="stat"><div class="num">67<span style="font-size:22px">岁</span></div><div class="lab">一生 1452—1519</div></div>
+    </div>
+
+    <div class="quote" style="margin-top:28px">
+      <span class="mark">"</span>
+      <blockquote>列奥纳多是演奏及制作里拉琴的高手、优秀的即兴诗人、演出庆典设计师、画家兼工程师、解剖学研究者、武器设计师，以及遗迹化石学的先驱……</blockquote>
+      <div class="ex">他三十岁去米兰求职，给公爵的信快写完了才补一句："对了，我还会画画。"可见"画家"是他最不值得一提的身份。</div>
+    </div>
+  </section>
+
+  <!-- 三、时代与处境 -->
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 他出生的时代与处境</div>
+    <div class="sec-sub">文艺复兴给了他土壤，而他的"异类"身份反而成全了他。</div>
+    <div class="prose">
+      <p>达·芬奇生在 1452 年的意大利，那时候正好是文艺复兴最热闹的阶段——人们重新开始看重人的能力，不再只信教条。这种氛围让他可以名正言顺地探索五花八门的东西。</p>
+      <p>他身上有几重"异类"身份：私生子、左撇子、素食者，还特别容易分心。放在别的年代，这些可能都是麻烦；但在文艺复兴，加上他自己的性情，反而让他不被任何框框住。</p>
+      <p style="margin-top:12px">艾萨克森写得很明白：他幸好是个私生子，否则家里会指望他子承父业去当公证员——他家至少四代都做这一行。正因为没被安排这条路，他才走上了绘画和探索。所以他的"不合常规"，成了他能自由探索的起点。</p>
+    </div>
+  </section>
+
+  <!-- 四、一生时间线（故事化 + 陈述节点） -->
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 一生关键时间线</div>
+    <div class="sec-sub">重要节点按"背景 → 冲突 → 行动 → 结果"讲成故事，平淡节点直接陈述。</div>
+    <div class="timeline">
+
+      <div class="tnode"><span class="dot"></span>
+        <div class="ty">1452 · 出生</div>
+        <div class="tt">芬奇镇的私生子</div>
+        <div class="plain-body">
+          他生在佛罗伦萨附近的芬奇镇，父亲是公证员世家。因为是私生子，他不能继承姓氏和公证员职业，也没受过系统的拉丁文教育。这反而让他没被安排进"公证员"轨道，可以跟着兴趣画画、做手工、观察自然。
+        </div>
+      </div>
+
+      <div class="tnode"><span class="dot"></span>
+        <div class="ty">1470 前后 · 少年</div>
+        <div class="tt">韦罗基奥工作室的学徒</div>
+        <div class="plain-body">
+          父亲把他送进佛罗伦萨画师韦罗基奥的工作室。那里不只教画画，木工、机械、解剖、雕塑、金银工艺一起学。传说他与老师合作《基督受洗》时，画的天使太生动，让老师觉得自己被超越。达·芬奇从这里继承了手艺，也染上了容易分心、拖稿的"毛病"。
+        </div>
+      </div>
+
+      <div class="tnode"><span class="dot"></span>
+        <div class="ty">1482 · 三十岁</div>
+        <div class="tt">逃离佛罗伦萨：带着一封"吹牛信"去米兰谋生</div>
+        <div class="story-parts">
+          <div class="story-part"><div class="sp-num">1</div><div class="sp-body"><b>背景：</b>三十岁的达·芬奇在佛罗伦萨待不下去了。原因众说纷纭，其中一种说法与同性恋指控有关——当时这在佛罗伦萨是重罪，足以毁掉前途。</div></div>
+          <div class="story-part"><div class="sp-num">2</div><div class="sp-body"><b>冲突：</b>他必须离开熟悉的环境，去陌生的米兰找靠山。一个三十岁的创作者，没有稳定收入，前途未卜。</div></div>
+          <div class="story-part"><div class="sp-num">3</div><div class="sp-body"><b>行动：</b>他给米兰公爵卢多维科·斯福尔扎写了一封求职信。前几页全是"我能造桥、挖水道、设计大炮、造装甲车、修公共建筑、搞庆典、弹里拉琴"——快写完了，才补一句："对了，我还会画画。"</div></div>
+          <div class="story-part"><div class="sp-num">4</div><div class="sp-body"><b>结果：</b>公爵留下了他，达·芬奇在米兰一待就是十七年。这封信也说明，在他心里，"画家"从来不是唯一身份，甚至不是他最看重的那一个。</div></div>
+        </div>
+      </div>
+
+      <div class="tnode"><span class="dot"></span>
+        <div class="ty">1490 — 1498 · 盛年</div>
+        <div class="tt">《最后的晚餐》：画活了十二个人，也毁在了自己的实验里</div>
+        <div class="story-parts">
+          <div class="story-part"><div class="sp-num">1</div><div class="sp-body"><b>背景：</b>米兰圣玛利亚感恩教堂请他给修道院食堂画一幅《最后的晚餐》。当时画家普遍用湿壁画技法，干得快，不能反复改。</div></div>
+          <div class="story-part"><div class="sp-num">2</div><div class="sp-body"><b>冲突：</b>达·芬奇想慢慢打磨每个人的表情，可现有技术不允许。于是他面临选择：要么妥协用快干技法，要么冒险自己调配新颜料。</div></div>
+          <div class="story-part"><div class="sp-num">3</div><div class="sp-body"><b>行动：</b>他选了后者，自己调配干得慢的新颜料，一遍遍地改；为了让人物表情真实，他跑到街上看愤怒、怀疑、恐惧、忠诚各种脸；为了让空间有纵深感，他又去研究光学和透视。</div></div>
+          <div class="story-part"><div class="sp-num">4</div><div class="sp-body"><b>结果：</b>新颜料不稳定，壁画在他活着的时候就开始剥落。后来它还经历过战争——拿破仑时期这里被改成马厩，二战时教堂又挨了轰炸，墙面被震裂、画面严重受损。现在我们看到的《最后的晚餐》，是经过好几代人反复修补和还原之后的残作。</div></div>
+        </div>
+      </div>
+
+      <div class="tnode"><span class="dot"></span>
+        <div class="ty">1503 起 · 四十八岁</div>
+        <div class="tt">《蒙娜丽莎》：一拖就是十四年，改了又改</div>
+        <div class="story-parts">
+          <div class="story-part"><div class="sp-num">1</div><div class="sp-body"><b>背景：</b>回到佛罗伦萨后，丝绸商人焦孔多委托他给妻子丽莎画一幅肖像。这本来只是一单普通生意。</div></div>
+          <div class="story-part"><div class="sp-num">2</div><div class="sp-body"><b>冲突：</b>达·芬奇很快被一个自己的问题勾住了："微笑"到底是怎么产生的？这不是客户的要求，而是他自己给自己出的题。</div></div>
+          <div class="story-part"><div class="sp-num">3</div><div class="sp-body"><b>行动：</b>为了弄明白，他就跑去停尸房解剖人脸，研究嘴唇肌肉、面部神经和皮肤阴影。他不是只在画布上"画"微笑，而是在解剖台上"找"微笑。而且每次有了新灵感，他就拿起笔再改一点。</div></div>
+          <div class="story-part"><div class="sp-num">4</div><div class="sp-body"><b>结果：</b>这幅画他一画就是十四年，改了又改，到最后也没交给委托人。艾萨克森说，它成了达·芬奇"为了求知而求知"的一个例证。</div></div>
+        </div>
+      </div>
+
+      <div class="tnode"><span class="dot"></span>
+        <div class="ty">1513 — 1516 · 花甲</div>
+        <div class="tt">在罗马，没拿到大项目</div>
+        <div class="plain-body">
+          六十一岁，达·芬奇到罗马，受美第奇家族庇护。但罗马那时已经是米开朗基罗和拉斐尔的舞台，他没拿到重要项目，只能继续自己的解剖研究。后来教皇利奥十世下令禁止他解剖——教会认为切开人体是亵渎。于是这条研究线被堵死了，他也没再做出什么大型作品。
+        </div>
+      </div>
+
+      <div class="tnode"><span class="dot"></span>
+        <div class="ty">1516 · 六十四岁</div>
+        <div class="tt">赴法国安度晚年</div>
+        <div class="plain-body">
+          法国国王弗朗索瓦一世邀请他去法国，给了他庄园和稳定年金，让他可以安心做研究。达·芬奇带着几幅未完成的画稿去了，其中就有《蒙娜丽莎》。他在那里不再需要接订单，只是继续画、写、想。最终，《蒙娜丽莎》留在了法国，后来进了卢浮宫。
+        </div>
+      </div>
+
+      <div class="tnode"><span class="dot"></span>
+        <div class="ty">1519 · 离世</div>
+        <div class="tt">去世，享年 67 岁</div>
+        <div class="plain-body">
+          1519 年 5 月 2 日，达·芬奇在法国去世，享年 67 岁。他留下大量未完成的画稿和约 7200 页笔记。传说他临终前还在研究洪水的漩涡和直角三角形的规律——那颗一直问"为什么"的脑子，到死都没停。
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 五、能学到什么 -->
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 从他身上能学到什么</div>
+    <div class="sec-sub">作者揭秘达·芬奇的创造力密码，重点不在天赋，而在他每天做的事。</div>
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>保持好奇，对日常现象也肯停下来琢磨。</b>"列奥纳多的研究方法植根于实验、好奇心"，而大多数人早就对这些现象习以为常，不再停下来思考。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>求知欲。</b>他从来不问"这有没有用"，只是不停追问"这是什么""这是为什么"。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>一手信息。</b>"通过自己的观察和实验获取一手经验，用你的双眼和双手去亲自发现，与拿着手机消费别人的成果不可能是同样的感受。"</p></div>
+      <div class="pt"><div class="n">4</div><p><b>敢于质疑现有的结论。</b>他不盲从既有的说法，敢去探索，敢做那个"异类"。"不应止步于吸收知识，更要去质疑，要充满想象力，要敢于不同凡'想'。"</p></div>
+      <div class="pt"><div class="n">5</div><p><b>跨学科。</b>为了画好人像，他去解剖；为了画好水流，他去研究物理。艺术、科学和技术，在他手里是同一回事。</p></div>
+      <div class="pt"><div class="n">6</div><p><b>拖延并不全是坏处。</b>"后来列奥纳多在方方面面都远远超过了自己的老师，其中也包括容易分心、半途而废，还有拖延交付。"适度拖延让他不断打磨，但别学"拖到烂尾"——要学的是"为了把事情搞明白，舍得花时间的劲儿"。</p></div>
+      <div class="pt"><div class="n">7</div><p><b>记录的习惯。</b>"当你独处时，你才是自己的主人。"想到就写、看到就画，他一辈子留下了约 7200 页笔记。</p></div>
+    </div>
+    <div class="indent">提醒：他拖稿很厉害，现存完整画作可能只有十几幅，大量设想停在纸面。学他，别学"半途而废"，要学他对世界那份不肯停下的好奇。</div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  var spy=new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]});
+  sections.forEach(function(s){spy.observe(s);});
+</script>
+</body>
+</html>

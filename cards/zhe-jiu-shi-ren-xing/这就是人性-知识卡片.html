@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《这就是人性（合集）》· 白板手绘逻辑图</title>
+<style>
+/* 本地后备：霞鹜文楷加载失败时使用系统字体 */
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .item-title{font-size:31px;font-weight:400;color:var(--ink);line-height:1.25}
+  .item-desc{margin-top:10px;font-size:23px;color:var(--muted);line-height:1.5}
+  .red{color:var(--accent);font-weight:400}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .rise.show{opacity:1;transform:translateY(0)}
+  .no-anim .rise{opacity:1;transform:none}
+
+  /* HERO：书名 + 作者 + 全称 + 一句红色大字 */
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  /* 顶部 tab */
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .divider{margin:60px auto 0;max-width:520px;height:26px}
+
+  /* 模块配色 */
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .tag{background:var(--line)}
+  .vs.old .vt{color:var(--accent)}
+
+  @media (max-width:900px){}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+    .abc-flow{flex-direction:column;align-items:stretch}
+    .abc-arrow{transform:rotate(90deg);flex:0 0 30px}
+  }
+
+  /* 情绪ABC 流程图 */
+  .abc{margin-top:18px;background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:20px 22px}
+  .abc-flow{display:flex;align-items:stretch;gap:6px}
+  .abc-box{flex:1;min-width:0;border:2.5px solid var(--line);border-radius:14px;padding:14px 12px;text-align:center;background:var(--paper)}
+  .abc-box.b{border-color:var(--accent);background:var(--accent-soft)}
+  .abc-letter{font-size:32px;font-weight:400;color:var(--line);line-height:1}
+  .abc-box.b .abc-letter{color:var(--accent)}
+  .abc-name{margin-top:5px;font-size:22px;font-weight:400;color:var(--ink)}
+  .abc-text{margin-top:7px;font-size:19px;color:var(--muted);line-height:1.42}
+  .abc-arrow{flex:0 0 30px;display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--accent);font-weight:400}
+  .abc-note{margin-top:15px;font-size:21px;line-height:1.5;color:var(--ink);border-top:2px dashed var(--line);padding-top:13px}
+  .abc-note b{color:var(--accent)}
+  .abc-cap{margin-top:10px;font-size:19px;color:var(--muted);line-height:1.5}
+
+  /* 马斯洛需求层次（三角 + 左侧序号 + 箭头指向弱点） */
+  .pyr{margin-top:18px;background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:18px 20px}
+  .pyr-grid{display:flex;align-items:stretch;gap:16px}
+  .pyr-tri{flex:0 0 260px;width:260px;height:auto;display:block}
+  .pyr-tri text{font-family:inherit}
+  .pyr-weak{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-around;padding:4px 0}
+  .pyr-wrow{display:flex;flex-wrap:wrap;gap:5px;align-items:center;height:60px}
+  .pyr-tag{font-size:14px;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:2px 9px;line-height:1.4}
+  .pyr-note{margin-top:16px;font-size:20px;line-height:1.55;color:var(--ink);border-top:2px dashed var(--line);padding-top:14px}
+  .pyr-note b{color:var(--accent)}
+  @media (max-width:720px){
+    .pyr-grid{flex-direction:column;align-items:stretch;gap:10px}
+    .pyr-tri{width:100%;max-width:280px;margin:0 auto;flex:0 0 auto}
+    .pyr-weak{padding:0}
+    .pyr-wrow{justify-content:center}
+    .pyr-tag{font-size:13px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO：书名 + 作者 + 全称 + 一句红色大字 -->
+  <header class="hero rise">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《这就是人性（合集）》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">王心傲 · 2024</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">全称《这就是人性：人间生存的醒脑指南》</div>
+    <div class="bigq" style="margin-top:18px">为什么你越好说话，别人越不把你当回事？</div>
+  </header>
+
+  <!-- 顶部 tab 导航 -->
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 人性底色</a>
+    <a href="#s3" class="tab">③ 价值交换</a>
+    <a href="#s4" class="tab">④ 立边界·守底线</a>
+    <a href="#s5" class="tab">⑤ 筛选圈子·经营关系</a>
+    <a href="#s6" class="tab">⑥ 成长是逆人性的</a>
+    <a href="#s7" class="tab">⑦ 扎心金句</a>
+  </nav>
+
+  <!-- 一、书籍定位：这本书到底在讲什么 -->
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="sec-sub">一本把"人为什么会这样"讲透的人间生存指南。</div>
+    <div class="prose">
+      <p>《这就是人性》不是教人变坏的书，而是一本人性说明书、现代人的生存指南。它把"人为什么会这样对人、对利益、对关系"的真正道理一层层拆开——从自私的基因、趋利避害的本能，到价值交换的关系本质，再到怎么立住边界、怎么筛选圈子、怎么在复杂的世界里做个明白人。</p>
+      <p style="margin-top:12px">作者王心傲的核心判断是：<b style="color:var(--accent)">世界很简单，复杂的是人性</b>。洞察人性，不是为了算计别人、掌控关系，而是为了更了解自己、掌控自己。所以这本书表面上在讲别人，落脚点却始终是——你怎么在复杂的人性里，活得清醒、少受伤、成得了事。</p>
+    </div>
+  </section>
+
+  <!-- 二、人性底色 -->
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 人性底色：趋利避害，趋易避难</div>
+    <div class="sec-sub">两条最根本的定律，其余都是它们的延伸。</div>
+    <div class="vs old">
+      <div class="col">
+        <span class="tag">旧观念 · 童话思维</span>
+        <div class="vt">善有善报，恶有恶报，好人得回报</div>
+        <div class="vd">觉得世界非黑即白，好人一定有好报，坏人一定被惩罚；只要努力就有回报，只要对别人好，别人就会对自己好。</div>
+        <div class="ve">后果：用这种思维处世，现实会把你打得稀碎，因为你把人想得太完美了。</div>
+      </div>
+      <div class="col">
+        <span class="tag">真实人性 · 趋利避害</span>
+        <div class="vt">没有绝对的好人坏人，只有利益取舍</div>
+        <div class="vd">自私是生存本能，趋利避害天经地义；刘备曹操没有绝对好坏，只是立场不同、做了不同的事。</div>
+        <div class="ve">后果：接纳世界的复杂与灰色，你才不会被人伤、被事坑，看人看事更准。</div>
+      </div>
+    </div>
+    <div class="points" style="margin-top:24px">
+      <div class="pt"><div class="n">①</div><p><b>趋利避害，是生存的第一本能。</b>从进化看，祖先如果不先顾着自己活下来，早就被淘汰了；"自私的基因"只是它的生物机制。所以再善良的人，骨子里也藏着自我保全的一面——这不是坏，是刻在身体里的生存机制。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>趋易避难，是大脑爱走的捷径。</b>人要即时满足、怕麻烦、懒得深度思考，所以才会拖延、懒惰、被情绪劫持。这恰恰说明：成长难，是因为成长本来就逆着这条本能。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>没有非黑即白，灰度是结果不是独立人性。</b>一个人很难用好、坏去定义，刘备曹操只是立场不同、做了不同的事。接纳世界的复杂，你才不会被人伤、被事坑。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>道德保群体，人性保个体。</b>道德让一个群体更稳定、不内乱；人性让每个个体活得好。只谈道德、不讲规则，社会反而很虚伪、很无力；强者懂得用规则来治理人性。</p></div>
+    </div>
+
+    <p style="margin-top:24px;font-size:22px;line-height:1.5;color:var(--ink)">讲到人性，就绕不开<b style="color:var(--accent)">欲望</b>。马斯洛基于人的需求，提出了<b>马斯洛需求层次理论</b>：他把人的欲望由底到顶分成五层，而每一层都离不开对应的人性弱点。</p>
+    <div class="pyr">
+      <div class="pyr-grid">
+        <svg class="pyr-tri" viewBox="0 0 260 320" role="img" aria-label="马斯洛需求五层三角">
+          <defs>
+            <marker id="pah" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#E0432E"/></marker>
+          </defs>
+          <polygon points="130,10 248,310 12,310" fill="#FBF6F0" stroke="#6A6058" stroke-width="2.5"/>
+          <line x1="105" y1="70" x2="155" y2="70" stroke="#6A6058" stroke-width="2"/>
+          <line x1="80" y1="130" x2="180" y2="130" stroke="#6A6058" stroke-width="2"/>
+          <line x1="55" y1="190" x2="205" y2="190" stroke="#6A6058" stroke-width="2"/>
+          <line x1="30" y1="250" x2="230" y2="250" stroke="#6A6058" stroke-width="2"/>
+          <text x="2" y="66" font-size="20" fill="#201914" font-family="inherit" font-weight="400">⑤</text>
+          <text x="2" y="126" font-size="20" fill="#201914" font-family="inherit" font-weight="400">④</text>
+          <text x="2" y="186" font-size="20" fill="#201914" font-family="inherit" font-weight="400">③</text>
+          <text x="2" y="246" font-size="20" fill="#201914" font-family="inherit" font-weight="400">②</text>
+          <text x="2" y="306" font-size="20" fill="#201914" font-family="inherit" font-weight="400">①</text>
+          <text x="130" y="64" text-anchor="middle" font-size="23" fill="#201914" font-family="inherit">自我实现</text>
+          <text x="130" y="124" text-anchor="middle" font-size="23" fill="#201914" font-family="inherit">尊重</text>
+          <text x="130" y="184" text-anchor="middle" font-size="23" fill="#201914" font-family="inherit">归属与爱</text>
+          <text x="130" y="244" text-anchor="middle" font-size="23" fill="#201914" font-family="inherit">安全</text>
+          <text x="130" y="304" text-anchor="middle" font-size="23" fill="#201914" font-family="inherit">生理</text>
+          <line x1="142" y1="40" x2="260" y2="40" stroke="#E0432E" stroke-width="1.8" marker-end="url(#pah)"/>
+          <line x1="165" y1="100" x2="260" y2="100" stroke="#E0432E" stroke-width="1.8" marker-end="url(#pah)"/>
+          <line x1="189" y1="160" x2="260" y2="160" stroke="#E0432E" stroke-width="1.8" marker-end="url(#pah)"/>
+          <line x1="213" y1="220" x2="260" y2="220" stroke="#E0432E" stroke-width="1.8" marker-end="url(#pah)"/>
+          <line x1="236" y1="280" x2="260" y2="280" stroke="#E0432E" stroke-width="1.8" marker-end="url(#pah)"/>
+        </svg>
+        <div class="pyr-weak">
+          <div class="pyr-wrow"><span class="pyr-tag">固执己见</span><span class="pyr-tag">自我否定</span></div>
+          <div class="pyr-wrow"><span class="pyr-tag">虚荣</span><span class="pyr-tag">傲慢</span><span class="pyr-tag">自负</span><span class="pyr-tag">控制欲</span><span class="pyr-tag">完美主义</span><span class="pyr-tag">报复心</span></div>
+          <div class="pyr-wrow"><span class="pyr-tag">攀比</span><span class="pyr-tag">嫉妒</span><span class="pyr-tag">虚伪</span><span class="pyr-tag">冲动盲从</span></div>
+          <div class="pyr-wrow"><span class="pyr-tag">损失厌恶</span><span class="pyr-tag">追求确定性</span><span class="pyr-tag">害怕失败</span><span class="pyr-tag">焦虑</span><span class="pyr-tag">逃避责任</span></div>
+          <div class="pyr-wrow"><span class="pyr-tag">贪婪</span><span class="pyr-tag">纵欲</span><span class="pyr-tag">及时满足</span><span class="pyr-tag">懒惰</span></div>
+        </div>
+      </div>
+      <div class="pyr-note">越往下就越基础，人在满足底层的需求后，就会不断寻求更高层次的需求，最终达到自我实现的目的。穷人活命都难的时候，最先满足的一定是生理和安全的需求；只有这些底层的需求有了保障以后，才会去寻求更高层次的需求。比如一些人去做公益，虽然没有获得什么名利，但是会获得精神上的成就感，来实现自我价值。</div>
+    </div>
+
+    <div class="prose" style="margin-top:24px">
+      <p>所以作者提出，懂人性不是要你变狠，而是看清真相后更清醒地待人待己：你可以善良，但善良要有一个底线。</p>
+    </div>
+  </section>
+
+  <!-- 三、价值交换 -->
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 价值交换</div>
+    <div class="sec-sub">所有关系的本质，都是价值交换。</div>
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>关系的本质，是价值交换。</b>你的能量越高（自信、供求关系、权威程度），主动权就越多。一味讨好、付出，只会暴露你更需要对方，于是变成被随意挑选、可有可无的那一个。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>先让自己成为有价值的人。</b>成年人的世界需要价值交换。修炼自己的不可替代性：做某个领域里别人比不了的深度专家，或者做复合型人才，并且始终保持成长型思维。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>赚钱，本质上也是一场价值交换。</b>钱只是一种价值衡量单位，背后是不同形态的价值。不敢谈钱，才是成年人最大的灾难——伤害感情的从来不是金钱，而是双方的利益没被平衡好。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>熟人成本：能用钱解决，就别动用人情。</b>请人做事，本质是你为别人的价值付酬劳，完成这次交易。能用市场方式解决的，就别随意麻烦熟人，因为人情往往更费钱、更难算清。</p></div>
+      <div class="pt"><div class="n">⑤</div><p><b>没有价值，当老好人没用。</b>你如果没有价值，一味讨好、当老好人，换来的不是尊重，而是被随便使唤。"友善是病"——病在企图取悦所有人；把面子看得比天大，往往源于内心的弱小。先让自己有被人需要的价值，你的好才有人珍惜；否则再怎么讨好，也只换来一句"你人真好"，转头还被随便使唤。</p></div>
+    </div>
+
+    <div class="vs" style="margin-top:26px">
+      <div class="col">
+        <span class="tag">你以为</span>
+        <div class="vt">付出越多，对方越珍惜</div>
+        <div class="vd">你以为，只要我拼命对他好、投入大把时间金钱精力，他就会感动，就会更爱我、更珍惜这段关系。</div>
+        <div class="ve">后果：越这么想、越无底线地给，对方越不把你的好当回事。</div>
+      </div>
+      <div class="col">
+        <span class="tag">真相</span>
+        <div class="vt">价值由对方的需要决定，稀缺才显贵</div>
+        <div class="vd">同样一瓶水，平时不值钱，沙漠里价值连城——因为稀缺。一个人的付出值不值钱，也看对方此刻需不需要，不是看你花了多少。无底线的付出，只会让对方形成"你不会拒绝"的刻板印象，把你的好当成理所当然。</div>
+        <div class="ve">后果：付出要设门槛、制造稀缺；先苦后甜，对方才更珍惜。</div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top:24px">
+      <p>作者说，一件东西值不值钱，看的是"别人想不想要、有多想要"，而不是你为它花了多少力气。所以想让别人重视你，先想清楚：我在被谁需要？我提供的价值稀缺吗？这确实是对方想要的吗？</p>
+    </div>
+  </section>
+
+  <!-- 四、立边界·守底线 -->
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 立边界·守底线：别人敢欺负你，是因为你允许</div>
+    <div class="sec-sub">边界守不住，就永远被动；这一节是全书最该拿来用的实操。</div>
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>别抱怨别人欺负你。</b>你在别人心里的地位，是一步一步博弈争取来的，不是一味忍让换来的。对方一次次试探你的底线，你退一步，他就进一步，直到把你定义成软柿子。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>先对自己善良。</b>在对别人善良之前，先对自己善良。在合法利益面前，要敢于挣脱道德枷锁、大胆追求自己的利益，而不是把所有好处让给别人。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>藏好你的底牌。</b>别那么容易让人看透。你越容易被看透、欺辱你的成本越低，别人越敢肆无忌惮地拿捏你；有弱点、有边界的人，反而没那么容易被冒犯。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>增加别人干预你的成本。</b>有些人敢肆无忌惮地干涉你，是因为他们不用为此付出代价。不要只在意自己的反驳成本，要主动增加别人折腾你的隐性成本，该反击时就反击。</p></div>
+      <div class="pt"><div class="n">⑤</div><p><b>讨好别人，就是把自己的底线交出去。</b>你越想让所有人满意，越容易在每一件事上退让，边界就一点点被磨没。守住底线，关键不是对谁狠，而是先想清楚：这件事，我的线画在哪？下面的"拒绝五层级"，就是把线捡回来的方法。</p></div>
+    </div>
+
+    <div class="prose" style="margin-top:24px">
+      <p><b style="color:var(--accent)">拒绝的五个层级（从弱到强）：</b></p>
+      <div class="points" style="margin-top:14px">
+        <div class="pt"><div class="n">1</div><p><b>不拒绝</b>——最弱。为了保关系什么都答应，慢慢变成任人宰割的那个。</p></div>
+        <div class="pt"><div class="n">2</div><p><b>代价很大时才拒绝</b>——平时不好意思，只有自己亏太多才开口。</p></div>
+        <div class="pt"><div class="n">3</div><p><b>找借口拒绝</b>——"没时间""下周再约"，其实是不敢说真实的想法。</p></div>
+        <div class="pt"><div class="n">4</div><p><b>不带理由地拒绝</b>——别人让你不舒服、踩了你的边界，直接说"不"就好，拒绝本不需要理由。这是很多人该练到的层级。</p></div>
+        <div class="pt"><div class="n">5</div><p><b>开条件拒绝（最高级）</b>——反客为主：我可以帮，但你要先……把被动变成主动，让对方为自己的需求负责。</p></div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:30px">
+      <p class="lead" style="font-size:26px">情绪：边界被踩时的自我保护</p>
+      <div class="points" style="margin-top:14px">
+        <div class="pt"><div class="n">1</div><p><b>情绪不是无理取闹，是身体的警报。</b>作者提出，愤怒、委屈本质上是觉察到边界被侵犯时，身体拉起的警报；冲突也是一样，是你感到被侵占时的战斗反应。所以先别急着压住情绪，先看清：是谁、在哪件事上踩了你的线。</p></div>
+        <div class="pt"><div class="n">2</div><p><b>人的一切痛苦，是对自己无能的愤怒。</b>很多情绪看着是别人惹的，根子却在自己还没练出本事。王小波这句话，作者很认同。把矛头从别人身上收回来，才是情绪真正的出口。</p></div>
+        <div class="pt"><div class="n">3</div><p><b>换个想法，就换个结果（情绪ABC理论）。</b>很多人以为"是那件事让我生气"——其实不是。下面这张图把 A、B、C 拆开，一看就懂。</p></div>
+      </div>
+
+      <div class="abc">
+        <div class="abc-flow">
+          <div class="abc-box">
+            <div class="abc-letter">A</div>
+            <div class="abc-name">诱发事件</div>
+            <div class="abc-text">发生了什么事<br>例：被领导当众批评了一句</div>
+          </div>
+          <div class="abc-arrow">→</div>
+          <div class="abc-box b">
+            <div class="abc-letter">B</div>
+            <div class="abc-name">你的看法 / 信念</div>
+            <div class="abc-text">你怎么解读这件事<br>（关键变量，由你掌控）</div>
+          </div>
+          <div class="abc-arrow">→</div>
+          <div class="abc-box">
+            <div class="abc-letter">C</div>
+            <div class="abc-name">情绪后果</div>
+            <div class="abc-text">你因此产生的情绪、反应<br>例：愤怒想怼 / 平静去改</div>
+          </div>
+        </div>
+        <div class="abc-note">关键：<b>不是 A 直接造成 C，是 B 造成 C</b>。人们总怪"是那件事气到我"，但真正点燃气绪的，是你对那件事的看法。所以想换情绪，改的是 <b>B（你的解读）</b>，不是去死磕 A（已经发生、改不了的事）。</div>
+        <div class="abc-cap">同样被批评：B 是"他故意让我难堪" → C 是炸、想怼回去；B 是"他在指出我的问题" → C 是平静、想想怎么改。换的不是事，是你的想法。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 五、筛选圈子·经营关系 -->
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 筛选圈子·经营关系：你强了，身边全是好人</div>
+    <div class="sec-sub">圈子不是靠"对人好"换来的，而是靠你自己的分量筛出来的。</div>
+    <div class="vs">
+      <div class="col">
+        <span class="tag">弱者思维</span>
+        <div class="vt">依赖、等别人来救</div>
+        <div class="vd">把希望寄托在别人身上（在家靠父母、出门靠朋友），对别人有过高道德期望，总想把结果怪到外界，等着别人对自己好、拯救自己。</div>
+        <div class="ve">后果：永远被动，容易被利用，关系里总是那个吃亏的人。</div>
+      </div>
+      <div class="col">
+        <span class="tag">强者思维</span>
+        <div class="vt">聚焦自己的价值，用规则治理人性</div>
+        <div class="vd">不盲信道德、不指望别人拯救，先把精力放在提升自己的价值上；懂道德让你成为好人，懂人性让你成为富人。</div>
+        <div class="ve">后果：你越强大，身边好人越多，因为别人得罪你的成本变高了。</div>
+      </div>
+    </div>
+    <div class="points" style="margin-top:24px">
+      <div class="pt"><div class="n">①</div><p><b>别人对你是好是坏，取决于你。</b>你弱了，得罪你的成本太低，身边坏人就多；你强大了，别人不敢轻易冒犯，身边显得全是好人。外在的一切我们很难主导，唯一能控制的只有自己。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>知己知彼：读懂冰山下的期待。</b>一个人的行为只是冰山一角，底下藏着感受、观点、期待和渴望。只看到表面行为，很容易擦枪走火；读懂对方行为背后的期待，关系才顺。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>管理别人的期待（阈值管理）。</b>一开始别表现太好，形成"自薄而厚"的趋势，每次都稍稍超出对方预期，他才会更欢喜。做了一辈子好事的人做件坏事，容易被唾弃；无恶不作的人救个人，却像升华——这就是期待值的魔法。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>让人喜欢你，本质是提供安全感与价值感。</b>表达欣赏、借助身边的"镜子"反射你的价值、制造情绪波动。真爱有时只是对童年缺失的弥补，理解这点，你就不会被一句好话轻易带跑。</p></div>
+    </div>
+  </section>
+
+  <!-- 六、成长是逆人性的 -->
+  <section class="section rise" id="s6">
+    <div class="sec-title">六 · 成长是逆人性的</div>
+    <div class="sec-sub">成长违背本能，所以难。但扒掉三层皮、学会深度思考，就能扛住。</div>
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>普通人逆袭，先扒三层皮。</b>第一层扒掉俗世道德观——别被"礼让、先人后己"绑住，不敢去争本该属于自己的机会；第二层扒掉规则束缚——规则是人为的、会因时因地变化，不是铁律；第三层扒掉欲望驱动——不为本能的懒惰和即时满足所惑，懂得延迟满足。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>学会深度思考。</b>走"观察→了解→收集→过滤→总结"的路线，不断刨根问底找根本规律；分拣信息源，把别人当成镜子扫除自己的思维盲区，而不是困在自己的连续发散里。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>克制纠正他人的欲望。</b>没人愿意承认自己错了，你越劝他，他越要对抗你。能改正错误的永远只有他自己。所以不随便给别人提建议，是成年人最基本的自律。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>成长的真相，是逆人性的。</b>别做迎合者，做引领者——聚焦提升自己的价值，让别人来求你，而不是你去讨好别人。因上努力，果上随缘；见自己，听天命，清楚自己的能力边界。</p></div>
+      <div class="pt"><div class="n">⑤</div><p><b>保持独立思考，别被带节奏。</b>大多数人觉得"对"，往往只是因为同一个说法听得太多（重复曝光），而不是它真有道理。沟通的意义取决于对方收到了什么，不是你自己说得对不对。</p></div>
+      <div class="pt"><div class="n">⑥</div><p><b>自知之明，是成长的前提。</b>作者提出，永远不要高估别人，也不要低估自己。人贵有自知之明——知道自己的长处短处、能力边界，才知道往哪使劲、该认什么账。认识自己有两种方式：自我反思，以及借别人的评价当镜子。看不清自己，努力就容易使错方向。</p></div>
+    </div>
+    <div class="prose" style="margin-top:24px">
+      <p>作者还说，想问题不妨"反过来想"：要研究怎么幸福，先研究人怎么变痛苦；贝索斯不问"未来什么会变"，而问"未来什么不变"，然后把资源压在那些不变的事情上。逆向思维，常常比顺着想更管用。</p>
+    </div>
+  </section>
+
+  <!-- 七、扎心的金句 -->
+  <section class="section rise" id="s7">
+    <div class="sec-title">七 · 扎心金句</div>
+    <div class="sec-sub">作者说这些话很刺耳，但越品越觉得是实话。</div>
+
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>你弱了，身边坏人就多了；你强了，身边好人就多了。</blockquote>
+      <div class="ex">外在的人我们主导不了，唯一能掌控的只有自己。你强大了，一切问题都会不再是问题。</div>
+    </div>
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>懂道德让你成为好人，懂人性让你成为富人。</blockquote>
+      <div class="ex">只谈道德、不讲规则，社会很虚伪；强者用规则治理人性，先聚焦自己的价值。</div>
+    </div>
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>关系的本质，是价值交换。</blockquote>
+      <div class="ex">你能量越高、越被需要，主动权就越多；一味讨好，只会暴露你更需要对方。</div>
+    </div>
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>讨好别人，就等于得罪自己。</blockquote>
+      <div class="ex">讨好的内在和外在在打架：外在想让人开心，内在想做真实的自己，最后两边都委屈。</div>
+    </div>
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>你所有的痛苦，都来自期待过高。</blockquote>
+      <div class="ex">一是对外在期待太高，二是让别人对你期待太高。降低期待，落空的概率就小了。</div>
+    </div>
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>免费的东西人人喜欢，却无人珍惜。你对别人的好越没底线，你的付出就越廉价。</blockquote>
+      <div class="ex">越容易得到的东西越不被珍惜，亲人之间也一样——因为对亲人发泄不需要代价。</div>
+    </div>
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>不要高估别人，也不要低估自己。</blockquote>
+      <div class="ex">我们总拿别人的看法衡量自我价值，被指出错误就下意识反驳、证明，反而看不见客观事实。</div>
+    </div>
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>因上努力，果上随缘。</blockquote>
+      <div class="ex">全力以赴就好，剩下的交给天意。对结果有过高期待，期待落空时痛苦自然就来了。</div>
+    </div>
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>成年人的顶级自律，是克制纠正他人的欲望。</blockquote>
+      <div class="ex">没人愿意承认自己错，能说服一个人的永远是他自己。不随便提建议，是成年人基本的自律。</div>
+    </div>
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>别人欠你的，他会忘记你；你欠别人的，他会记住你。</blockquote>
+      <div class="ex">人性是以自我为中心的：欠了别人，倾向于忘记；别人欠了自己，却一直记着。</div>
+    </div>
+    <div class="quote"><div class="mark">"</div>
+      <blockquote>永远不要低估周围人的嫉妒。</blockquote>
+      <div class="ex">你往上走时，身边人态度悄悄变冷，很多时候不是你做错了什么，而是有人见不得你好。看清这点，就不必为疏远近况自责。</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  var spy=new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]});
+  sections.forEach(function(s){spy.observe(s);});
+
+  // 内容块默认已可见（CSS .rise opacity:1），不再用 IntersectionObserver 控制显隐，避免滚动时出现空白断层。
+</script>
+</body>
+</html>

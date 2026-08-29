@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《进化心理学》· 知识卡片</title>
+<style>
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .sub-title{margin-top:44px;font-size:30px;font-weight:400;color:var(--ink);display:flex;align-items:center;gap:12px;letter-spacing:.5px}
+  .sub-title .sn{flex:0 0 auto;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;font-size:23px;display:flex;align-items:center;justify-content:center}
+  .sub-title .st-sub{margin-left:auto;font-size:19px;color:var(--muted);letter-spacing:0}
+  .sub-desc{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .item-title{font-size:31px;font-weight:400;color:var(--ink);line-height:1.25}
+  .item-desc{margin-top:10px;font-size:23px;color:var(--muted);line-height:1.5}
+  .red{color:var(--accent);font-weight:400}
+  .strike{position:relative;display:inline-block;color:var(--muted);font-weight:400}
+  .strike::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:4px;background:var(--accent);border-radius:3px;transform:rotate(-2deg)}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .rise.show{opacity:1;transform:translateY(0)}
+  .no-anim .rise{opacity:1;transform:none}
+
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+  .points .pt b{color:var(--accent)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+  .vs .tail{margin-top:14px;font-size:23px;color:var(--accent);line-height:1.5;font-weight:400}
+
+  .divider{margin:60px auto 0;max-width:520px;height:26px}
+
+  .vs.old .tag{background:var(--line)}
+  .vs.old .vt{color:var(--accent)}
+
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:180px}
+
+  /* 理论模块（多格对照表） */
+  .theory-grid{margin-top:26px;display:grid;grid-template-columns:repeat(3, 1fr);gap:14px}
+  .tcard{background:var(--card);border:2.5px solid var(--line);border-radius:13px;padding:18px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06)}
+  .tcard .thead{display:flex;align-items:baseline;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center}
+  .tcard .tname{font-size:24px;font-weight:400;color:var(--accent);line-height:1.2}
+  .tcard .tdef{margin-top:7px;font-size:19px;color:var(--muted);line-height:1.4;min-height:54px}
+  .tcard .tfig{margin-top:10px;width:100%}
+  .tcard .tfig svg{width:100%;height:auto;display:block}
+
+  /* 概念展开模块：纳瓦尔式结构呈现（编号+红名+灰cone+连贯prose+结构件拎重点） */
+  .concept-list{margin-top:30px;display:flex;flex-direction:column;gap:22px}
+  .concept{background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:3px 4px 0 rgba(0,0,0,.06)}
+  .concept .chead{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+  .concept .cnum{flex:0 0 46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center}
+  .concept .cmeta{flex:1;min-width:260px}
+  .concept .cname{font-size:29px;color:var(--accent);line-height:1.2}
+  .concept .cone{font-size:20px;color:var(--muted);margin-top:4px;line-height:1.45}
+  .concept .cbody{margin-top:18px}
+  .concept .cbody p{font-size:23px;line-height:1.55;color:var(--ink);margin-top:12px}
+  .concept .cbody p:first-child{margin-top:0}
+  .concept .cbody b{font-weight:400;color:var(--accent)}
+  .concept .cline{margin-top:18px;padding:16px 18px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:10px}
+  .concept .cline .lab{font-size:19px;color:var(--accent);font-weight:400}
+  .concept .cline p{font-size:22px;color:var(--ink);line-height:1.5;margin-top:6px}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .tagx{font-size:18px;color:var(--ink);background:rgba(106,96,88,.10);border:2px solid var(--line);border-radius:20px;padding:5px 12px;white-space:nowrap}
+  .mini-vs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  .mini-vs .mcol{padding:14px 16px;border-radius:12px;background:rgba(106,96,88,.08)}
+  .mini-vs .mcol.good{background:rgba(224,67,46,.08);border:2px solid var(--accent)}
+  .mini-vs .mt{font-size:20px;color:var(--accent);margin-bottom:6px}
+  .mini-vs .mp{font-size:21px;color:var(--ink);line-height:1.5}
+  .levels{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .lv{display:flex;gap:12px;align-items:flex-start}
+  .lv .lvn{flex:0 0 30px;height:30px;border-radius:50%;background:var(--line);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center}
+  .lv .lvc{font-size:22px;color:var(--ink);line-height:1.5;flex:1}
+  .lv .lvc b{color:var(--accent);font-weight:400}
+  .example{margin-top:16px;padding:14px 18px;border:2px dashed var(--line);border-radius:12px;background:rgba(251,246,240,.7)}
+  .example .ex-title{font-size:19px;color:var(--muted);margin-bottom:6px}
+  .example p{font-size:22px;color:var(--ink);line-height:1.5}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)} .theory-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+    .theory-grid{grid-template-columns:1fr}
+    .sub-title{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero rise">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《进化心理学》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">戴维·巴斯 · 2015</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">全称《进化心理学：心理的新科学》</div>
+    <div class="bigq" style="margin-top:18px">人类今天所有的心理，都是为了解决昨天的问题。</div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 核心误区</a>
+    <a href="#s3" class="tab">③ 核心观点</a>
+    <a href="#s4" class="tab">④ 核心内容</a>
+    <a href="#s5" class="tab">⑤ 核心价值</a>
+  </nav>
+
+  <!-- 一、书籍定位 -->
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="sec-sub">一句话：用达尔文的进化论，来重写心理学。</div>
+    <div class="prose">
+      <p>《进化心理学》是戴维·巴斯写的一本学科入门书，用进化论的视角看人的心理和行为。这本书的核心观点是：<strong style="color:var(--accent)">人的心理是一整套为了解决祖先反复遇到的生存和繁衍问题，被自然选择慢慢筛选出来的"心理机制"</strong>。</p>
+      <p>进化不是一个有目的的过程。自然选择没有目的，它只是把那些适合当前环境的基因保留下来。基因并不知道未来会发生什么，所以它不会预知生物体未来需要什么。进化本身并不完美，它不是为了"未来更好"，只是为了更好地适应当前的环境。</p>
+      <p>在巴斯之前，已经有很多人从不同角度研究过人的心理。比如弗洛伊德，把人的心理看作"压抑的本能"；行为主义，把它看作"环境刺激的反应"；社会学，把它看作"文化的产物"。这些说法都漏掉了最关键的一层：<strong style="color:var(--accent)">人的心理是被自然选择塑造的，在遇到某些特定的场景时，会触发人的某些特定的行为</strong>。一句话：机制就是"场景 → 行为"的固定连接。连接为什么存在，是因为它过去帮我们的祖先解决了生存或繁衍里的某一类具体问题。</p>
+      <p style="margin-top:12px">所以这本书要回答的核心问题只有一个：<span class="red">人的心理和行为有什么规律？这些规律是怎么被进化塑造出来的？</span></p>
+    </div>
+  </section>
+
+  <!-- 二、核心误区 -->
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 一个最常被搞错的常识</div>
+    <div class="sec-sub">大众的普遍想法和巴斯研究出来的结论，正好相反。</div>
+    <div class="vs old">
+      <div class="col">
+        <span class="tag">大众的默认想法</span>
+        <div class="vt">行为是由基因决定的，改不了</div>
+        <div class="vd">一提到"进化"，第一反应就是"男人天生花心、女人天生拜金"。再往下聊，就容易变成用进化论去给歧视背书，所以很多人干脆回避这个话题。</div>
+      </div>
+      <div class="col">
+        <span class="tag">巴斯的研究结论</span>
+        <div class="vt">行为是基因和环境共同塑造的</div>
+        <div class="vd">基因确实影响人的行为，但它不是唯一因素，环境同样重要。机制也不是"写死在骨头里"，它是在某些场景下倾向于做出某种反应，环境一变，倾向性也跟着变。比如远古的"怕蛇"机制，在今天的动物园里就是不必要的紧张；远古的"躲避高处陌生人"的反应，在今天的电梯里就显得过度。</div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top:20px">
+      <p>巴斯反复做的事，是把每一条"看似天生"的反应，从头追问一句，它最初是为了帮我们祖先解决什么事而存在的。搞清楚这一点，反而能更主动地决定：是顺着它，还是拦下来。</p>
+    </div>
+  </section>
+
+  <!-- 三、巴斯的核心观点 -->
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 巴斯的 5 个核心观点</div>
+    <div class="sec-sub">先讲清楚"机制"到底指什么，再讲 5 个具体的机制。</div>
+
+    <div class="prose">
+      <p>先说清一件事：<strong style="color:var(--accent)">机制就是"场景 → 行为"的固定连接</strong>。在遇到某些特定的场景时，人会倾向于做出某些特定的行为，这就是机制。这条连接不是谁设计的，是自然选择筛选出来的：过去帮我们祖先解决了生存或繁衍某一类问题的连接，被保留下来；解决不了的，被淘汰。所以机制不是"命中注定"，它只是"在某种场景下倾向于做出某种反应"，场景变了，倾向性也会变。后面 5 条机制，就是这一句话在日常行为里的具体落地。</p>
+    </div>
+
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>择偶差异。</b>谁在养育后代上投入越多，谁就越挑剔；谁投入越少，谁就越倾向广撒网。具体到人类：女性最低投入是 9 个月孕期加多年抚养，男性最低投入是一次射精。投入量级差太多，能承受的错选代价就完全不同，所以女性比男性挑剔，是机制在各自筛自己承受不起的风险，不是谁更"现实"。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>亲缘利他。</b>人愿意为亲人牺牲、对远亲近亲差别对待，是因为机制在按"基因相同多少"排序。孩子和自己亲缘系数最高，兄弟姐妹次之，表亲再次之，所以你更愿为孩子牺牲、为兄弟姐妹、为表亲，是机制在按亲缘排序，不是道德在排序。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>互惠利他。</b>没有血缘的人也愿意互相帮忙，是因为互惠。远古时代你帮了别人，将来别人也会帮你；大家都更容易活下去，这就是机制在做的事。</p></div>
+      <div class="pt"><div class="n">4</div><p><b>情绪过度敏感。</b>人的情绪系统被设计成"宁可犯错也不放过"，宁可把无害当危险（误报），也不能漏掉真危险（漏报）。因为漏报的代价是丢命，误报的代价只是错过一次机会。所以你总往坏处想、被焦虑拽着停不下来，是这套机制在响。</p></div>
+      <div class="pt"><div class="n">5</div><p><b>冲突。</b>亲子之间、两性之间，只要两边的进化利益不一致就会起冲突。父母想让资源在不同子女之间平均分，让孩子都能活下去；子女想独占全部资源，不想分给兄弟姐妹。男女之间，男性精子便宜容易多占，女性卵子稀缺需要锁定长期投入。这种利益错位就是冲突的源头。</p></div>
+    </div>
+  </section>
+
+  <!-- 四、核心内容 -->
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 核心内容</div>
+    <div class="sec-sub">把每个机制单独展开：它怎么运作、跨文化的证据、日常里看到它是什么样子。</div>
+
+    <div class="theory-grid">
+      <div class="tcard">
+        <div class="thead"><span class="tname">① 亲代投资理论</span></div>
+        <div class="tfig">
+          <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m1" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <rect x="14" y="14" width="68" height="26" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="48" y="30" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">高投入</text>
+            <text x="48" y="50" font-size="10" fill="#9C928A" text-anchor="middle" font-family="LXGW WenKai">9月孕期+</text>
+            <line x1="84" y1="27" x2="186" y2="27" stroke="#E0432E" stroke-width="2" marker-end="url(#m1)"/>
+            <text x="135" y="20" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">挑剔</text>
+            <rect x="14" y="60" width="68" height="26" rx="5" fill="rgba(106,96,88,.12)" stroke="#6A6058" stroke-width="2"/>
+            <text x="48" y="76" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">低投入</text>
+            <text x="48" y="94" font-size="10" fill="#9C928A" text-anchor="middle" font-family="LXGW WenKai">一次射精</text>
+            <line x1="84" y1="73" x2="186" y2="73" stroke="#6A6058" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="140" y="66" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">广撒网</text>
+          </svg>
+        </div>
+        <div class="tdef">雌孔雀投入大，所以它必须挑；雄孔雀投入小，所以它可以广撒网</div>
+      </div>
+      <div class="tcard">
+        <div class="thead"><span class="tname">② 性选择理论</span></div>
+        <div class="tfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="36" r="20" fill="rgba(224,67,46,.14)" stroke="#E0432E" stroke-width="2"/>
+            <text x="100" y="40" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">择偶</text>
+            <line x1="84" y1="50" x2="38" y2="86" stroke="#6A6058" stroke-width="2"/>
+            <rect x="6" y="86" width="64" height="24" rx="5" fill="rgba(106,96,88,.10)" stroke="#6A6058" stroke-width="2"/>
+            <text x="38" y="102" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">同性竞争</text>
+            <line x1="116" y1="50" x2="162" y2="86" stroke="#E0432E" stroke-width="2"/>
+            <rect x="130" y="86" width="64" height="24" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="162" y="102" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">异性选择</text>
+          </svg>
+        </div>
+        <div class="tdef">物种的进化不只有同性竞争，还包括异性的选择</div>
+      </div>
+      <div class="tcard">
+        <div class="thead"><span class="tname">③ 互惠利他</span></div>
+        <div class="tfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <circle cx="48" cy="60" r="22" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="48" y="64" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">你</text>
+            <circle cx="152" cy="60" r="22" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="152" y="64" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">我</text>
+            <line x1="72" y1="50" x2="128" y2="50" stroke="#E0432E" stroke-width="2" marker-end="url(#m3)"/>
+            <line x1="128" y1="72" x2="72" y2="72" stroke="#E0432E" stroke-width="2" marker-end="url(#m3)"/>
+          </svg>
+        </div>
+        <div class="tdef">人有互惠利他的天然倾向，互惠共赢能提高生存概率</div>
+      </div>
+      <div class="tcard">
+        <div class="thead"><span class="tname">④ 广义适合度</span></div>
+        <div class="tfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <text x="100" y="16" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">亲缘越近 → 越愿帮</text>
+            <rect x="14" y="28" width="172" height="22" rx="4" fill="rgba(224,67,46,.85)" stroke="#E0432E" stroke-width="2"/>
+            <text x="100" y="44" font-size="13" fill="#fff" text-anchor="middle" font-family="LXGW WenKai">孩子（最愿帮）</text>
+            <rect x="14" y="56" width="120" height="22" rx="4" fill="rgba(224,67,46,.45)" stroke="#E0432E" stroke-width="2"/>
+            <text x="74" y="72" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">兄弟姐妹</text>
+            <rect x="14" y="84" width="68" height="22" rx="4" fill="rgba(224,67,46,.18)" stroke="#E0432E" stroke-width="2"/>
+            <text x="48" y="100" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">表亲</text>
+          </svg>
+        </div>
+        <div class="tdef">你愿不愿意帮一个人，看他跟你基因上有多亲</div>
+      </div>
+      <div class="tcard">
+        <div class="thead"><span class="tname">⑤ 冲突理论</span></div>
+        <div class="tfig">
+          <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+            <rect x="14" y="20" width="74" height="32" rx="5" fill="rgba(106,96,88,.10)" stroke="#6A6058" stroke-width="2"/>
+            <text x="51" y="40" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">父母</text>
+            <rect x="112" y="20" width="74" height="32" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="149" y="40" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">子女</text>
+            <line x1="88" y1="30" x2="112" y2="30" stroke="#E0432E" stroke-width="2"/>
+            <polygon points="108,26 114,30 108,34" fill="#E0432E"/>
+            <line x1="112" y1="44" x2="88" y2="44" stroke="#E0432E" stroke-width="2"/>
+            <polygon points="92,40 86,44 92,48" fill="#E0432E"/>
+          </svg>
+        </div>
+        <div class="tdef">亲子之间、两性之间，进化利益不一致就起冲突</div>
+      </div>
+      <div class="tcard">
+        <div class="thead"><span class="tname">⑥ 情绪机制</span></div>
+        <div class="tfig">
+          <svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m6" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <rect x="14" y="18" width="68" height="28" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="48" y="36" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">误报</text>
+            <line x1="84" y1="32" x2="186" y2="32" stroke="#E0432E" stroke-width="2" marker-end="url(#m6)"/>
+            <text x="135" y="24" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">错过机会</text>
+            <rect x="14" y="64" width="68" height="28" rx="5" fill="rgba(106,96,88,.10)" stroke="#6A6058" stroke-width="2"/>
+            <text x="48" y="82" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">漏报</text>
+            <line x1="84" y1="78" x2="186" y2="78" stroke="#6A6058" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="135" y="70" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">丢掉性命</text>
+          </svg>
+        </div>
+        <div class="tdef">情绪系统被设计成宁可误报，不能漏报</div>
+      </div>
+    </div>
+
+    <div class="concept-list">
+
+      <!-- ① 亲代投资 -->
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">1</div>
+          <div class="cmeta">
+            <div class="cname">亲代投资理论</div>
+            <div class="cone">女性投入大 = 挑剔，男性投入小 = 广撒网</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>男女择偶偏好的差异，源于亲代投资的不对称。女性最低投入是 9 个月孕期加多年哺乳抚养，男性最低投入是一次射精。投入量级差太多，能承受的错误量级就不同，女性一次错选可能赔上整个生育窗口，所以必须挑；男性一次错选几乎零成本，所以更倾向广撒网。这种差异跨文化高度一致，说明不是文化教出来的，是亲代投资这一条机制直接决定的。</p>
+          <p>由这条主机制，可以推出 5 个具体的择偶现象：</p>
+          <div class="levels">
+            <div class="lv"><div class="lvn">①</div><div class="lvc"><b>女性偏好资源、地位、承诺</b>：因为这些特质能反映对方是否愿意长期投入。</div></div>
+            <div class="lv"><div class="lvn">②</div><div class="lvc"><b>男性偏好年轻、健康、外貌</b>：因为这些直接反映生育力水平。</div></div>
+            <div class="lv"><div class="lvn">③</div><div class="lvc"><b>女性把"爱情"理解为长期投入的期待</b>：本质上，她需要的是男性对长期投入的保证。</div></div>
+            <div class="lv"><div class="lvn">④</div><div class="lvc"><b>短期择偶策略的性别差异</b>：男性主动寻求短期关系的意愿普遍更强，女性更谨慎，因为一次短择对女性代价高得多。</div></div>
+            <div class="lv"><div class="lvn">⑤</div><div class="lvc"><b>择偶复制</b>：被多人选中的异性会被认为更值得选，因为"被多人选中"本身就是一种认可。</div></div>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>相亲时女性先翻"条件表"、男性先扫照片，不是谁更现实，是机制在各自筛自己承受不起的风险。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② 性选择 -->
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">2</div>
+          <div class="cmeta">
+            <div class="cname">性选择理论</div>
+            <div class="cone">物种的进化不只有同性竞争，还包括异性的选择</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>按自然选择的逻辑，雄孔雀的大尾羽又笨重又碍事，应该早就被淘汰了，但它没被淘汰。原因是雌孔雀偏好长着大尾羽的雄孔雀。这种违反"适者生存"的现象就是性选择要解释的事：物种的进化不只有"谁能活下去"的同性竞争，还包括"谁被异性选中"的异性选择。同性竞争和异性选择是同一个机制的两面，一个解释"为什么留下这种特征"，一个解释"为什么这种特征越来越夸张"。</p>
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">同性竞争</div>
+              <div class="mp">同性之间争配偶。胜者独占交配机会，更多基因传给后代，胜者的特征在种群中越来越普遍。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">异性选择</div>
+              <div class="mp">一个性别偏好的特征，让另一个性别里拥有该特征的个体繁殖更成功，从而该特征在种群中越来越普遍。</div>
+            </div>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>雄鹿争雌鹿、角大的胜出留下更多后代，同性竞争；选美、肌肉训练、彩礼，现代社会里的异性选择压力，机制和孔雀尾巴一样。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ 互惠利他 -->
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">3</div>
+          <div class="cmeta">
+            <div class="cname">互惠利他</div>
+            <div class="cone">人有互惠利他的天然倾向，互惠共赢能提高生存概率</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>互惠利他解释了非亲缘个体之间的合作关系：一方为另一方提供帮助，以期在未来获得回报。人类为维持互惠系统，进化出若干认知能力，并形成与欺骗和互利识别相关的两种心理倾向。</p>
+          <p>维持这种互惠关系需要 5 项专门的认知能力：</p>
+          <div class="levels">
+            <div class="lv"><div class="lvn">①</div><div class="lvc"><b>识别个体</b>：区分不同的合作者，是记录谁帮过谁的前提。</div></div>
+            <div class="lv"><div class="lvn">②</div><div class="lvc"><b>记录互惠</b>：记住与每个人过去的交换情况。</div></div>
+            <div class="lv"><div class="lvn">③</div><div class="lvc"><b>表达需要</b>：能向对方说清楚自己需要什么帮助。</div></div>
+            <div class="lv"><div class="lvn">④</div><div class="lvc"><b>理解需要</b>：理解对方需要什么帮助。</div></div>
+            <div class="lv"><div class="lvn">⑤</div><div class="lvc"><b>评估收益与代价</b>：在帮助别人前评估这次忙值不值得帮。</div></div>
+          </div>
+          <div class="cline">
+            <div class="lab">两种合作倾向</div>
+            <p>对欺骗行为的识别与回避；对互利行为的觉察与趋向。</p>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>同事帮了一次忙，你倾向于在对方需要时回报，这是互惠机制在运作。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ④ 广义适合度 -->
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">4</div>
+          <div class="cmeta">
+            <div class="cname">广义适合度</div>
+            <div class="cone">你愿不愿意帮一个人，看他跟你基因上有多少相同</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>人为什么会为亲人牺牲？对谁更舍得？答案是：你愿不愿意帮一个人，看他基因和你相同多少。你和孩子的亲缘系数最高，和兄弟姐妹次之，和表亲再次之。所以你愿为孩子牺牲胜过兄弟姐妹、又胜过表亲，不是道德在排序，是机制在按亲缘关系排序。</p>
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">父系亲缘</div>
+              <div class="mp">每一代都可能被偷换，父亲并不确定孩子是不是自己的。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">母系亲缘</div>
+              <div class="mp">每一代都确定，母亲一定知道孩子是自己生的，亲缘从不打折。</div>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tagx">亲子 > 兄弟姐妹 > 表亲</span>
+            <span class="tagx">亲缘越近，越愿帮</span>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>外婆比奶奶更愿意带孩子，因为外婆这一支的亲缘关系每一代都确定，父系那一支可能打折。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑤ 冲突理论 -->
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">5</div>
+          <div class="cmeta">
+            <div class="cname">冲突理论</div>
+            <div class="cone">亲子之间、两性之间，进化利益不一致就会起冲突</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p><b>亲子冲突。</b>父母和子女看着一条心，实际只有一半基因相同。子女想让父母把资源全给自己，父母想在不同子女之间平分，两套本能偏好天然就不一样。冲突从子宫里就开始：胎儿尽量多拿母体资源，甚至伤到母亲；出生以后，断奶、玩具、教育资源、遗产、婚姻对象，每一项都可能成战场。</p>
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">父母</div>
+              <div class="mp">和每个子女只有一半基因相同，所以想把资源在所有子女之间均分，让每个都能活下去。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">子女</div>
+              <div class="mp">和自己 100% 基因相同，所以想独占全部资源，不想分给兄弟姐妹。</div>
+            </div>
+          </div>
+          <p><b>两性冲突。</b>男女在同一段关系里的最优策略也不重合。男性精子便宜，多占一个配偶代价很低；女性卵子和孕期昂贵，更需要把对方的资源长期锁定。所以一方倾向少承诺多占有，另一方倾向锁定长期投入，这种利益错位贯穿择偶、出轨与短期策略，两边都会演化出争取自己这边的做法。</p>
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">妻子更怕的</div>
+              <div class="mp">丈夫动了感情，因为资源可能被转去给别人。她在意的是"长期投入会不会被抽走"。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">丈夫更怕的</div>
+              <div class="mp">妻子身体出轨，因为孩子可能未必是自己的。他在意的是"养育的到底是不是自己的基因"。</div>
+            </div>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>家里有继父母的孩子受虐待的概率显著更高，因为继父母对这些孩子没有那 50% 的基因投入本能。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑥ 烟雾报警器 -->
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">6</div>
+          <div class="cmeta">
+            <div class="cname">烟雾报警器原理</div>
+            <div class="cone">情绪系统被设计成宁可误报、不能漏报</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>人的情绪系统不像温度计，更像烟雾报警器。烟雾报警器不是等着火了以后才响，而是在冒烟的时候就响了。因为漏报的代价是烧掉房子，误报的代价只是白忙活一场。所以，宁可误报，也不能漏报。这就是：宁可错杀，不要放过。同样的逻辑推到人的情绪：怕蛇、怕黑、怕陌生人、在意别人眼光，都是这套机制在起作用。所以人看着过度敏感，却是按"漏报代价远大于误报"的原则设计的。</p>
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">漏报（真危险当无害）</div>
+              <div class="mp">代价是丢掉性命，进化绝不允许犯这种错。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">误报（无害当危险）</div>
+              <div class="mp">代价只是犯一次错，不会有生命危险，还可以补救。</div>
+            </div>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>理性告诉你吸烟有害、你戒不掉，过马路别看手机、你做不到，听到家人话不对劲马上担心，这都是报警系统在响。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="prose" style="margin-top:28px">
+      <p>5 个机制放在不同文化里被反复验证过，结果高度一致。所以这些机制不是某个文化教出来的，是人类共通的。</p>
+    </div>
+  </section>
+
+  <!-- 五、核心价值 -->
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 核心价值</div>
+    <div class="sec-sub">5 个机制讲了人为什么会有那些冲动。下面这 3 条不是把机制再讲一遍，是机制照进现实以后真能用的思考。</div>
+
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>看到一个行为，先问一句"它当初帮我们祖先解决什么事"。</b>比如父母催婚，表面看是"他们好烦"，从机制看是"他们想让你接入一个稳定的资源来源"。同样的路：路怒司机、攀比的同事、自私的亲戚，你骂的不是"那个人"，是他背后那条还在起作用的老机制。先问这一句，常比直接评判对方有用，你从"评判他是个什么样的人"，变成"看清他背后在动的力量是什么"。看清了以后，再用不用它的判断权就回到你手里。</p></div>
+
+      <div class="pt"><div class="n">②</div><p><b>焦虑的时候，先分清"它是真危险还是只是让我难受的事"。</b>远古的机制是为应对狮子、饥饿、群体排斥设计的，几亿年没变。过去几百年，社会变化太快，被领导批评、朋友圈没人点赞、35 岁还没成家、亲戚比工资，这些事都没要你的命，但机制照样把"危险"贴在上面。这就是为什么很多人"理性知道没事，停不下来"。具体的做法：焦虑到睡不着、或被某条微信气到反复看的时候，先把让你难受的那件事写下来，再问自己三句，"它影响我今晚睡觉吗？影响我明天干活吗？影响我三年后过什么样吗？"几秒就答完。答案常常是"其实没那么要命"，这就是机制错位。错位的应对不是消灭反应，是把反应等级调低（少琢磨，去做点别的），而不是反复生气。常这么做，错位的次数就会越来越少。</p></div>
+
+      <div class="pt"><div class="n">③</div><p><b>遇到冲突，先别站队，看两边背后各自在动的机制是什么。</b>你和伴侣吵架、和父母催婚对峙、和同事争资源，表面看是"谁对谁错"，背后常常是机制的两套利益不一致。父母催你结婚和孩子想晚结婚，背后是两套机制的拉扯；夫妻争执和伴侣出轨，背后是两性冲突的不同侧重；同事之间争晋升，背后是地位机制在起作用。看到两边各自在动的机制，比"评判谁错"省力：你不再是站在一边攻击另一边，而是看清结构再决定怎么处理。处理方式三种：顺着它、拦下来、或者给它换个出口。每一种都比"在道德上评判对方"管用。</p></div>
+    </div>
+
+    <div class="indent">书里讲的<b>是群体的，不是具体个人的</b>。它说的是"人作为物种整体上普遍会怎么做"，不等于每个具体的人都会照做。读这本书不要拿去套任何一个人，包括自己。它适合用来"看到机制在起作用"，不适合用来"指导你下次具体怎么做"，看清自己和别人，已经够了。</div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  var spy=new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]});
+  sections.forEach(function(s){spy.observe(s);});
+</script>
+</body>
+</html>

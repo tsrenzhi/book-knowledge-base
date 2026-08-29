@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《孙子兵法》· 知识卡片</title>
+<style>
+/* 本地后备：霞鹜文楷加载失败时使用系统字体 */
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .item-title{font-size:31px;font-weight:400;color:var(--ink);line-height:1.25}
+  .item-desc{margin-top:10px;font-size:23px;color:var(--muted);line-height:1.5}
+  .red{color:var(--accent);font-weight:400}
+  .strike{position:relative;display:inline-block;color:var(--muted);font-weight:400}
+  .strike::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:4px;background:var(--accent);border-radius:3px;transform:rotate(-2deg)}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .rise.show{opacity:1;transform:translateY(0)}
+  .no-anim .rise{opacity:1;transform:none}
+
+  /* HERO：一行红色大字问题 */
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  /* 顶部 tab */
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+  .quote.user{border-color:var(--line)}
+  .quote.user .mark{color:var(--line)}
+  .quote.user blockquote{color:var(--ink)}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .divider{margin:60px auto 0;max-width:520px;height:26px}
+
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .tag{background:var(--line)}
+  .vs.old .vt{color:var(--accent)}
+
+  /* 道天地将法 / 五事 拆解 */
+  .five{margin-top:22px;display:grid;grid-template-columns:1fr;gap:10px}
+  .five .row{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:14px 18px}
+  .five .lab{flex:0 0 54px;height:54px;border-radius:12px;background:var(--accent);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;font-weight:400}
+  .five .body{font-size:22px;line-height:1.5;color:var(--ink)}
+  .five .body b{color:var(--accent)}
+  .five .body .orig{color:var(--muted);font-size:20px;display:block;margin-top:4px;line-height:1.5}
+
+  /* 核心内容：概念卡 */
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:220px}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO：书名 + 作者 + 核心问题 -->
+  <header class="hero rise">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《孙子兵法》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">[春秋] 孙武 · 约公元前 512 年（春秋末期）</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">全称《吴孙子兵法》，传世十三篇、六千余字</div>
+    <div class="bigq" style="margin-top:18px">真正的高手想的从来不是怎么赢，而是怎么才不会输。</div>
+  </header>
+
+  <!-- 顶部 tab 导航 -->
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab active">① 书籍定位</a>
+    <a href="#s2" class="tab">② 核心误区</a>
+    <a href="#s3" class="tab">③ 孙武破局</a>
+    <a href="#s4" class="tab">④ 核心内容</a>
+    <a href="#s5" class="tab">⑤ 核心价值</a>
+  </nav>
+
+  <!-- 一、书籍定位 -->
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="prose">
+      <p>一句话说清：<b style="color:var(--accent)">《孙子兵法》不是一本教你怎么打胜仗的战术手册，而是一本讲"在对抗中如何立于不败之地"的战略书。</b></p>
+      <div class="indent"><b>它只有十三篇、六千多字，</b>却奠定了后世两千多年的军事思想。它研究的不是具体怎么排兵布阵，而是更早的一层问题：这一仗该不该打、有没有胜算、怎么用最小的代价把问题解决掉。</div>
+      <p style="margin-top:12px">它写的是战争，但讲的道理能用在做事、竞争、做人上——前提是先把"赢"这个执念放下来。带着"一定要赢"的心态去干一件事，往往正是输的开始。</p>
+    </div>
+  </section>
+
+  <!-- 二、核心误区 -->
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 大多数人对它的最大误读</div>
+    <div class="sec-sub">人们把它当成"逆袭秘籍"，其实它的底色是"不败之学"。</div>
+    <div class="vs old">
+      <div class="col">
+        <span class="tag">大众以为的孙子兵法</span>
+        <div class="vt">教人怎么赢</div>
+        <div class="vd">把它当成以少胜多、奇谋巧计的逆袭宝典。很多人记住的是"草船借箭""空城计"这种故事，觉得读了就能以小博大、出奇制胜。</div>
+        <div class="ve">后果：带着"赢心"去干事，容易冒进、频频动作，反而把自己拖垮——关羽百战百胜，一败而亡，就是典型。</div>
+      </div>
+      <div class="col">
+        <span class="tag">孙子兵法真正的底色</span>
+        <div class="vt">教人怎么不输</div>
+        <div class="vd">它的根基是先假设你会输，再教你立于不败。孙子说"善战者，先为不可胜"，先把自己练到不可战胜，再等敌人露出破绽。</div>
+        <div class="ve">所以华杉把它总结成三句话：兵法不是战法，是不战之法；不是战胜之法，是不败之法；不是以少胜多之法，是以多胜少之法。</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>这两个理解，一个盯着"赢"，一个盯着"不输"。孙子兵法从头到尾选的是后者——先保证自己不输，胜利才会自己走过来。</p>
+    </div>
+  </section>
+
+  <!-- 三、孙武破局 -->
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 孙武的核心主张</div>
+    <div class="sec-sub">先打破"求赢"的执念，再立起四条主线。这四条，就是全书的方法论骨架。</div>
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>先算胜算，不是耍计谋。</b>开篇《计篇》的"计"是计算——对比道、天、地、将、法，算清敌我强弱；没胜算就别打，而不是靠奇谋翻盘。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>先胜后战，不胜不战。</b>先把自己练到不可战胜，再等敌人可以被战胜的时机。胜兵总是先赢下再打，败兵总是先打再指望侥幸赢。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>不战而屈人之兵。</b>上兵伐谋，其次伐交，其次伐兵，其下攻城。能用谋略和利害让对方屈服，就别流血硬攻。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>以失败为假设前提思考。</b>做事前先想风险、代价，再想利益；先避害，再趋利。这是兵法智慧的根本。</p></div>
+    </div>
+
+    <div class="quote">
+      <div class="mark">"</div>
+      <blockquote>"兵者，国之大事，死生之地，存亡之道，不可不察也。"</blockquote>
+      <div class="ex">发动战争关系到国家的生死存亡，必须反复研究该不该打。这八个字奠定了全书的基调：慎战。把"兵"换成你任何一件大事——创业、投资、跳槽——都是一个道理：先想清楚代价，再动手。所谓"先计后战"，就是先把账算明白。</div>
+    </div>
+  </section>
+
+  <!-- 四、核心内容 -->
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 核心内容</div>
+    <div class="sec-sub">孙武用六条主线串起全书：先算清楚、立于不败、全胜为上、避实击虚、奇正相生、知己知彼。</div>
+
+    <div class="core-cards">
+      <div class="ccard">
+        <div class="ctitle">五事七计</div>
+        <div class="ctag">开打前先算胜算</div>
+        <div class="cfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m1" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <rect x="10" y="18" width="28" height="30" rx="4" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <rect x="45" y="18" width="28" height="30" rx="4" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <rect x="80" y="18" width="28" height="30" rx="4" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <rect x="115" y="18" width="28" height="30" rx="4" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <rect x="150" y="18" width="28" height="30" rx="4" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="24" y="38" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">道</text>
+            <text x="59" y="38" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">天</text>
+            <text x="94" y="38" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">地</text>
+            <text x="129" y="38" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">将</text>
+            <text x="164" y="38" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">法</text>
+            <line x1="24" y1="48" x2="164" y2="48" stroke="#6A6058" stroke-width="1.6"/>
+            <path d="M94,48 L94,72" fill="none" stroke="#6A6058" stroke-width="1.6" marker-end="url(#m1)"/>
+            <rect x="70" y="72" width="60" height="28" rx="4" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="100" y="91" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">七计</text>
+          </svg>
+        </div>
+        <div class="cdesc">开打前先对比"道天地将法"五项、再算"七计"，算清敌我强弱；没胜算就别打。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">先胜后战</div>
+        <div class="ctag">先立于不败之地</div>
+        <div class="cfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m2" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <path d="M100,18 L150,40 L150,86 L100,108 L50,86 L50,40 Z" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2.4"/>
+            <path d="M88,62 L96,74 L116,50" fill="none" stroke="#E0432E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="100" y="112" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">不可胜</text>
+            <circle cx="168" cy="58" r="13" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <path d="M150,58 Q160,58 156,58" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m2)"/>
+            <text x="168" y="92" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">待敌隙</text>
+          </svg>
+        </div>
+        <div class="cdesc">"先为不可胜，以待敌之可胜"——先让自己不可战胜，再等敌人露出破绽。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">不战而胜</div>
+        <div class="ctag">全胜优于死战</div>
+        <div class="cfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m3" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <circle cx="64" cy="60" r="22" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2.4"/>
+            <text x="64" y="65" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">我</text>
+            <circle cx="140" cy="60" r="22" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2.4"/>
+            <text x="140" y="65" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">敌</text>
+            <path d="M86,56 Q112,44 118,54" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m3)"/>
+            <text x="102" y="38" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">伐谋</text>
+            <text x="102" y="96" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">不攻城·不流血</text>
+          </svg>
+        </div>
+        <div class="cdesc">上兵伐谋，其次伐交，其次伐兵；能用利害让对方屈服，就不必攻城流血。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">避实击虚</div>
+        <div class="ctag">致人而不致于人</div>
+        <div class="cfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m4" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <path d="M20,96 Q60,40 180,30" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="5 4"/>
+            <circle cx="64" cy="76" r="16" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2.2"/>
+            <text x="64" y="80" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">实</text>
+            <circle cx="150" cy="46" r="16" fill="rgba(224,67,46,.14)" stroke="#E0432E" stroke-width="2.2"/>
+            <text x="150" y="50" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">虚</text>
+            <path d="M40,104 Q90,90 134,60" fill="none" stroke="#E0432E" stroke-width="2.4" marker-end="url(#m4)"/>
+            <text x="100" y="112" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">兵形象水·避实击虚</text>
+          </svg>
+        </div>
+        <div class="cdesc">"兵形象水，避实而击虚"——调动敌人而不被敌人调动，专打它薄弱处。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">奇正相生</div>
+        <div class="ctag">以正合，以奇胜</div>
+        <div class="cfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m5" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <circle cx="100" cy="60" r="38" fill="none" stroke="#6A6058" stroke-width="2.2" stroke-dasharray="5 4"/>
+            <path d="M100,60 m0,-38 a38,38 0 0 1 38,38" fill="none" stroke="#E0432E" stroke-width="3"/>
+            <text x="100" y="55" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">正</text>
+            <text x="100" y="74" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">奇</text>
+            <path d="M138,60 a38,38 0 0 1 0,1" fill="none" stroke="#E0432E" stroke-width="2.4" marker-end="url(#m5)"/>
+          </svg>
+        </div>
+        <div class="cdesc">正兵迎战、奇兵制胜，二者循环转化，像转圆环没尽头，战术变化无穷。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">知己知彼</div>
+        <div class="ctag">先摸清敌我底牌</div>
+        <div class="cfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="m6" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker>
+              <marker id="m6b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#6A6058"/></marker>
+            </defs>
+            <rect x="16" y="22" width="70" height="70" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2.2"/>
+            <text x="51" y="48" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">己</text>
+            <text x="51" y="68" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">实力·意图</text>
+            <rect x="114" y="22" width="70" height="70" rx="5" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2.2"/>
+            <text x="149" y="48" font-size="14" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">彼</text>
+            <text x="149" y="68" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">实力·意图</text>
+            <path d="M86,50 L114,50" fill="none" stroke="#6A6058" stroke-width="1.8" marker-end="url(#m6b)"/>
+            <path d="M114,64 L86,64" fill="none" stroke="#E0432E" stroke-width="1.8" marker-end="url(#m6)"/>
+            <text x="100" y="110" font-size="11" fill="#201914" text-anchor="middle" font-family="LXGW WenKai">摸清双方底牌 = 胜算</text>
+          </svg>
+        </div>
+        <div class="cdesc">"知彼知己，百战不殆"——先摸清敌我双方的实力、意图和条件，才算清该不该打。</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:28px">
+      <p><b style="color:var(--accent)">五事七计，是开打前先算胜算。</b>孙子说"经之以五事，校之以计，而索其情"，从道、天、地、将、法五个方面衡量敌我、再算七计，求的是"该不该打"的实情。很多人把《计篇》的"计"理解成奇谋，其实它是计算——一套比较敌我强弱的评估框架。这五项各指什么，孙子在《计篇》里讲得很清楚：</p>
+      <div class="five">
+        <div class="row"><div class="lab">道</div><div class="body"><b>民心向背</b><span class="orig">"令民与上同意也"——君主与民众意愿一致、上下同心，民众才肯同生共死、不惧危难。所以古代出兵必"师出有名"，让天下认这仗打得对。</span></div></div>
+        <div class="row"><div class="lab">天</div><div class="body"><b>天时与时机</b><span class="orig">"阴阳、寒暑、时制也"——昼夜晴雨、四季寒暑、农时节气，本质是"什么时候打"的外部条件。</span></div></div>
+        <div class="row"><div class="lab">地</div><div class="body"><b>战场环境</b><span class="orig">"远近、险易、广狭、死生也"——距离远近、地形险易、战场宽窄、何处是死地何处是生地，决定兵马如何调动。</span></div></div>
+        <div class="row"><div class="lab">将</div><div class="body"><b>将领五德</b><span class="orig">"智、信、仁、勇、严也"——智是谋略、信是赏罚有信、仁是爱护士卒、勇是果敢、严是军纪严明，五德俱备才堪为将。</span></div></div>
+        <div class="row"><div class="lab">法</div><div class="body"><b>组织编制与制度</b><span class="orig">"曲制、官道、主用也"——曲制是部队编组、官道是军官职守、主用是粮秣军需，保障大军令行禁止。</span></div></div>
+      </div>
+      <p style="margin-top:12px">五事算清，再用"主孰有道、将孰有能、天地孰得、法令孰行、兵众孰强、士卒孰练、赏罚孰明"七计逐项对照敌我，强弱立判，该不该打自然清楚。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">先胜后战，是让自己先立于不败。</b>"昔之善战者，先为不可胜，以待敌之可胜。不可胜在己，可胜在敌。"意思是，先创造条件让自己立于不败，主动权就在自己手里；至于能不能赢，要看敌人有没有破绽。所以胜兵总是先赢下再打，败兵总是先打再指望侥幸赢。对应到做事：先把自己变强、准备足，等机会来了再出手，别一上来就蛮干。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">不战而胜，是全胜优于死战。</b>"百战百胜，非善之善者也；不战而屈人之兵，善之善者也。"常打胜仗不算最高明，不交战就让敌人降服才是。因为攻城代价太大——修器械要三个月，士兵爬墙死三分之一还可能攻不下。所以上策是伐谋（破坏对方计谋）、其次伐交（拆散联盟）、其次伐兵，最下才攻城。放在竞争里：能用价值共识、利益绑定让对方退让，就别硬碰硬两败俱伤。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">避实击虚，是掌握主动权。</b>"夫兵形象水，水之形避高而趋下；兵之形避实而击虚。""善战者，致人而不致于人。"水流避开高处流向低处，用兵要避开敌人结实的地方、打它虚弱的地方；高手能调动敌人，而不是被敌人调动。比如敌军士气正盛就避其锋芒，等它松懈再出手，永远在运动中形成我实敌虚的优势。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">奇正相生，是战术没有定式。</b>"凡战者，以正合，以奇胜。奇正相生，如循环之无端。"一般作战，正兵正面接敌、奇兵侧翼突袭；已经投入战斗的是正，留作预备的是奇，预备队压上去就变成正。两者不断转化，像转圆环没尽头。所以战术没有固定套路，看情况组合就行。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">知己知彼，是算账的前提。</b>"知彼知己，百战不殆。"真正开打之前，先摸清双方的实力、意图和外部条件：自己强在哪里、弱在哪里，对手强在哪里、怕在哪里。情报摸清了，五事七计的对比才有依据；情报不准，再精妙的计谋也是赌命。对普通人来说，做任何重大决定前先回问自己：我有什么、缺什么、对手或环境会怎样反应——这就是把"知彼知己"变成日常判断。</p>
+    </div>
+  </section>
+
+  <!-- 五、核心价值 -->
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 对今天的核心价值</div>
+    <div class="sec-sub">冷兵器时代的手段早过时了，但"慎战、先胜、主动权"是一套跨领域的底层思维。</div>
+    <div class="prose">
+      <p>《孙子兵法》写于春秋，火攻、用间这些具体手段今天用不上了。但它讲的"先算、不输、掌握主动"这一层，放在创业、投资、职场、做人上都能直接用。</p>
+    </div>
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>先胜后战，没胜算就等。</b>做任何大事前先算胜算、积累实力；等不是不作为，是蓄力和等对方失误。诸葛亮不停作为却无胜算，反把自己累死——该等的时候得等。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>以失败为假设前提。</b>做事前先想风险、代价，再想利益；先避害再趋利。李嘉诚说做任何事先考虑失败。很多人"见利忘害"，见到好处就冒进，忘了行动必有代价。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>大局观：用道天地将法看整体。</b>90% 的人做重大人生选择犯错，不是认知不够，而是少了大局观——不能从整体和长远看问题。读懂道、天、地、将、法这五个字，就能用整体、长远的眼光判断一件事该不该做、能不能成（详见下方）。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>求之于势，不责于人。</b>优秀的领导造势、选对人，不骂下面人执行力差；事没干好，先问自己安排得对不对、人选得对不对。</p></div>
+      <div class="pt"><div class="n">⑤</div><p><b>致人而不致于人。</b>掌握主动，别被别人牵着走；在对抗和竞争里，能调动对方，就别被对方调动。</p></div>
+    </div>
+
+    <div class="card" style="margin-top:26px;border-color:var(--accent)">
+      <div class="item-title" style="color:var(--accent)">大局观：把道天地将法变成看问题的框架</div>
+      <div class="item-desc" style="margin-top:10px">大局观，就是"以整体利益为目标、用长远眼光分析问题"的能力。它可以从《孙子兵法》的五个字里练出来——把一场仗换成你的一件事，逐项问自己：</div>
+      <div class="five" style="margin-top:16px">
+        <div class="row"><div class="lab">道</div><div class="body"><b>价值共识</b><span class="orig">想做成一件事，得先想办法让相关的人都支持你、认可你的价值，这样你才能推动别人一起干。就说孟母三迁吧——孟母和孟子都打心眼里觉得学习重要，所以哪怕搬家很麻烦，他们也搬了。公司讲使命愿景价值观、项目开启动会，其实都是一个道理：先把"这件事值不值得做"对齐了，后面推起来才顺。</span></div></div>
+        <div class="row"><div class="lab">天</div><div class="body"><b>趋势时机</b><span class="orig">你做的事顺不顺势、抓没抓准时机。行业发展、技术演进、经济周期的外部条件具备了没有——比如当下 AI 是大趋势，顺势而为才事半功倍。</span></div></div>
+        <div class="row"><div class="lab">地</div><div class="body"><b>资源环境</b><span class="orig">做成这件事的资源和环境备齐没有。想读书至少得有书、有静得下来的环境、最好还有读书搭子或圈子——这些都是"地"。</span></div></div>
+        <div class="row"><div class="lab">将</div><div class="body"><b>选对人，或让自己成为那人</b><span class="orig">做事前先问：谁来做最合适？自己是最佳人选吗？若不是，要么换人，要么持续提升认知和能力、把自己练成最佳人选。</span></div></div>
+        <div class="row"><div class="lab">法</div><div class="body"><b>流程制度</b><span class="orig">需要相应的流程、制度来推动完成。公司靠流程约定权责，个人读书靠计划、打卡、监督来防三天打鱼——"法"就是防止动作变形的机制：有了规范的流程，动作才不会跑偏、走样。</span></div></div>
+      </div>
+      <div class="item-desc" style="margin-top:14px">这五个字看着简单，却能套进生活任何场景：领导只会下命令不讲价值、裸辞创业亏光积蓄、团队遇问题互相甩锅——这些反复出现的错，根子都在缺大局观。读懂它们，你就有了透过现象看本质、在重大选择上不犯糊涂的能力。</div>
+    </div>
+
+    <div class="card" style="margin-top:26px">
+      <div class="item-title" style="color:var(--accent)">成事心法：不败 · 积强 · 取胜</div>
+      <div class="item-desc" style="margin-top:10px">《孙子兵法》讲"先胜而后求战""胜敌而益强"，《论持久战》讲速胜不可能、要分防御—相持—反攻。两者底色一致：在自己不败的基础上取胜。落到普通人做事，就是三个关键词加四个动作：</div>
+      <div class="points" style="margin-top:16px">
+        <div class="pt"><div class="n">不</div><p><b>不败</b>——不急于求胜，确保每次行动都有结果，让自己永远不下牌桌。</p></div>
+        <div class="pt"><div class="n">积</div><p><b>积强</b>——不做没价值的事，每次行动只为一个目的：让自己变强。</p></div>
+        <div class="pt"><div class="n">胜</div><p><b>取胜</b>——持续积累实力、等机会，一飞冲天。</p></div>
+      </div>
+      <div class="item-desc" style="margin-top:14px">四个落地动作：</div>
+      <div class="points" style="margin-top:10px">
+        <div class="pt"><div class="n">1</div><p><b>定一个"不可能失败"的小目标。</b>目标小到不可能失败，才能每天坚持；今天只读一页，比"一次读完一本书"更靠谱。</p></div>
+        <div class="pt"><div class="n">2</div><p><b>用最小的代价获得反馈。</b>围绕小目标投入最少时间精力，正反馈告诉你做对了什么，负反馈帮你发现问题、及时止损。</p></div>
+        <div class="pt"><div class="n">3</div><p><b>持续积累优势、让自己变强。</b>很多人只顾着做事，以为做完事就结束了，却忘了让自己变强。结果就是，有的人工作了10年，但他并没有10年的工作经验，而是把1年的工作经验用了10年。那怎么积累优势、让自己变强？靠复盘——不复盘，所有的事都只是经历，而不是经验。</p></div>
+        <div class="pt"><div class="n">4</div><p><b>积小胜，成大胜。</b>成功需要不断地积累和放大，这就是量变引起质变。不要指望某一个机会、某一次成功，就能改变命运。逆天改命，靠的是你持续的积累。</p></div>
+      </div>
+    </div>
+
+    <div class="indent">它当然也有局限：通篇讲"怎么不输"，对"怎么主动开创、怎么在顺风时扩大战果"讲得少；而且它默认你处在对抗里，今天很多事是合作大于对抗。把它当作战略思维的入门书读，别当战术宝典用。</div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  var spy=new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]});
+  sections.forEach(function(s){spy.observe(s);});
+
+  // 内容块默认已可见（CSS .rise opacity:1），不再用 IntersectionObserver 控制显隐，避免滚动时出现空白断层。
+</script>
+</body>
+</html>

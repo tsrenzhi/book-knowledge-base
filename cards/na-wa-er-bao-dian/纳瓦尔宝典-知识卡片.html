@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《纳瓦尔宝典》· 白板手绘逻辑图</title>
+<style>
+/* 本地后备：霞鹜文楷加载失败时使用系统字体 */
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .item-title{font-size:31px;font-weight:400;color:var(--ink);line-height:1.25}
+  .item-desc{margin-top:10px;font-size:23px;color:var(--muted);line-height:1.5}
+  .red{color:var(--accent);font-weight:400}
+  .strike{position:relative;display:inline-block;color:var(--muted);font-weight:400}
+  .strike::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:4px;background:var(--accent);border-radius:3px;transform:rotate(-2deg)}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .rise.show{opacity:1;transform:translateY(0)}
+  .no-anim .rise{opacity:1;transform:none}
+
+  /* HERO：一行红色大字问题 */
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  /* 顶部 tab */
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .divider{margin:60px auto 0;max-width:520px;height:26px}
+
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .tag{background:var(--line)}
+  .vs.old .vt{color:var(--accent)}
+
+  /* 核心内容：概念卡 = 标题 + 标签 + 小图 + 一句话，和主线融为一体 */
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:250px;margin-left:auto;margin-right:auto}
+
+  /* 概念展开模块：结构化、层级化、关键词标签 */
+  .concept-list{margin-top:28px;display:flex;flex-direction:column;gap:22px}
+  .concept{background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:3px 4px 0 rgba(0,0,0,.06)}
+  .concept .chead{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+  .concept .cnum{flex:0 0 46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center}
+  .concept .cmeta{flex:1;min-width:260px}
+  .concept .cname{font-size:29px;color:var(--accent);line-height:1.2}
+  .concept .cone{font-size:20px;color:var(--muted);margin-top:4px;line-height:1.45}
+  .concept .cbody{margin-top:18px}
+  .concept .cbody p{font-size:23px;line-height:1.55;color:var(--ink);margin-top:10px}
+  .concept .cbody p:first-child{margin-top:0}
+  .concept .cbody b{font-weight:400;color:var(--accent)}
+  .concept .cline{margin-top:18px;padding:16px 18px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:10px}
+  .concept .cline .lab{font-size:19px;color:var(--accent);font-weight:400}
+  .concept .cline p{font-size:22px;color:var(--ink);line-height:1.5;margin-top:6px}
+
+  /* 关键词标签 */
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .tagx{font-size:18px;color:var(--ink);background:rgba(106,96,88,.10);border:2px solid var(--line);border-radius:20px;padding:5px 12px;white-space:nowrap}
+
+  /* 两栏小对比 */
+  .mini-vs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  .mini-vs .mcol{padding:14px 16px;border-radius:12px;background:rgba(106,96,88,.08)}
+  .mini-vs .mcol.good{background:rgba(224,67,46,.08);border:2px solid var(--accent)}
+  .mini-vs .mt{font-size:20px;color:var(--accent);margin-bottom:6px}
+  .mini-vs .mp{font-size:21px;color:var(--ink);line-height:1.5}
+
+  /* 层级编号列表 */
+  .levels{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .lv{display:flex;gap:12px;align-items:flex-start}
+  .lv .lvn{flex:0 0 30px;height:30px;border-radius:50%;background:var(--line);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center}
+  .lv .lvc{font-size:22px;color:var(--ink);line-height:1.5;flex:1}
+  .lv .lvc b{color:var(--accent);font-weight:400}
+
+  /* 例子/故事框 */
+  .example{margin-top:16px;padding:14px 18px;border:2px dashed var(--line);border-radius:12px;background:rgba(251,246,240,.7)}
+  .example .ex-title{font-size:19px;color:var(--muted);margin-bottom:6px}
+  .example p{font-size:22px;color:var(--ink);line-height:1.5}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+    .mini-vs{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO：书名 + 作者 + 核心问题 -->
+  <header class="hero rise">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《纳瓦尔宝典》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">埃里克·乔根森 编 · 纳瓦尔·拉维坎特 著 · 2020</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">全名《The Almanack of Naval Ravikant：财富与幸福的指南》</div>
+    <div class="bigq" style="margin-top:18px">怎样才能不靠运气，就变得富有？</div>
+  </header>
+
+  <!-- 顶部 tab 导航 -->
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 核心误区</a>
+    <a href="#s3" class="tab">③ 纳瓦尔破局</a>
+    <a href="#s4" class="tab">④ 核心内容</a>
+    <a href="#s5" class="tab">⑤ 核心价值</a>
+  </nav>
+
+  <!-- 一、书籍定位：这本书研究什么 -->
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="prose">
+      <p>这本书不是教你怎么找工作、怎么升职加薪，而是把纳瓦尔几十年的推特长文、播客访谈、公开谈话，整理成一本关于两件人生大事的"现代智者语录"。</p>
+      <div class="indent"><b>第一件是财富。</b>纳瓦尔关心的不是"怎么拿高薪"，而是"怎么在不靠运气的情况下变富"——也就是建立一套哪怕你睡着也在为你赚钱的系统。</div>
+      <div class="indent"><b>第二件是幸福。</b>他花了同样多的篇幅讲怎么获得内心的平静，因为在他看来，光有钱而内心焦躁，人生仍然失败。</div>
+      <p style="margin-top:12px">一句话：这不是一本成功学，而是一本讲清楚<b>财富和幸福这两件事的底层逻辑</b>的书。</p>
+    </div>
+  </section>
+
+  <!-- 二、核心误区：多数人卡在哪（合并原"现实矛盾"与"核心误区"） -->
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 核心误区：多数人卡在哪</div>
+    <div class="sec-sub">把"高工资"当成"财富"，越忙越穷；这背后是一个没说出口的默认设定。</div>
+    <div class="prose">
+      <p>很多人默认：只要努力工作、拿到高薪，就是在积累财富。于是拼命加班、不敢休息，把全部时间出卖给老板。</p>
+      <p>但另一面是：这种收入完全绑在"你在场"这件事上。一旦生病、被裁员、想休息，收入立刻断掉。更麻烦的是，每天被工作占满，反而没时间想清楚自己到底该往哪个方向走。表面在赚钱，实际上困在一条停不下来的流水线上。</p>
+    </div>
+    <div class="vs old" style="margin-top:26px">
+      <div class="col">
+        <span class="tag">旧认知（多数人的默认设定）</span>
+        <div class="vt">财富 = 高薪 / 存款 / 头衔</div>
+        <div class="vd">默认"赚钱 = 出卖时间"：要想赚钱，就一定得付出时间，就得出卖自己的时间才行。工资越高、职位越高，就是在变富。</div>
+        <div class="ve">后果：收入绑在你的体力上，一停就归零；越忙越没空想清楚方向。</div>
+      </div>
+      <div class="col">
+        <span class="tag">纳瓦尔的重定义</span>
+        <div class="vt">财富 = 你睡着也在赚钱的资产</div>
+        <div class="vd">你真正应该追求的是财富，而不是金钱或地位。因为金钱只是转移财富的工具，地位只是社会排名。真正的财富是，能够持续为你创造价值的资产。要致富，就要积累别人学不来的专长，再用杠杆来放大你的专长。</div>
+        <div class="ve">关键转变：从"用时间换钱"转向"用专长 + 杠杆，造一个自动运转的系统"。</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>所以纳瓦尔整本致富篇，破的就是这一个误会：我们从小把"工资、存款、头衔"当成了财富，却从没拥有过"不工作也有收入"的东西。他把这层误会揭开后，才有后面"专长 → 杠杆 → 复利 → 产品化"的一整套方法论。</p>
+    </div>
+  </section>
+
+  <!-- 三、纳瓦尔破局 -->
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 纳瓦尔破局</div>
+    <div class="sec-sub">先破除误区，再立起四个支点。这四条，就是他"不靠运气致富"的方法论骨架。</div>
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>积累专长。</b>专长指的是无法通过培训获得的知识；如果社会能培训你，那也能培训别人来取代你，所以你得发展只有你能做、别人学不来的那部分。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>善用杠杆。</b>劳动力、资本之外，最重要的是零边际成本的杠杆——代码、媒体、产品，一份产出能同时服务无数人。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>相信复利。</b>财富、人际关系、知识，所有回报都来自长期坚持后的复利，而不是一夜暴富。</p></div>
+      <div class="pt"><div class="n">4</div><p><b>把自己产品化。</b>把"独特的自己"和"可规模化的产品"结合起来，让自己变成一个能复制、能放大价值的产品。</p></div>
+    </div>
+
+    <div class="quote">
+      <div class="mark">"</div>
+      <blockquote>"获得财富的一个途径，就是为社会提供其有需求但无从获得的东西，并实现规模化。"</blockquote>
+      <div class="ex">纳瓦尔把"致富"这样定义：你不需要比别人更拼命，只需要提供别人想要、却到处找不到的东西，并且能大规模地提供出去。</div>
+    </div>
+  </section>
+
+  <!-- 四、核心内容 -->
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 核心内容</div>
+    <div class="sec-sub">纳瓦尔用一条主线串起致富逻辑：先有专长，再用 4 种杠杆放大，靠复利积累，把自己产品化，并掌握销售与构建两大核心能力。</div>
+
+    <div class="core-cards">
+      <div class="ccard">
+        <div class="ctitle">金钱≠财富</div>
+        <div class="ctag">财富是睡着也在赚钱的资产</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m1" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <rect x="20" y="30" width="50" height="34" rx="5" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="45" y="52" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">工资</text>
+            <line x1="70" y1="47" x2="150" y2="47" stroke="#6A6058" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="110" y="40" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">停止即归零</text>
+            <rect x="20" y="78" width="50" height="30" rx="5" fill="rgba(224,67,46,.14)" stroke="#E0432E" stroke-width="2"/>
+            <text x="45" y="98" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">资产</text>
+            <path d="M72,93 L148,93" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m1)"/>
+            <text x="110" y="86" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">持续进账</text>
+          </svg>
+        </div>
+        <div class="cdesc">月薪三万的程序员，辞职就没收入；写了一套几万人用的付费软件，睡着也在进账。前者是工资，后者才是财富。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">专长·人生支点</div>
+        <div class="ctag">无法被培训取代的知识</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m2" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <circle cx="38" cy="60" r="22" fill="rgba(224,67,46,.14)" stroke="#E0432E" stroke-width="2"/>
+            <text x="38" y="57" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">你的</text>
+            <text x="38" y="72" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">专长</text>
+            <path d="M62,50 L108,38" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m2)"/>
+            <rect x="110" y="22" width="56" height="32" rx="5" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <text x="138" y="42" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">别人学不来</text>
+            <path d="M62,70 L108,82" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="4 3"/>
+            <rect x="110" y="66" width="56" height="32" rx="5" fill="rgba(106,96,88,.12)" stroke="#6A6058" stroke-width="2"/>
+            <text x="138" y="86" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">可培训被取代</text>
+          </svg>
+        </div>
+        <div class="cdesc">社会能培训你的，也能培训别人取代你。所以积累专长，要追随自己的天赋和好奇心，而不是追热门专业。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">杠杆（4 种）</div>
+        <div class="ctag">放大价值的 4 种借力方式</div>
+        <div class="cfig">
+          <svg viewBox="0 0 200 132" xmlns="http://www.w3.org/2000/svg">
+            <rect x="16" y="12" width="168" height="24" rx="5" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <text x="100" y="28" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">劳动力杠杆</text>
+            <rect x="16" y="40" width="168" height="24" rx="5" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <text x="100" y="56" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">资本杠杆</text>
+            <rect x="16" y="68" width="168" height="24" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="100" y="84" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">产品杠杆</text>
+            <rect x="16" y="96" width="168" height="24" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="100" y="112" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">媒体杠杆</text>
+          </svg>
+        </div>
+        <div class="cdesc">4 种借力方式：劳动力、资本、产品、媒体。后两类零边际成本，最适合普通人。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">复利</div>
+        <div class="ctag">长期主义的回报</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <line x1="16" y1="104" x2="166" y2="104" stroke="#6A6058" stroke-width="2"/>
+            <line x1="16" y1="20" x2="16" y2="104" stroke="#6A6058" stroke-width="2"/>
+            <path d="M16,100 C70,100 100,98 120,86 C140,74 155,50 164,24" fill="none" stroke="#E0432E" stroke-width="3"/>
+            <circle cx="164" cy="24" r="5" fill="#E0432E"/>
+            <text x="70" y="86" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">前期平缓</text>
+            <text x="135" y="40" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">后期陡峭</text>
+          </svg>
+        </div>
+        <div class="cdesc">财富、人脉、知识都来自长期复利。前期增长慢，突破临界点后才会陡峭上扬。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">产品化</div>
+        <div class="ctag">把经验、专长、技能包装成可规模化的产品</div>
+        <div class="cfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m5" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <rect x="6" y="42" width="50" height="38" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="31" y="60" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">你的</text>
+            <text x="31" y="75" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">专长</text>
+            <path d="M58,61 L86,61" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m5)"/>
+            <rect x="90" y="42" width="50" height="38" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="115" y="66" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">产品</text>
+            <path d="M142,61 L170,61" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m5)"/>
+            <rect x="174" y="42" width="22" height="38" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="185" y="61" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">N</text>
+            <text x="185" y="76" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">倍</text>
+          </svg>
+        </div>
+        <div class="cdesc">不再靠单纯出卖时间赚钱，而是把经验、专长、技能封装成有社会需求、可规模化的产品。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">销售与构建</div>
+        <div class="ctag">势不可挡的两种能力</div>
+        <div class="cfig">
+          <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m6" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <rect x="14" y="38" width="66" height="46" rx="6" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="47" y="66" font-size="15" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">构建</text>
+            <path d="M82,61 L118,61" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m6)"/>
+            <rect x="120" y="38" width="66" height="46" rx="6" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="153" y="66" font-size="15" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">销售</text>
+            <text x="100" y="104" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">同时掌握 = 势不可挡</text>
+          </svg>
+        </div>
+        <div class="cdesc">构建是把优势变成可复制方案，销售是让价值抵达需要它的人。两者兼备，才能放大财富。</div>
+      </div>
+    </div>
+
+    <!-- ④ 核心内容：6 个概念展开模块 -->
+    <div class="concept-list">
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">1</div>
+          <div class="cmeta">
+            <div class="cname">金钱 ≠ 财富</div>
+            <div class="cone">金钱是社会欠条 vs 财富是睡着赚钱的资产</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">金钱</div>
+              <div class="mp">金钱只是你跟社会进行物质交换的媒介，是社会给你打的一张欠条，它本身并不会增值，甚至还会被通胀稀释。所以，追求金钱，就是在追求更多的"欠条"，你只能为了钱不断地工作。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">财富</div>
+              <div class="mp">财富是你睡着也在为你赚钱的资产，积累财富需要你拥有某类资产的所有权，通过资产的持续增值，来让你的财富像滚雪球一样越滚越大，实现"睡后收入"。</div>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tagx">生产性资产：房产/股权/知识产权</span>
+            <span class="tagx">无形资产：知识/技能/认知</span>
+            <span class="tagx">社会资产：影响力/信誉/人脉</span>
+            <span class="tagx">时间资产：自主权</span>
+            <span class="tagx">你自己：身体+大脑</span>
+          </div>
+
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>月薪三万的程序员，辞职就没收入；写了一套几万人用的付费软件，睡着也在进账。前者是工资，后者才是财富。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">2</div>
+          <div class="cmeta">
+            <div class="cname">专长 · 人生支点</div>
+            <div class="cone">专长者，无法被培训取代的知识；支点即你独特的天赋和优势。</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p><b>为什么专长无法被培训？</b>因为社会能培训你，就能培训别人来取代你。真正的专长，只有你能做、别人学不来。</p>
+          <div class="cline">
+            <div class="lab">找到人生支点的四个问题</div>
+            <p>① 你热爱什么？ ② 你擅长什么？ ③ 你想获得什么？ ④ 你能提供什么价值？</p>
+          </div>
+          <div class="mini-vs" style="margin-top:16px">
+            <div class="mcol">
+              <div class="mt">旧误区：木桶理论</div>
+              <div class="mp">拼命补短板，以为缺什么补什么就能成功。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">正解：长板理论</div>
+              <div class="mp">发现优势、把长板拉得足够长，再围绕它建护城河。</div>
+            </div>
+          </div>
+          <div class="example">
+            <div class="ex-title">关键提醒</div>
+            <p>钱只是社会价值的欠条。想要什么直接去追，别绕到"先赚钱"上舍本逐末。在"做自己"这件事上，没有人能和你竞争。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">3</div>
+          <div class="cmeta">
+            <div class="cname">杠杆（4 种）</div>
+            <div class="cone">杠杆的本质是借力，用别人的力量放大自己的价值。</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <div class="levels">
+            <div class="lv"><div class="lvn">①</div><div class="lvc"><b>劳动力杠杆</b>：借别人的力——团队、协作、人脉、合作。</div></div>
+            <div class="lv"><div class="lvn">②</div><div class="lvc"><b>资本杠杆</b>：借资本的力——产权、复利、认知资本。</div></div>
+            <div class="lv"><div class="lvn">③</div><div class="lvc"><b>产品杠杆</b>：借工具的力——实体/软件/工具，零边际成本规模化。</div></div>
+            <div class="lv"><div class="lvn">④</div><div class="lvc"><b>媒体杠杆</b>：借流量的力——内容、个人 IP，一次创作多次传播。</div></div>
+          </div>
+          <div class="cline">
+            <div class="lab">对普通人最友好的</div>
+            <p>后两类零边际成本杠杆：写代码、做内容。一份产出能同时服务无数人。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">4</div>
+          <div class="cmeta">
+            <div class="cname">复利</div>
+            <div class="cone">财富、人际关系、知识，所有回报都来自长期复利。</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <div class="mini-vs">
+            <div class="mcol">
+              <div class="mt">前期</div>
+              <div class="mp">增长平缓，几乎看不出变化，最容易放弃。</div>
+            </div>
+            <div class="mcol good">
+              <div class="mt">后期</div>
+              <div class="mp">突破临界点后陡峭上扬，回报远超线性努力。</div>
+            </div>
+          </div>
+          <p><b>警惕</b>：这个世界上没有一夜暴富的神话，如果有的话，那也只是昙花一现。所以也别信那些"快速致富教程"——真有这种神话，卖教程的人也只是想从你身上赚钱。</p>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>每天写 500 字，前半年没人看；坚持三年后，内容资产、读者信任、写作能力会互相放大，机会自然找上门。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">5</div>
+          <div class="cmeta">
+            <div class="cname">产品化</div>
+            <div class="cone">不再靠单纯出卖时间来赚钱，而是把自己的经验、专长、技能，包装成一个有社会需求、还能规模化的产品。</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <div class="cline">
+            <div class="lab">公式</div>
+            <p>经验 · 专长 · 技能 → 产品 → N 倍复制（一次投入，多次售卖，边际成本趋近于零）</p>
+          </div>
+          <p><b>关键</b>：产品必须有真实的社会需求，且你能用杠杆规模化交付。</p>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>老师一对一讲课，时间会被锁死，只能教固定的几十个人；但是如果把课程录成视频，就可以同时卖给一万个人，时间就解放了。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">6</div>
+          <div class="cmeta">
+            <div class="cname">销售与构建</div>
+            <div class="cone">构建把优势变方案，销售让价值抵达需要它的人。</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p><b>先想清楚能提供哪类价值</b>，这是销售的前提：</p>
+          <div class="tags">
+            <span class="tagx">经济价值：省钱/赚钱/避坑</span>
+            <span class="tagx">效率价值：省时间/降门槛</span>
+            <span class="tagx">解决问题：处理烂摊子/辅助决策</span>
+            <span class="tagx">成长价值：变强/跃迁/抓机会</span>
+            <span class="tagx">情绪价值：愉悦/尊重/缓解焦虑</span>
+          </div>
+          <div class="cline" style="margin-top:16px">
+            <div class="lab">销售的 4 个层级</div>
+          </div>
+          <div class="levels">
+            <div class="lv"><div class="lvn">①</div><div class="lvc"><b>推销</b>：把别人不需要的硬塞给他，最 low 也最招烦。</div></div>
+            <div class="lv"><div class="lvn">②</div><div class="lvc"><b>卖东西</b>：知道对方需要什么，把解决痛点的东西卖给他。</div></div>
+            <div class="lv"><div class="lvn">③</div><div class="lvc"><b>分享</b>：不带功利心地推荐真正好的东西，积累信任。</div></div>
+            <div class="lv"><div class="lvn">④</div><div class="lvc"><b>卖自己</b>：卖的不再是具体商品，而是观点、方案、人格和信任。</div></div>
+          </div>
+          <div class="example">
+            <div class="ex-title">例子</div>
+            <p>人生无处不销售：跟老板汇报是推销方案，跟朋友聊天是推销想法，找对象本质也是"卖自己"。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- 五、核心价值 -->
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 核心价值</div>
+    <div class="sec-sub">这本书把"致富"和"幸福"都还原成了可以操作的底层逻辑。</div>
+    <div class="prose">
+      <p>纳瓦尔想回答的不是某一招赚钱技巧，而是一组根本问题：财富到底是什么、怎么在不靠运气的情况下获得、以及钱之外，人怎样才能内心平静。这套思路放到今天，仍能帮我们看清很多误会。</p>
+      <p>几个最值得记住的核心价值：</p>
+    </div>
+
+    <div class="points">
+      <div class="pt" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="n">①</div>
+          <div style="font-size:26px;color:var(--accent);line-height:1.3">财富来自提供稀缺价值</div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:6px">获得财富的一个途径，就是为社会提供其有需求但无从获得的东西，并实现规模化。所以与其在红海里拼加班，不如找到别人想要、却到处找不到的东西。</p>
+      </div>
+
+      <div class="pt" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="n">②</div>
+          <div style="font-size:26px;color:var(--accent);line-height:1.3">用钱投资，而不是只消费</div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:6px">钱只有两个去处：消费和投资。你把它花在哪里，决定了你最终是穷人还是富人。</p>
+        <div class="vs old" style="margin-top:12px">
+          <div class="col">
+            <span class="tag">消费</span>
+            <div class="vt">用钱买即时满足、买面子、买别人的羡慕</div>
+            <div class="vd">吃大餐、买衣服、买奢侈品、刷短视频、玩游戏——只要你的钱和时间花在了"消耗"别人的产出上，你就是消费者。花完就没了，财富只出不进。</div>
+            <div class="ve">后果：越消耗越穷，永远为钱奔波。</div>
+          </div>
+          <div class="col">
+            <span class="tag">投资</span>
+            <div class="vt">用钱买资产、买未来现金流</div>
+            <div class="vd">买书、学技能、买股权、做产品、积累能持续产生收益的资产——你的钱在帮你工作，而不是你一直在为钱工作。</div>
+            <div class="ve">关键：把劳动收入转成能带来被动收入的资产，财富才会越滚越大。</div>
+          </div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:14px"><b>所以说</b>，真正的财富不是手里有多少现金，而是你有没有持续创造价值、并让钱为你工作的能力。</p>
+      </div>
+
+      <div class="pt" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="n">③</div>
+          <div style="font-size:26px;color:var(--accent);line-height:1.3">先当生产者，而不是消费者</div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:6px">很多人之所以赚不到钱、积累不下财富，核心就是长期停留在"消费者"角色里，只想着消耗，却从没想过创造。</p>
+        <div class="vs old" style="margin-top:12px">
+          <div class="col">
+            <span class="tag">消费者</span>
+            <div class="vt">花钱买、花时间、花自己的资产，去买别人的产品或服务</div>
+            <div class="vd">不管是买衣服、吃大餐，还是刷短视频、玩游戏，只要是在"消耗"别人的产出，你就是消费者。这种持续的消耗，只会让你的财富不断流失。</div>
+            <div class="ve">后果：财富只出不进，越消耗越穷。</div>
+          </div>
+          <div class="col">
+            <span class="tag">生产者</span>
+            <div class="vt">主动创造产品、提供服务，供别人去消费</div>
+            <div class="vd">写一篇干货文章、做一套PPT模板、开一家小店卖东西，这些都是生产行为。只有生产，才能让财富主动流向你，实现财富的积累。</div>
+            <div class="ve">更重要的是：一旦你变成生产者，你看待问题的视角会完全不一样。刷短视频时你不会再只是傻乐，而是会下意识地想：这个视频为什么能火？它满足了什么需求？博主是怎么变现的？我能不能借鉴这个逻辑，做出自己的内容或产品？</div>
+          </div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:14px"><b>所以说</b>，普通人积累财富的第一步，从来不是"更努力赚钱"，而是先停止无意义的消费，开始切换视角，多想想自己能生产什么，能为别人提供什么价值。</p>
+      </div>
+
+      <div class="pt" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="n">④</div>
+          <div style="font-size:26px;color:var(--accent);line-height:1.3">幸福是一种不需要主动作为的状态</div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:6px">当把"缺憾感"从生活中剔除时，幸福感就会油然而生。成功来自对现状的不满，幸福则来自满足现状——这是两件事，别用赚钱去填补内心的空洞。</p>
+      </div>
+
+      <div class="pt" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="n">⑤</div>
+          <div style="font-size:26px;color:var(--accent);line-height:1.3">人生早期有三个重大决定</div>
+        </div>
+        <p style="font-size:24px;line-height:1.5;color:var(--ink);margin-top:6px">在哪里生活、和谁在一起、从事什么职业。最重要的是，在重大决定上花更多时间，因为选对方向，比埋头蛮干更关键。</p>
+      </div>
+    </div>
+    <div class="indent">它当然也有局限：这是一本按主题汇编的"智者语录"，不是体系严谨的学术著作，很多观点是推文式的金句，需要你自己串联和验证。但作为一本帮人想清楚"财富与幸福"的入门书，它足够真诚、足够可操作。把它当作一份值得反复翻的笔记读，别当作致富保证书用。</div>
+  </section>
+
+</div>
+
+<script>
+  function fitStage(wrap){
+    var stage=wrap.querySelector('.stage');
+    var logical=1000;
+    var avail=wrap.clientWidth;
+    var scale=Math.min(1, avail/logical);
+    stage.style.transform='scale('+scale+')';
+    var h=parseFloat(stage.dataset.h)||stage.offsetHeight;
+    wrap.style.height=(h*scale)+'px';
+    wrap.style.width=(logical*scale)+'px';
+  }
+  function fitAll(){document.querySelectorAll('.stage-wrap').forEach(fitStage);}
+  window.addEventListener('resize',fitAll); fitAll();
+
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  var spy=new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]});
+  sections.forEach(function(s){spy.observe(s);});
+
+  // 内容块默认已可见（CSS .rise opacity:1），不再用 IntersectionObserver 控制显隐，避免滚动时出现空白断层。
+</script>
+</body>
+</html>

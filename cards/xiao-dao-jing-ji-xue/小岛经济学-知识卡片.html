@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《小岛经济学》· 白板手绘逻辑图</title>
+<style>
+/* 本地后备：霞鹜文楷加载失败时使用系统字体 */
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .item-title{font-size:31px;font-weight:400;color:var(--ink);line-height:1.25}
+  .item-desc{margin-top:10px;font-size:23px;color:var(--muted);line-height:1.5}
+  .red{color:var(--accent);font-weight:400}
+  .strike{position:relative;display:inline-block;color:var(--muted);font-weight:400}
+  .strike::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:4px;background:var(--accent);border-radius:3px;transform:rotate(-2deg)}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .rise.show{opacity:1;transform:translateY(0)}
+  .no-anim .rise{opacity:1;transform:none}
+
+  /* HERO：一行红色大字问题 */
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  /* 顶部 tab */
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:24px;font-weight:400;color:var(--accent);line-height:1.4}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .divider{margin:60px auto 0;max-width:520px;height:26px}
+
+  /* 模块配色：旧观念用原版深棕+红色，保持清晰 */
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .tag{background:var(--line)}
+  .vs.old .vt{color:var(--accent)}
+
+  /* 核心内容：4 张 ccard（保留为视觉锚点，不放内容主体） */
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:200px}
+
+  /* 概念展开模块：结构化、层级化（学自纳瓦尔宝典） */
+  .concept-list{margin-top:28px;display:flex;flex-direction:column;gap:22px}
+  .concept{background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:3px 4px 0 rgba(0,0,0,.06)}
+  .concept .chead{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+  .concept .cnum{flex:0 0 46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center}
+  .concept .cmeta{flex:1;min-width:260px}
+  .concept .cname{font-size:29px;color:var(--accent);line-height:1.2}
+  .concept .cone{font-size:20px;color:var(--muted);margin-top:4px;line-height:1.45}
+  .concept .cbody{margin-top:18px}
+  .concept .cbody p{font-size:23px;line-height:1.55;color:var(--ink);margin-top:10px}
+  .concept .cbody p:first-child{margin-top:0}
+  .concept .cbody b{font-weight:400;color:var(--accent)}
+  .concept .cline{margin-top:18px;padding:16px 18px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:10px}
+  .concept .cline .lab{font-size:19px;color:var(--accent);font-weight:400}
+  .concept .cline p{font-size:22px;color:var(--ink);line-height:1.5;margin-top:6px}
+
+  /* 例子/故事框 */
+  .example{margin-top:16px;padding:14px 18px;border:2px dashed var(--line);border-radius:12px;background:rgba(251,246,240,.7)}
+  .example .ex-title{font-size:19px;color:var(--muted);margin-bottom:6px}
+  .example p{font-size:22px;color:var(--ink);line-height:1.5}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO：书名 + 作者 + 核心问题 -->
+  <header class="hero rise">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《小岛经济学》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">彼得·D.希夫 · 安德鲁·J.希夫 · 2016</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">原名《How an Economy Grows and Why It Crashes》· 鱼、美元和经济的故事</div>
+    <div class="bigq" style="margin-top:18px">一个国家的经济靠什么增长——多印钱、多消费，还是多生产？</div>
+  </header>
+
+  <!-- 顶部 tab 导航 -->
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 流行误解</a>
+    <a href="#s3" class="tab">③ 故事主线</a>
+    <a href="#s4" class="tab">④ 核心主张</a>
+    <a href="#s5" class="tab">⑤ 核心内容</a>
+    <a href="#s6" class="tab">⑥ 核心价值</a>
+  </nav>
+
+  <!-- 一、书籍定位：这本书研究什么 -->
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="prose">
+      <p>《小岛经济学》用一座小岛、三个人、一条鱼的寓言，把现代经济怎么运转讲清楚：从徒手捕鱼、织网、存鱼、借鱼，一直讲到货币、银行和危机。故事读起来像童话，内核是严肃的经济学。</p>
+
+      <div class="indent"><b>书要回答的核心问题：</b>一个社会的经济是怎么一步步长起来的？生产、储蓄、货币、政府干预各自起什么作用？当印钞和借债撑出虚假繁荣，为什么最后一定会崩？</div>
+
+      <p style="margin-top:12px">它不堆术语、不列方程，适合想看懂新闻背后逻辑、又不想啃教科书的人——读完后看政策、看市场，会多一条底层判断。</p>
+    </div>
+  </section>
+
+  <!-- 二、流行误解（核心误区） -->
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 大多数人的误解</div>
+    <div class="sec-sub">下面这两条，很多人觉得"听起来挺对"，其实都站不住脚。</div>
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>误解：政府多印钱、鼓励消费，经济就好了。</b>书里的逻辑正好相反：给老百姓发钱让他们花，并不会让东西变多，只会让已经生产出来的商品被更快买光、然后涨价。鼓励多买多花，也只是把已有的东西花掉。真正让生活变好的，是供给增加——把东西造得更多更好。消费是生产的结果，不是原因。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>误解：钱就是财富，钱越多越富。</b>能满足需求的商品和服务才是财富；钱只是衡量和交换财富的工具。鱼变小了、纸币印多了，你手里的钱还是那些，能换到的东西却少了。津巴布韦印出几十亿面额的钞票，人们照样买不起面包——钱多不等于富。</p></div>
+    </div>
+  </section>
+
+  <!-- 三、寓言怎么讲（作者的方法） -->
+  <section class="section rise" id="s3">
+    <div class="sec-title">三 · 故事主线</div>
+    <div class="sec-sub">先把"一条鱼怎么演化成整本经济学"的主线看清，下面再讲每一段怎么连成闭环。</div>
+    <!-- 完整故事主线图（先放最上面）：一条鱼演化成整本经济学的 6 个阶段 -->
+    <div style="margin-top:22px;background:var(--card);border:2.5px solid var(--accent);border-radius:14px;padding:22px 24px;box-shadow:3px 4px 0 rgba(0,0,0,.06)">
+      <div style="font-size:25px;font-weight:400;color:var(--ink);line-height:1.35">一条鱼，讲完整个经济怎么运转</div>
+      <svg viewBox="0 0 900 150" xmlns="http://www.w3.org/2000/svg" style="margin-top:16px;width:100%;height:auto">
+        <defs>
+          <marker id="chain1" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker>
+        </defs>
+        <!-- 6 个节点 -->
+        <rect x="14" y="50" width="124" height="56" rx="9" fill="rgba(106,96,88,.10)" stroke="#6A6058" stroke-width="2.5"/>
+        <text x="76" y="76" font-size="19" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">① 徒手捕鱼</text>
+        <text x="76" y="96" font-size="14" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">每天 1 条</text>
+
+        <rect x="162" y="50" width="124" height="56" rx="9" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2.5"/>
+        <text x="224" y="76" font-size="19" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">② 织网·资本</text>
+        <text x="224" y="96" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">生产力翻倍</text>
+
+        <rect x="310" y="50" width="124" height="56" rx="9" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2.5"/>
+        <text x="372" y="76" font-size="19" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">③ 储蓄</text>
+        <text x="372" y="96" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">余鱼存起来</text>
+
+        <rect x="458" y="50" width="124" height="56" rx="9" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2.5"/>
+        <text x="520" y="76" font-size="19" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">④ 借贷·银行</text>
+        <text x="520" y="96" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">资本流动</text>
+
+        <rect x="606" y="50" width="124" height="56" rx="9" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2.5"/>
+        <text x="668" y="76" font-size="19" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">⑤ 货币</text>
+        <text x="668" y="96" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">鱼变成钱</text>
+
+        <rect x="754" y="50" width="132" height="56" rx="9" fill="rgba(106,96,88,.10)" stroke="#6A6058" stroke-width="2.5"/>
+        <text x="820" y="76" font-size="19" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">⑥ 通胀·危机</text>
+        <text x="820" y="96" font-size="14" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">鱼票越印越多</text>
+
+        <!-- 箭头连接 -->
+        <path d="M138,78 L162,78" fill="none" stroke="#E0432E" stroke-width="3" marker-end="url(#chain1)"/>
+        <path d="M286,78 L310,78" fill="none" stroke="#E0432E" stroke-width="3" marker-end="url(#chain1)"/>
+        <path d="M434,78 L458,78" fill="none" stroke="#E0432E" stroke-width="3" marker-end="url(#chain1)"/>
+        <path d="M582,78 L606,78" fill="none" stroke="#E0432E" stroke-width="3" marker-end="url(#chain1)"/>
+        <path d="M730,78 L754,78" fill="none" stroke="#E0432E" stroke-width="3" marker-end="url(#chain1)"/>
+      </svg>
+    </div>
+
+    <!-- 流程图下面，按节点顺序拆开讲每一段怎么形成闭环 -->
+    <div class="prose">
+      <p style="margin-top:18px"><b style="color:var(--accent)">① 三人徒手捕鱼，是一切的起点：</b>岛上就这三个人——艾伯、贝克、查理——每人每天抓一条鱼，刚够当天吃，没有余粮、没有工具、没有明天。谁也跳不出"今天抓、今天吃"的循环。这就是所有经济学问题的原始状态：怎么从"只够活着"变成"日子变好"？</p>
+
+      <p style="margin-top:14px"><b style="color:var(--accent)">② 织网，是整个故事的转折：</b>艾伯想通了：与其每天只抓一条，不如先饿几天，编一张渔网。结果呢？网织好之后，他一天能抓两条，比原来多出一条。多出来的那条，就是"资本"——不是钱，是"能让生产变多"的东西。从此，岛上的鱼开始有了"多余"。这一下，故事就不一样了。</p>
+
+      <p style="margin-top:10px"><b style="color:var(--accent)">③ 多余的鱼存起来，就是储蓄：</b>自己吃不完的，留着明天吃、留到没鱼的时候吃，就是最原始的储蓄。作者告诉你：储蓄创造资本——你忍住今天的嘴，明天才有投入生产的本钱。有人觉得，存钱就是抠门。其实不对，<b>存钱不是抠，是给未来的自己攒弹药。</b></p>
+
+      <p style="margin-top:10px"><b style="color:var(--accent)">④ 别人想织网又没余粮，向你借鱼——这就是借贷和银行的起源：</b>借出去的鱼，要约定还更多（利息）。这一逼，借钱的人就把鱼用在能增产的地方。存款被汇聚起来，借给有项目的人，资本就开始流动了。这就是最朴素的银行。</p>
+
+      <p style="margin-top:10px"><b style="color:var(--accent)">⑤ 鱼太多不好带，约定用「鱼」当一般等价物——这就是货币：</b>一开始一票换一鱼，方便携带、好交易。记住一点：<b>钱不是财富，钱只是工具。</b>政府一旦把"多印票"当成解决问题的方法，麻烦就来了——因为票可以印，鱼不能印。</p>
+
+      <p style="margin-top:10px"><b style="color:var(--accent)">⑥ 政府印发「鱼票」代替真鱼，越印越多——通胀和危机就来了：</b>票还是那张票，能换到的真鱼越来越少。谁还愿意辛辛苦苦捕鱼呢？印票多轻松啊。债务堆到还不上，繁荣一夜之间塌了。</p>
+
+      <p style="margin-top:14px">所以你看，整本书就讲了一个事儿：用一条鱼，把"生产—储蓄—资本—货币—通胀—危机"这条链给串起来。每个环节是怎么连起来的、又是怎么一步步走向崩盘的。</p>
+    </div>
+  </section>
+
+  <!-- 四、核心主张 -->
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 作者的核心主张</div>
+    <div class="sec-sub">整本书站在奥地利学派一边：先破误解，再立主张。</div>
+
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>生产先于消费。</b>经济增长的本源是生产效率提升，不是刺激消费。东西造不出来，大家再有钱也买不到更多。书里一句话点透：一国的经济不会因为人们的消费而增长，而是经济增长带动人们的消费。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>储蓄创造资本。</b>存下来的鱼才能变成工具、让生产扩大；花掉的鱼只是被吃掉。储蓄起来的一美元，对经济的积极作用大于消费掉的一美元——钱先存下来、投到能增产的地方，经济才有后劲。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>警惕货币超发。</b>通胀不是天灾，是央行或政府印发过多货币的结果——钱变多了，能换到的东西却少了。看到降息、降准、货币宽松这类消息，别只盯住资产价格涨没涨，要先看生产端有没有跟上。</p></div>
+      <div class="pt"><div class="n">4</div><p><b>政府该守边界。</b>保护产权、修基础设施该干；靠印钞和借债制造繁荣不能干。书里原话："无法自由地失败，也就是无法自由地成功。"把所有风险都兜住，看似稳妥，实则让人失去真实的成败信号。</p></div>
+    </div>
+
+          <div class="quote">
+            <div class="mark">"</div>
+            <blockquote>"大多数经济学家认为，给老百姓更多的钱花就可以增加需求，但是这种做法并不能改变真正的需求，只会使人们花更多的钱购买已经生产出来的商品。只有增加供给，才能切实满足人们更多的需求。"</blockquote>
+            <div class="ex">用岛上的故事讲：发钱让人花，东西不会凭空多出来，只会被更快买光、然后涨价。只有供给增加了，需求才真正被满足——只有真把东西造出来，才是真变富。</div>
+          </div>
+
+  </section>
+
+  <!-- 五、核心内容 -->
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 核心内容</div>
+
+    <div class="prose">
+      <p>整本书围绕 4 个核心环节展开：<b>资本怎么积累、储蓄怎么变资本、货币怎么贬值、政府干预怎么把繁荣拖成危机。</b>下面先用 4 张速览卡看一遍整体轮廓，再逐个概念展开到底是怎么连起来的、又是怎么一步步走向崩盘的。</p>
+    </div>
+
+    <!-- ▇▇▇▇▇ 第一层：先框架（4 张 ccard 速览卡，让人一眼看到 4 个核心点） ▇▇▇▇▇ -->
+    <div class="core-cards">
+      <div class="ccard">
+        <div class="ctitle">资本积累</div>
+        <div class="ctag">挨饿造网，生产力翻倍</div>
+        <div class="cfig"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="22" width="74" height="46" rx="8" fill="rgba(106,96,88,.10)" stroke="#6A6058" stroke-width="2"/>
+          <text x="43" y="44" font-size="14" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">徒手 1 鱼</text>
+          <text x="43" y="62" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">刚够活命</text>
+          <path d="M82,45 L108,45" fill="none" stroke="#E0432E" stroke-width="2.5" marker-end="url(#isl1)"/>
+          <defs><marker id="isl1" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+          <rect x="112" y="22" width="82" height="46" rx="8" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+          <text x="153" y="44" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">渔网 2 鱼</text>
+          <text x="153" y="62" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">多出资本</text>
+        </svg></div>
+        <div class="cdesc">艾伯牺牲眼前消费，编出渔网，每天从 1 条鱼变 2 条。</div>
+      </div>
+      <div class="ccard">
+        <div class="ctitle">储蓄与借贷</div>
+        <div class="ctag">存下的鱼变成资本</div>
+        <div class="cfig"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="22" width="60" height="46" rx="8" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+          <text x="36" y="44" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">存鱼</text>
+          <text x="36" y="62" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">储蓄</text>
+          <path d="M70,45 L100,45" fill="none" stroke="#E0432E" stroke-width="2.5" marker-end="url(#isl2)"/>
+          <defs><marker id="isl2" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+          <rect x="104" y="22" width="90" height="46" rx="8" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+          <text x="149" y="44" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">借出织网</text>
+          <text x="149" y="62" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">资本流动</text>
+        </svg></div>
+        <div class="cdesc">多余的鱼存起来、借给别人织网，生产就滚起来了。</div>
+      </div>
+      <div class="ccard">
+        <div class="ctitle">货币与通胀</div>
+        <div class="ctag">鱼票越印越多，鱼越缩</div>
+        <div class="cfig"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="56" height="50" rx="8" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+          <text x="48" y="42" font-size="15" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">真鱼</text>
+          <text x="48" y="62" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">1 票=1 鱼</text>
+          <path d="M80,45 L104,45" fill="none" stroke="#E0432E" stroke-width="2.5" marker-end="url(#isl3)"/>
+          <defs><marker id="isl3" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+          <rect x="108" y="28" width="72" height="34" rx="7" fill="rgba(106,96,88,.12)" stroke="#6A6058" stroke-width="2"/>
+          <text x="144" y="45" font-size="14" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">鱼票</text>
+          <text x="144" y="65" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">1 票=半鱼</text>
+        </svg></div>
+        <div class="cdesc">真鱼变纸币，政府超发，钱不值钱了。</div>
+      </div>
+      <div class="ccard">
+        <div class="ctitle">干预与危机</div>
+        <div class="ctag">印钞救市，埋下崩溃</div>
+        <div class="cfig"><svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg">
+          <rect x="16" y="24" width="74" height="42" rx="8" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+          <text x="53" y="43" font-size="14" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">印钞救市</text>
+          <text x="53" y="60" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">虚假繁荣</text>
+          <path d="M94,45 L120,45" fill="none" stroke="#E0432E" stroke-width="2.5" marker-end="url(#isl4)"/>
+          <defs><marker id="isl4" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+          <circle cx="152" cy="45" r="20" fill="none" stroke="#6A6058" stroke-width="2.5"/>
+          <path d="M138,31 L166,59" stroke="#6A6058" stroke-width="2.5"/>
+          <text x="152" y="82" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">危机</text>
+        </svg></div>
+        <div class="cdesc">靠借债和印钞撑起来的繁荣，终究要还。</div>
+      </div>
+    </div>
+
+    <!-- ▇▇▇▇▇ 第二层：后展开（4 张 concept 大卡 + 编号 1/2/3/4，每个概念配结构件） ▇▇▇▇▇ -->
+    <div class="concept-list" style="margin-top:36px">
+
+      <!-- 概念 1：资本积累 -->
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">1</div>
+          <div class="cmeta">
+            <div class="cname">资本积累：增长的第一步</div>
+            <div class="cone">牺牲眼前消费，才能换来未来的生产力</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>三个人本来每天徒手抓一条鱼，刚够活命，没有余粮、没有明天。艾伯想通了：与其每天只抓一条，不如先饿几天，编一张渔网。网织好后，他一天能抓两条鱼——多出来的那条，就是"资本"带来的增量。</p>
+          <p>"通过自我牺牲（挨饿），他创造了资本。"——增长不是从天上掉下来的，是先忍住不消费、把资源投到工具上，才有的。也正因为有了多余的鱼，大家才腾出手做别的事——"只有当我们能够生产出额外的食物时，我们才有时间做其他事情。"</p>
+          <div class="cline">
+            <div class="lab">为什么这一步最关键？</div>
+            <p>没有多余的产出，就谈不上储蓄、借贷、分工。整座岛后来的银行、货币、贸易，全是从"每天多出一条鱼"开始的。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 概念 2：储蓄与借贷 -->
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">2</div>
+          <div class="cmeta">
+            <div class="cname">储蓄与借贷：资本从哪来</div>
+            <div class="cone">存下的鱼，是扩大生产的本钱</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>艾伯每天多捕的那条鱼，自己吃不完，就存起来；别人想织网又没有余粮，就向他借鱼，答应以后还更多。这样，存下来的鱼变成了"资本"，借出去变成了"投资"。书里的判断很直接："储蓄创造了资本，而资本使生产扩大成为可能，所以储蓄起来的一美元对经济产生的积极影响要大于消费掉的一美元。"</p>
+          <p>利率在这里起作用：借鱼要还更多，逼着借钱的人把鱼用在真正能增产的地方。反之，消费贷款如果只是为了买享受、不提高产能，对借的人和贷的人都是负担——"因为消费贷款如果不能提高产能的话，这笔贷款无论是对贷款人还是借款人来说都是一种负担。"</p>
+          <div class="cline">
+            <div class="lab">一句话记住</div>
+            <p>钱先存下来、投到能增产的地方，才是资本；花掉、或者借来只为了消费，只是把未来的购买力提前吃掉。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 概念 3：货币与通胀 -->
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">3</div>
+          <div class="cmeta">
+            <div class="cname">货币与通胀：钱怎么变毛的</div>
+            <div class="cone">真鱼变纸币，印发多了就不值钱</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>岛上鱼越来越多，带着鱼不方便，大家约定用鱼当钱。再后来，政府发行"鱼票"代替真鱼，一开始一张票换一条鱼。可政府发现，多印票不用真鱼背书，就能凭空多花——于是越印越多。票还是那张票，能换到的真鱼却越来越少，这就是通胀。</p>
+          <p>书里借"不断缩水的鱼"讲清：钱本身不是财富，能满足需求的商品和服务才是；钱只是衡量和交换的工具，印发多了，每一张能换到的东西就少了。真正的财富，是岛上新织的网、多种的粮、多造的棚屋，而不是堆在仓库里的鱼票。</p>
+        </div>
+      </div>
+
+      <!-- 概念 4：政府干预与危机 -->
+      <div class="concept">
+        <div class="chead">
+          <div class="cnum">4</div>
+          <div class="cmeta">
+            <div class="cname">政府干预与危机：虚假繁荣的代价</div>
+            <div class="cone">靠印钞和借债撑的繁荣，终究要还</div>
+          </div>
+        </div>
+        <div class="cbody">
+          <p>政府为了讨好选民、救市、刺激经济，不断举债、印钞、兜底。短期看就业有了、棚屋价格涨了，一片繁荣；长期看，真正的生产没跟上，债务越堆越高。当大家发现手里的"鱼票"换不到真鱼，泡沫就破了——房价崩、银行垮、危机来。</p>
+          <p>书里借"中岛帝国"（映射现实里的出口大国）和"棚屋价格"（映射房地产泡沫）讲这套循环。作者的提醒是：经济有风险，政府替所有人消除苦痛，代价是没人能真正自由地成功或失败——"无法自由地失败，也就是无法自由地成功。"</p>
+          <div class="cline">
+            <div class="lab">作者的边界观</div>
+            <p>政府该保护产权、修基础设施，但不该靠印钞制造繁荣。把"自由市场 vs 政府干预"推到极致，是这本书最有冲击力、也最有争议的地方。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- 六、对今天的核心价值 -->
+  <section class="section rise" id="s6">
+    <div class="sec-title">六 · 对今天的核心价值</div>
+    <div class="sec-sub">一条鱼的故事不是讲着玩的，是给你一把尺子——下次看新闻、判断政策、看投资时，多一个判断角度。</div>
+
+    <!-- ▇ 作者最关键的那句话 ▇ -->
+    <div class="quote">
+      <div class="mark">"</div>
+      <blockquote>"一国的经济不会因为人们的消费而增长，而是经济增长带动人们的消费。"</blockquote>
+      <div class="ex">翻译成大白话：先有增长，再有消费——事情顺序不能反过来。「花钱拉动增长」是错觉，「先把东西造出来、再花钱买」才是真的。</div>
+    </div>
+
+    <!-- ▇ 三件你立刻能用上的事 ▇ -->
+    <div class="sec-sub" style="margin-top:26px">作者用这句话，给你做三件事的判断：</div>
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>看到「刺激消费 / 发钱补贴」：</b>政府发钱让你花、补贴让你买——钱确实多了，但东西没多。短期账面数字好看，长期是物价涨、债务堆。看这种新闻别只看"涨没涨"，先看是生产端真的增产了，还是只是给消费端补了钱。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>看到「降息 / 降准 / 货币宽松」：</b>通俗讲就是"钱更多了"。但钱多了不会自动变出东西——资产价格短期会涨一下，那只是把"已有的东西"重新定了个更高的价，不是真的东西多了。能涨多久，看生产端跟不跟得上。跟不上就是涨完要跌。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>你买股票、买基金、买房、买理财之前，先问一句：</b>这东西买完之后，能不能真的帮你赚钱——比如收租金、得分红、能产生现金流？还是只能赌后面有人出更高的价接手？前者是真投资；后者只是博差价，价格一掉就亏。小岛经济学提醒：把博差价当成投资，风险被大大低估了。</p></div>
+    </div>
+
+    <!-- ▇ 一句话带走 ▇ -->
+    <div class="indent" style="margin-top:24px">
+      <b>记住一句话就够了：</b>东西没多，钱多了，只是涨价，不是变富。真变富只有一条路——有人把东西造出来了。
+    </div>
+
+    <!-- 局限保留 -->
+    <div class="indent">它当然有边界：用寓言讲经济，必然过度简化；立场偏向奥地利学派，把"自由市场 vs 政府干预"推成了近乎二元对立，对政府提供公共品、危机托底的正面作用讲得少。当通俗入门读极好，别当成严谨的宏观经济学教材。</div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  var spy=new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]});
+  sections.forEach(function(s){spy.observe(s);});
+
+  // 内容块默认已可见（CSS .rise opacity:1），不再用 IntersectionObserver 控制显隐，避免滚动时出现空白断层。
+</script>
+</body>
+</html>

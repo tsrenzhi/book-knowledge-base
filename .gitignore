@@ -1,0 +1,22 @@
+# 系统文件
+.DS_Store
+.AppleDouble
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+
+# 编辑器 / IDE
+.idea/
+.vscode/
+
+# 本地临时
+*.tmp
+~$*
+
+# 卡片生成过程的缓存/预览
+.weread/
+
+# 装配脚本残留（不应入库）
+_assemble*.py

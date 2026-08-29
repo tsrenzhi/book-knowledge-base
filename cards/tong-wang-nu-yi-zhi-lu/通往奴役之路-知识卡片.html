@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《通往奴役之路》· 白板手绘逻辑图</title>
+<style>
+/* 本地后备：霞鹜文楷加载失败时使用系统字体 */
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet" onerror="this.remove()">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .item-title{font-size:31px;font-weight:400;color:var(--ink);line-height:1.25}
+  .item-desc{margin-top:10px;font-size:23px;color:var(--muted);line-height:1.5}
+  .red{color:var(--accent);font-weight:400}
+  .strike{position:relative;display:inline-block;color:var(--muted);font-weight:400}
+  .strike::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:4px;background:var(--accent);border-radius:3px;transform:rotate(-2deg)}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .rise.show{opacity:1;transform:translateY(0)}
+  .no-anim .rise{opacity:1;transform:none}
+
+  /* HERO：书名 + 作者 + 核心问题 */
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  /* 顶部 tab */
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+    .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+    .indent b{color:var(--muted);font-weight:600}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .divider{margin:60px auto 0;max-width:520px;height:26px}
+
+  /* 模块配色 */
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .tag{background:var(--line)}
+  .vs.old .vt{color:var(--accent)}
+
+  /* 核心内容：概念卡 = 标题 + 标签 + 小图 + 一句话，和主线融为一体 */
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:180px}
+
+  /* 逻辑链（通往奴役之路） */
+  .road{margin-top:30px;background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:22px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06)}
+  .road .rl-title{font-size:26px;color:var(--accent);text-align:center;line-height:1.3}
+  .road .rl-sub{font-size:20px;color:var(--muted);text-align:center;margin-top:6px;line-height:1.4}
+  .road .rl-fig{margin-top:14px;width:100%}
+  .road .rl-fig svg{width:100%;height:auto;display:block}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:38px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO：书名 + 作者 + 核心问题 -->
+  <header class="hero rise">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《通往奴役之路》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">弗里德里希·哈耶克 · 1944</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">全称 The Road to Serfdom · 中国社会科学出版社（王明毅、冯兴元等 译）</div>
+    <div class="bigq" style="margin-top:18px">通往奴役的道路，往往都是由善意造成的。</div>
+  </header>
+
+  <!-- 顶部 tab 导航 -->
+  <nav class="tabs" id="tabs">
+    <a href="#s1" class="tab">① 书籍定位</a>
+    <a href="#s2" class="tab">② 现实矛盾</a>
+    <a href="#s3" class="tab">③ 旧观念</a>
+    <a href="#s4" class="tab">④ 哈耶克破局</a>
+    <a href="#s5" class="tab">⑤ 核心内容</a>
+    <a href="#s6" class="tab">⑥ 核心价值</a>
+  </nav>
+
+  <!-- 一、书籍定位：这本书研究什么 -->
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底在讲什么</div>
+    <div class="prose">
+      <p>这本书要回答的核心问题很简单：<b style="color:var(--accent)">为什么计划经济不可行？</b></p>
+      <p>很多人以为，由国家统一安排经济，就能让大家过得更公平、更安全。但哈耶克说，这条路走下去，会先把经济大权集中到一个中心，再把普通人的选择权一点点剥夺掉。结果出发点是让社会变得更好，却因为权力过度集中，最终让普通人丧失自由、走向奴役。</p>
+    </div>
+  </section>
+
+  <!-- 二、当时面对的现实矛盾 -->
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 当时面对的现实矛盾</div>
+    <div class="sec-sub">二战快结束的时候，越来越多的人相信：把经济交给国家计划，是战后通往公平和繁荣的唯一正路。</div>
+    <div class="prose">
+      <p>当时，不管是英国还是欧洲大陆，战后重建的方案里都写满了"计划"两个字——从物价、生产到分配，由国家统一安排。很多人觉得，正是自由市场造成了大萧条和战争，所以必须把市场管起来，不能再让它乱跑。</p>
+      <p>另一面是：哈耶克看到，这种对"计划"的信仰，正在悄悄把权力往少数人手里收。表面上是要让大家过好日子，可每多计划一块，普通人就少一分自己安排生活的权利。更麻烦的是，当时很多人以为法西斯是"反社会主义"，哈耶克却指出，纳粹和斯大林其实共享同一套"把目标统一、由上面来安排"的集体主义根基——所以这条路的危险，被普遍低估了。</p>
+    </div>
+  </section>
+
+  <!-- 三、一个旧信念：哈耶克要破的局 -->
+  <section class="section rise" id="s3">
+    <div class="sec-title old">三 · 一个旧信念：哈耶克要破的局</div>
+    <div class="sec-sub">当时最主流的想法是——把经济集中计划，就能更高效、更公平地实现大家的共同的善。</div>
+    <div class="vs old">
+      <div class="col">
+        <span class="tag">计划许诺的好处</span>
+        <div class="vt">公平、安全、高效</div>
+        <div class="vd">由国家统一安排生产和分配，消灭失业和贫富差距，人人都有保障，不用再被市场甩来甩去。</div>
+        <div class="ve">这正是它吸引人的地方，也是战后那么多人支持它的原因。</div>
+      </div>
+      <div class="col">
+        <span class="tag">计划必然要求的</span>
+        <div class="vt">统一目标 + 集中权力</div>
+        <div class="vd">要让计划落地，就得有一个权威来决定"什么重要、生产什么、分给谁"，不同的意见必须给统一目标让路。</div>
+        <div class="ve">后果：普通人的自由被一点点剥夺；还没等到繁荣，路已经朝着奴役走去了。</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>哈耶克要破的，正是"计划等于好日子"这个默认想法。他说，问题不在计划者的初心坏，而在"计划"这件事本身：只要把经济大权交到一个中心手里，它就不得不靠命令和压制来维持运转。所以他才会写下那句很重的话："总是使得一个国家变成人间地狱的，恰恰是人们试图将其变成天堂。"</p>
+    </div>
+  </section>
+
+  <!-- 四、哈耶克的核心主张 -->
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 哈耶克的核心主张</div>
+    <div class="sec-sub">先认清旧信念的问题，再看他守住自由的几条根据。</div>
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>知识是分散的。</b>没人能掌握全社会该生产什么、怎么生产的所有知识；所以由少数人替所有人做决定，一定会出错、一定会僵住。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>竞争是公平筛选。</b>在市场上，谁更能满足需求、效率更高，谁就留下；谁不行，就被淘汰。价格就是这么比出来的，不是谁算出来的。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>守住法治，而不是行政命令。</b>自由靠的是"连政府也要守法律"，不是靠政府用法律来管你；一旦法律变成统治者随用随改的命令，人就不自由了。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>民主和全面计划不能共存。</b>民主是大家轮流、各抒己见；全面计划要求目标统一、令行禁止。两者要同时搞，往往先牺牲民主。</p></div>
+    </div>
+
+    <div class="quote">
+      <div class="mark">"</div>
+      <blockquote>"一个人不需要服从任何人，而只服从法律，他就是自由的。"</blockquote>
+      <div class="ex">这是全书被划得很多的一句。哈耶克讲的自由，核心就是这一条：一个人只受制于事先定好、对谁都一样的规则，而不受制于某个人的脸色。规则摆在那儿，谁都得遵守，人才能放心地安排自己的生活。</div>
+    </div>
+  </section>
+
+  <!-- 五、核心内容 -->
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 核心内容</div>
+    <div class="sec-sub">哈耶克用一条逻辑链把全书串起来：好意 → 计划 → 权力集中 → 压制 → 奴役。</div>
+
+    <div class="road">
+      <div class="rl-title">通往奴役之路：一步步怎么走出来的</div>
+      <div class="rl-sub">每一步看着都合理，合起来却一点点剥夺了普通人的自由</div>
+      <div class="rl-fig">
+        <svg viewBox="0 0 660 130" xmlns="http://www.w3.org/2000/svg">
+          <defs><marker id="rm" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+          <line x1="40" y1="100" x2="620" y2="100" stroke="#6A6058" stroke-width="2"/>
+          <g font-family="LXGW WenKai">
+            <rect x="22" y="38" width="108" height="48" rx="8" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="76" y="58" font-size="16" fill="#E0432E" text-anchor="middle">想安排好一切</text>
+            <text x="76" y="74" font-size="12" fill="#E0432E" text-anchor="middle">（好意）</text>
+
+            <rect x="158" y="38" width="108" height="48" rx="8" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="212" y="58" font-size="16" fill="#E0432E" text-anchor="middle">中央计划</text>
+            <text x="212" y="74" font-size="12" fill="#E0432E" text-anchor="middle">（统一安排）</text>
+
+            <rect x="294" y="38" width="108" height="48" rx="8" fill="rgba(224,67,46,.14)" stroke="#E0432E" stroke-width="2"/>
+            <text x="348" y="58" font-size="16" fill="#E0432E" text-anchor="middle">权力集中</text>
+            <text x="348" y="74" font-size="12" fill="#E0432E" text-anchor="middle">（到少数人）</text>
+
+            <rect x="430" y="38" width="108" height="48" rx="8" fill="rgba(224,67,46,.16)" stroke="#E0432E" stroke-width="2"/>
+            <text x="484" y="58" font-size="16" fill="#E0432E" text-anchor="middle">压住反对</text>
+            <text x="484" y="74" font-size="12" fill="#E0432E" text-anchor="middle">（统一思想）</text>
+
+            <rect x="560" y="36" width="86" height="52" rx="8" fill="rgba(224,67,46,.20)" stroke="#E0432E" stroke-width="2.5"/>
+            <text x="603" y="56" font-size="17" fill="#E0432E" text-anchor="middle">奴役</text>
+            <text x="603" y="74" font-size="12" fill="#E0432E" text-anchor="middle">（极权）</text>
+
+            <path d="M132,62 L154,62" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#rm)"/>
+            <path d="M268,62 L290,62" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#rm)"/>
+            <path d="M404,62 L426,62" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#rm)"/>
+            <path d="M540,62 L556,62" fill="none" stroke="#E0432E" stroke-width="2.5" marker-end="url(#rm)"/>
+            <text x="340" y="120" font-size="15" fill="#9C928A" text-anchor="middle" font-family="LXGW WenKai">中间的每一步，都是"为了更大的善"，自由就少了一点</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="core-cards">
+      <div class="ccard">
+        <div class="ctitle">自发秩序</div>
+        <div class="ctag">从实践中形成的</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="c1" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <circle cx="34" cy="80" r="14" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="34" y="84" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">个人</text>
+            <circle cx="70" cy="44" r="14" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="70" y="48" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">个人</text>
+            <circle cx="120" cy="70" r="14" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="120" y="74" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">个人</text>
+            <path d="M48,72 Q60,40 70,58" fill="none" stroke="#6A6058" stroke-width="1.6" stroke-dasharray="3 3"/>
+            <path d="M84,52 Q104,58 116,64" fill="none" stroke="#6A6058" stroke-width="1.6" stroke-dasharray="3 3"/>
+            <circle cx="90" cy="100" r="16" fill="rgba(224,67,46,.14)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="104" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">秩序</text>
+            <path d="M48,90 Q70,98 74,92" fill="none" stroke="#E0432E" stroke-width="1.6" marker-end="url(#c1)"/>
+            <path d="M104,78 Q98,90 80,96" fill="none" stroke="#E0432E" stroke-width="1.6" marker-end="url(#c1)"/>
+          </svg>
+        </div>
+        <div class="cdesc">众人各自行动、互相磨合，会自然形成一种秩序；它不是谁坐在上面设计出来的。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">分散的知识</div>
+        <div class="ctag">没人能掌握全部知识</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="c2" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <circle cx="90" cy="60" r="18" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="64" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">计划者</text>
+            <circle cx="28" cy="28" r="9" fill="rgba(106,96,88,.18)" stroke="#6A6058" stroke-width="1.6"/>
+            <circle cx="150" cy="30" r="9" fill="rgba(106,96,88,.18)" stroke="#6A6058" stroke-width="1.6"/>
+            <circle cx="30" cy="96" r="9" fill="rgba(106,96,88,.18)" stroke="#6A6058" stroke-width="1.6"/>
+            <circle cx="152" cy="94" r="9" fill="rgba(106,96,88,.18)" stroke="#6A6058" stroke-width="1.6"/>
+            <circle cx="60" cy="14" r="7" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="1.4"/>
+            <circle cx="120" cy="14" r="7" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="1.4"/>
+            <path d="M46,50 L74,54" fill="none" stroke="#E0432E" stroke-width="1.6" stroke-dasharray="3 3" marker-end="url(#c2)"/>
+            <path d="M134,50 L106,54" fill="none" stroke="#E0432E" stroke-width="1.6" stroke-dasharray="3 3" marker-end="url(#c2)"/>
+            <text x="90" y="112" font-size="11" fill="#9C928A" text-anchor="middle" font-family="LXGW WenKai">知识散在每个人手里</text>
+          </svg>
+        </div>
+        <div class="cdesc">该生产什么、怎么生产，知识散在千千万万人手里；中心再聪明，也收不齐、用不上。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">竞争</div>
+        <div class="ctag">市场用公平规则筛选</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="c3" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <rect x="14" y="30" width="40" height="26" rx="5" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="34" y="47" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">做法A</text>
+            <rect x="14" y="70" width="40" height="26" rx="5" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="34" y="87" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">做法B</text>
+            <path d="M54,43 L78,52" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#c3)"/>
+            <path d="M54,83 L78,72" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#c3)"/>
+            <rect x="82" y="50" width="44" height="30" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="104" y="67" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">市场比</text>
+            <path d="M126,65 L150,65" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#c3)"/>
+            <circle cx="162" cy="65" r="12" fill="rgba(224,67,46,.18)" stroke="#E0432E" stroke-width="2"/>
+            <text x="162" y="69" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">胜出</text>
+          </svg>
+        </div>
+        <div class="cdesc">市场靠价格汇总千万人的判断；更好的做法留下，竞争力差的被淘汰。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">法治</div>
+        <div class="ctag">政府也要守规则</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="c4" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <line x1="20" y1="34" x2="160" y2="34" stroke="#E0432E" stroke-width="2.5"/>
+            <text x="90" y="28" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">法律（事先定好·对谁都一样）</text>
+            <rect x="34" y="46" width="46" height="30" rx="5" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2"/>
+            <text x="57" y="65" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">政府</text>
+            <rect x="100" y="46" width="46" height="30" rx="5" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="123" y="65" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">个人</text>
+            <path d="M57,76 L57,96" fill="none" stroke="#6A6058" stroke-width="2" stroke-dasharray="3 3"/>
+            <path d="M123,76 L123,96" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#c4)"/>
+            <text x="123" y="112" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">只服从法律</text>
+            <text x="57" y="112" font-size="11" fill="#9C928A" text-anchor="middle" font-family="LXGW WenKai">也在法律内</text>
+          </svg>
+        </div>
+        <div class="cdesc">政府和个人都守同一套事先定好的规则；谁都不能凌驾规则之上，人才自由。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">计划与权力</div>
+        <div class="ctag">权力一集中就危险</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="c5" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <circle cx="30" cy="60" r="13" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="30" y="64" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">你</text>
+            <circle cx="30" cy="100" r="13" fill="rgba(106,96,88,.16)" stroke="#6A6058" stroke-width="2"/>
+            <text x="30" y="104" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">他</text>
+            <rect x="118" y="52" width="46" height="36" rx="6" fill="rgba(224,67,46,.16)" stroke="#E0432E" stroke-width="2.5"/>
+            <text x="141" y="70" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">计划中心</text>
+            <path d="M44,56 L116,60" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#c5)"/>
+            <path d="M44,96 L116,84" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#c5)"/>
+            <path d="M70,40 Q100,24 132,40" fill="none" stroke="#E0432E" stroke-width="1.6" stroke-dasharray="3 3" marker-end="url(#c5)"/>
+            <text x="90" y="20" font-size="11" fill="#9C928A" text-anchor="middle" font-family="LXGW WenKai">权力收拢</text>
+          </svg>
+        </div>
+        <div class="cdesc">经济大权集中到一个中心，决定权就捏在少数人手里；自由随之变窄。</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:28px">
+      <p><b style="color:var(--accent)">好的秩序是从实践中形成的，不是设计出来的。</b>哈耶克继承的是休谟、亚当·斯密那一路古典自由主义：一个社会能正常运转，靠的是无数人各自按自己的处境做决定、互相磨合，慢慢形成一套规则。它不是坐在上面、由某个聪明人画好蓝图再往下推的。所以一旦改用"由上而下统一设计"，就丢掉了这套自发秩序。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">没人能掌握全部知识。</b>该生产什么、该怎样生产，知识散在千千万万具体的人手里——农民知道自己的地，工人知道自己的机器，店主知道街坊要什么。中心再聪明，也不可能把这些细节都收上来、算清楚。所以由少数人替所有人做决定，一定会出错，也一定会越管越僵。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">竞争是公平筛选。</b>哈耶克认为，竞争不是制造不公平，而是市场在用公平规则比——谁的做法成本更低、质量更好、更能满足需求，谁就留下；谁不行，就被淘汰。哪种价格合理、该生产什么，不是谁拍脑袋算出来的，是成千上万人在市场上各自试、比出来的。计划者替不了这一环——他们没法让事实自己说话。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">法治和行政命令不是一回事。</b>自由靠的是"连政府也要守法律"，不是靠政府用法律来管你。规则要事先定好、对谁都一样，政府只能在规则里行事；人只服从法律，不服从某个人的脸色。可一旦法律变成统治者为了达成目标随时下的命令，今天就这样、明天那样，人就没有了稳定预期，自由也就没了。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">计划社会会吸引最坏的人掌权。</b>权力越集中，争夺权力的人就越不择手段。在计划体制里，最擅长发号施令、最会操纵舆论的人，反而最容易爬到上面；而知识分子为了保住影响力，往往选择配合。结果是，质疑计划就等于质疑国家目标，社会上只剩一种声音。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">安全不能拿自由去换。</b>哈耶克区分两种安全：一种是免于极端匮乏的基本保障，可以有限提供；另一种是保证特定的收入和地位，这必须以交出选择权为代价。当你要求国家"必须给我某个结果"时，国家就必须控制你能做什么，自由也就没了。</p>
+    </div>
+
+    <div class="vs" style="margin-top:18px">
+      <div class="col">
+        <span class="tag">法治（自由的护栏）</span>
+        <div class="vt">政府也在规则之内</div>
+        <div class="vd">规则事先定好、对所有人一样；政府想做事，也得在规则里走。人清楚自己能做什么、不能做什么，可以放心安排生活。</div>
+        <div class="ve">后果：有稳定预期，人才谈得上自由。</div>
+      </div>
+      <div class="col">
+        <span class="tag">行政命令（奴役的开端）</span>
+        <div class="vt">统治者随用随改的指令</div>
+        <div class="vd">法律变成上面为达目标随时下的命令；今天允许、明天禁止，全看计划需要。人得盯着上面的脸色，不知道明天会怎样。</div>
+        <div class="ve">后果：没了稳定预期，也就没了自由——这正是路上"压住反对"那一步的根。</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:18px">
+      <p style="font-size:22px;color:var(--muted)">把这条路走到头会怎样，讲得最直白：<b style="color:var(--accent)">为什么最坏者当政</b>——计划要统一思想，最擅长动员、最不择手段的人，反而最容易在"谁来当计划者"的争夺中胜出；<b style="color:var(--accent)">真理的终结</b>——为了不让计划动摇，不同的意见会被压下去，连"什么是对的"都开始被统一规定。自由一旦被剥夺，就很难再拿回来。</p>
+    </div>
+
+  </section>
+
+  <!-- 六、核心价值 -->
+  <section class="section rise" id="s6">
+    <div class="sec-title">六 · 核心价值</div>
+    <div class="sec-sub">写于 1944 年，它讲清的是一组关于自由与权力的基本道理。</div>
+    <div class="prose">
+      <p>哈耶克想提醒的，不是"政府什么都别做"，而是"把经济大权集中到一个中心，代价是自由"。这套思路放到今天，仍能帮我们看清很多似是而非的口号。</p>
+      <p>几个最值得记住的点：</p>
+    </div>
+
+    <div class="vs" style="margin-top:16px">
+      <div class="col">
+        <span class="tag">放弃经济自由</span>
+        <div class="vt">一步步被剥夺安排生活的权利</div>
+        <div class="vd">从物价、生产到工作，一样样交给上面安排；每一桩都"为了大家好"，可加起来，自己能决定的事越来越少。</div>
+        <div class="ve">后果：经济自由一旦被剥夺干净，政治自由也保不住——因为没有独立的经济，人就只能听命。</div>
+      </div>
+      <div class="col">
+        <span class="tag">自由先于繁荣</span>
+        <div class="vt">先有自由，才有别的</div>
+        <div class="vd">哈耶克说，我们逐渐放弃了经济事务中的自由，而离开这种自由，就绝不会存在以往那种个人的和政治的自由。也就是说，自由不是繁荣的副产品，而是它的地基。</div>
+        <div class="ve">提醒：别以为"先不管自由、等富裕了再谈"——顺序是反的。</div>
+      </div>
+    </div>
+
+    <div class="points" style="margin-top:22px">
+      <div class="pt"><div class="n">①</div><p><b>经济自由和政治自由分不开。</b>控制了经济，就控制了人的全部生活。经济自由一旦被剥夺干净，政治自由也保不住。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>别拿自由去换一时的保障。</b>"那些愿意放弃基本自由来换得少许暂时保障的人，既不配得到自由，也不配得到保障。"保障很重要，但若用它换掉自由，最后两头都落空。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>警惕"我这是为你好"的奴役。</b>落到个体角度，很多人会打着为你好的名义不断 PUA 你、打压你，张口就是"我都是为了你""听我的不会有错的"。你一旦习惯了这种状态，就会丧失捍卫自己自由的权利，迷失自我，最后沦为被对方奴役的对象。</p></div>
+      <div class="pt"><div class="n">④</div><p><b>自由不等于放任，政府该做的事要在法治内做。</b>哈耶克说，自由主义的论点，是赞成尽可能运用竞争力量来协调人们的努力，而不是主张让事态放任自流。他并不反对政府提供保障和公共品，只反对政府越过法治的边界、去全面安排一切。</p></div>
+    </div>
+    <div class="indent">它当然也有局限：写于 1944 年、站在冷战背景，对"市场自己也会失灵、需要监管"着墨不多；它警惕的是权力集中，不是反对一切公共行动。把它当作理解"自由与计划边界"的经典来读，别当成"政府全都别管"的教条。</div>
+  </section>
+
+</div>
+
+<script>
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector(t.getAttribute('href'));}).filter(Boolean);
+  var spy=new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', t.getAttribute('href')===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]});
+  sections.forEach(function(s){spy.observe(s);});
+
+  // 内容块默认已可见（CSS .rise opacity:1），不再用 IntersectionObserver 控制显隐，避免滚动时出现空白断层。
+</script>
+</body>
+</html>
