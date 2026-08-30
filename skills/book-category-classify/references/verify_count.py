@@ -3,7 +3,7 @@
 """校验一份 15 类分类清单 markdown 文件的本数与结构。
 
 用法：
-    python3 verify_count.py <分类总览-vN.md>
+    python3 verify_count.py <书单数据源-vN.md>
 
 输出：
     - 每个类的本数
@@ -47,7 +47,7 @@ def parse(path):
 
 def main():
     if len(sys.argv) < 2:
-        print('用法: python3 verify_count.py <分类总览-vN.md>')
+        print('用法: python3 verify_count.py <书单数据源-vN.md>')
         sys.exit(1)
     data, order, missing_meta = parse(sys.argv[1])
     total = sum(len(v) for v in data.values())

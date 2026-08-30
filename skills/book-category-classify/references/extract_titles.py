@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""从当前磁盘的 分类总览-vN.md 抽取 15 类书名（自然继承用户所有删除），
+"""从当前磁盘的 书单数据源-vN.md 抽取 15 类书名（自然继承用户所有删除），
 打印 JSON，供生成 Vn+1 时作为骨架——绝不从记忆/旧数字补书。
 
 用法：
-    python3 extract_titles.py <分类总览-vN.md> [输出json路径]
+    python3 extract_titles.py <书单数据源-vN.md> [输出json路径]
 
 输出：
     { "类名": ["《书名》", ...], ... }
@@ -39,7 +39,7 @@ def extract(path):
 
 def main():
     if len(sys.argv) < 2:
-        print('用法: python3 extract_titles.py <分类总览-vN.md> [输出json]')
+        print('用法: python3 extract_titles.py <书单数据源-vN.md> [输出json]')
         sys.exit(1)
     data, order = extract(sys.argv[1])
     out = {k: data[k] for k in order}

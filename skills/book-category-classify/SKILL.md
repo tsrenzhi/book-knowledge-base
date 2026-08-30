@@ -72,26 +72,26 @@
 
 ## 七、迭代版本工作流（Vn → Vn+1）★ 最高频翻车点
 
-> RC306 核心教训：用户在你生成的 `data/分类总览.md`（或旧版 `分类总览-vN.md`）上**直接改**（删书/调类），改完就是最新真值。你出 Vn+1 必须基于改后的文件，**绝不能凭自己记忆里的旧数重写**——否则用户删的书又被你加回来，他会一遍遍重删。
+> RC306 核心教训：用户在你生成的 `data/书单数据源.md`（或旧版 `书单数据源-vN.md`）上**直接改**（删书/调类），改完就是最新真值。你出 Vn+1 必须基于改后的文件，**绝不能凭自己记忆里的旧数重写**——否则用户删的书又被你加回来，他会一遍遍重删。
 
 **生成 Vn+1 的死步骤**：
 
-1. **先 `Read` 当前磁盘上 `data/分类总览.md` 真实文件**（不是凭记忆）。用户改过的就是最新。
+1. **先 `Read` 当前磁盘上 `data/书单数据源.md` 真实文件**（不是凭记忆）。用户改过的就是最新。
 2. **用脚本从文件抽取书名**：正则 `^\s*\d+\.\s*《(.+?)》` 逐类抽，自然继承用户所有删除。
 3. **标题写的数字一律作废**：清单标题写"639""596"都不算数。**跳号 = 已删**（用户删书后序号不连续），按实际《》出现数实算。
 4. **绝不补回任何用户删的书**：不翻旧数据、不瞎猜、不要求用户另建文件/给删除清单——用户在对话里贴过的最新版就是输入。
 5. **15 类一字排开必数对**：生成后跑 `references/verify_count.py` 校验：类别数=15、总本数=各类之和。
-6. **应用修正**：在抽出的基础上调类/排序，写新版 `分类总览.md`（或 `分类总览-v(N+1).md`），旧版备份到 `.pre-v(N+1)/`。
+6. **应用修正**：在抽出的基础上调类/排序，写新版 `书单数据源.md`（或 `书单数据源-v(N+1).md`），旧版备份到 `.pre-v(N+1)/`。
 7. **回复里贴的数字先从文件实抽**，不嘴说旧数。
-8. **【v8+ 新增】真重复扫描**：最终化前跑 `references/check_dup.py <分类总览.json>`，**同 author + 短 title 是长 title 子串 + 长度差 ≤5** 必报"真重复"——典型如《思考，快与慢》v《思考》（卡尼曼）。**保留长名，删除短名**。脚本会误报系列两本（如影响力 v 先发影响力、汉书 v 后汉书），由用户拍板"系列/真重复"。
+8. **【v8+ 新增】真重复扫描**：最终化前跑 `references/check_dup.py <书单数据源.json>`，**同 author + 短 title 是长 title 子串 + 长度差 ≤5** 必报"真重复"——典型如《思考，快与慢》v《思考》（卡尼曼）。**保留长名，删除短名**。脚本会误报系列两本（如影响力 v 先发影响力、汉书 v 后汉书），由用户拍板"系列/真重复"。
 
 ```bash
 # 校验一份分类清单
 python3 skills/book-category-classify/references/verify_count.py <文件.md>
 # 直接从文件抽书名生成 Vn+1 的骨架（继承删除，不补书）
-python3 skills/book-category-classify/references/extract_titles.py data/分类总览.md
+python3 skills/book-category-classify/references/extract_titles.py data/书单数据源.md
 # v8+ 真重复扫描（重点：是否同一本被写成不同 title）
-python3 skills/book-category-classify/references/check_dup.py data/分类总览.json
+python3 skills/book-category-classify/references/check_dup.py data/书单数据源.json
 ```
 
 ## 八、永久避用清单（绝不出现）
@@ -100,8 +100,8 @@ python3 skills/book-category-classify/references/check_dup.py data/分类总览.
 
 ## 九、与其它 skill 的关系
 
-- **book-core-points**：提每本书关键词/作者，并做"最终化管线"（合并关键词+作者进分类清单、类内相关性排序、出 `分类总览.json` 图谱核心真值）。
-- **book-knowledge-graph**：消费 `分类总览.json` 建图谱（走 RC306 第十四/十七节管线，不动原 `graph.json`）。
+- **book-core-points**：提每本书关键词/作者，并做"最终化管线"（合并关键词+作者进分类清单、类内相关性排序、出 `书单数据源.json` 图谱核心真值）。
+- **book-knowledge-graph**：消费 `书单数据源.json` 建图谱（走 RC306 第十四/十七节管线，不动原 `graph.json`）。
 - **book-knowledge-workflow**：总控编排，Phase 2 调 book-core-points，分类判定走本 skill。
 
 ## 十、自检清单（交付前过一遍）
