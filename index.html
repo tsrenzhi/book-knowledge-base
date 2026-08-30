@@ -51,15 +51,19 @@
   .searchItem .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
   /* 书名优先 + 完整：flex:1 占用剩余空间，溢出才省略号；永不截断书名主体 */
   .searchItem .name{flex:1 1 auto;min-width:0;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}  /* v25u: 书名大 14px */
-  /* 作者次之：max-width 控住让书名能完整 */
-  .searchItem .author{flex:0 1 auto;max-width:130px;font-size:9px;opacity:.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:6px}
-  /* v12: 评分紧跟书名（用分类色与左侧 dot 同色），跳转角标用 > 字符（参考微信读书"更多热门...>"） */
-  .searchItem .metaRight{flex:0 0 auto;margin-left:auto;display:flex;align-items:center;gap:6px}
-  .searchItem .metaRating{font-size:11px;font-weight:700;color:inherit;min-width:24px;text-align:right;margin-left:6px}
-  .searchItem .metaLink{font-size:18px;font-weight:700;color:rgba(126,182,255,0.85);text-decoration:none;line-height:1;padding:0 2px 0 4px;background:none;border:none;cursor:pointer;transition:color .15s;margin-left:4px}
-  .searchItem .metaLink:hover{color:#7eb6ff}
-  body.light .searchItem .metaLink{color:rgba(29,111,204,0.85)}
-  body.light .searchItem .metaLink:hover{color:#1d6fcc}
+  /* v14: 作者不挤压、不参与 flex 收缩，永远完整显示 */
+  .searchItem .author{flex:0 0 auto;max-width:90px;font-size:10.5px;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:14px;line-height:1;align-self:center;font-style:italic}
+  body.light .searchItem .author{opacity:.6}
+  /* v14: metaRight 独立悬浮块 — 整块用稍深的背景色 + padding-left + 圆角把它和左侧"书名+作者"区视觉上明确切开，箭头永远是独立可点击区 */
+  .searchItem .metaRight{flex:0 0 auto;margin-left:14px;display:flex;align-items:center;gap:6px;padding-left:10px;border-left:1px solid rgba(255,255,255,0.10)}
+  body.light .searchItem .metaRight{border-left-color:rgba(0,0,0,0.10)}
+  /* v14: 评分是书名的嫡系 — name 和 rating 之间用 -2px 让它俩视觉绑定，作者和评分之间用 14px 拉开（已经写在 .author 里） */
+  .searchItem .metaRating{font-size:11px;font-weight:700;color:inherit;min-width:26px;text-align:right;margin-left:-2px;margin-right:6px;font-variant-numeric:tabular-nums}
+  /* v14: 跳转角标改成圆形大独立按钮 — 像 iOS tab bar icon，padding 大点击区 + 圆角色块 + hover 高亮上飘 */
+  .searchItem .metaLink{font-size:15px;font-weight:700;color:#7eb6ff;text-decoration:none;line-height:1;width:30px;height:30px;background:rgba(126,182,255,0.12);border-radius:50%;cursor:pointer;transition:background .2s,color .2s,transform .2s,box-shadow .2s;display:inline-flex;align-items:center;justify-content:center;margin:0;padding:0}
+  .searchItem .metaLink:hover{color:#fff;background:rgba(126,182,255,0.45);transform:translate(2px,-2px) scale(1.1);box-shadow:0 4px 12px rgba(126,182,255,0.4)}
+  body.light .searchItem .metaLink{color:#1d6fcc;background:rgba(29,111,204,0.12)}
+  body.light .searchItem .metaLink:hover{color:#fff;background:#1d6fcc;box-shadow:0 4px 12px rgba(29,111,204,0.4)}
   .searchEmpty{padding:12px;font-size:12px;opacity:.6;color:#E8E6E2}
   body.light .searchEmpty{color:#201914}
   .filters{display:flex;flex-wrap:wrap;gap:6px}
