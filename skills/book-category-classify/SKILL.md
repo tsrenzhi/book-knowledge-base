@@ -72,11 +72,11 @@
 
 ## 七、迭代版本工作流（Vn → Vn+1）★ 最高频翻车点
 
-> RC306 核心教训：用户在你生成的 `data/书单数据源.md`（或旧版 `书单数据源-vN.md`）上**直接改**（删书/调类），改完就是最新真值。你出 Vn+1 必须基于改后的文件，**绝不能凭自己记忆里的旧数重写**——否则用户删的书又被你加回来，他会一遍遍重删。
+> RC306 核心教训：用户在你生成的 `书单数据源.md`（或旧版 `书单数据源-vN.md`）上**直接改**（删书/调类），改完就是最新真值。你出 Vn+1 必须基于改后的文件，**绝不能凭自己记忆里的旧数重写**——否则用户删的书又被你加回来，他会一遍遍重删。
 
 **生成 Vn+1 的死步骤**：
 
-1. **先 `Read` 当前磁盘上 `data/书单数据源.md` 真实文件**（不是凭记忆）。用户改过的就是最新。
+1. **先 `Read` 当前磁盘上 `书单数据源.md` 真实文件**（不是凭记忆）。用户改过的就是最新。
 2. **用脚本从文件抽取书名**：正则 `^\s*\d+\.\s*《(.+?)》` 逐类抽，自然继承用户所有删除。
 3. **标题写的数字一律作废**：清单标题写"639""596"都不算数。**跳号 = 已删**（用户删书后序号不连续），按实际《》出现数实算。
 4. **绝不补回任何用户删的书**：不翻旧数据、不瞎猜、不要求用户另建文件/给删除清单——用户在对话里贴过的最新版就是输入。
@@ -89,9 +89,9 @@
 # 校验一份分类清单
 python3 skills/book-category-classify/references/verify_count.py <文件.md>
 # 直接从文件抽书名生成 Vn+1 的骨架（继承删除，不补书）
-python3 skills/book-category-classify/references/extract_titles.py data/书单数据源.md
+python3 skills/book-category-classify/references/extract_titles.py 书单数据源.md
 # v8+ 真重复扫描（重点：是否同一本被写成不同 title）
-python3 skills/book-category-classify/references/check_dup.py data/书单数据源.json
+python3 skills/book-category-classify/references/check_dup.py 书单数据源.json
 ```
 
 ## 八、永久避用清单（绝不出现）

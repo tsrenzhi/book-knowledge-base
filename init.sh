@@ -58,7 +58,7 @@ echo
 echo "🔍 校验关键文件..."
 problems=0
 
-for f in README.md LICENSE 更新记录.md data/书单数据源.md 书籍知识图谱模板.html scripts/rebuild_final.py; do
+for f in README.md LICENSE 更新记录.md 书单数据源.md 书籍知识图谱模板.html scripts/rebuild_final.py; do
   if [ ! -f "$REPO_ROOT/$f" ]; then
     echo "  ❌ 缺：$f"
     problems=$((problems+1))
@@ -82,7 +82,7 @@ fi
 echo
 echo "🎉 初始化完成。下一步："
 echo "  1. 打开 README.md 看「场景对话示例」段，把里面引号内容复制发给你的 AI 助手"
-echo "  2. 打开 data/书单数据源.md 末尾看怎么改你的书单"
+echo "  2. 打开 书单数据源.md 末尾看怎么改你的书单"
 echo "  3. 双击 书籍知识图谱模板.html 预览演示图谱"
 echo
 echo "🗑  卸载：bash init.sh --uninstall"

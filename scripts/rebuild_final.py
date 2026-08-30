@@ -2,7 +2,7 @@
 """重生成书籍知识图谱 书籍知识图谱模板.html
 
 工作流：
-  1. 读 data/书单数据源.md 作为唯一数据真值
+  1. 读 书单数据源.md 作为唯一数据真值
   2. 以当前 书籍知识图谱模板.html 为 baseline，提取内嵌的 _EMBEDDED_GRAPH
   3. 按 书单数据源 过滤 / 增删 / 改书名；补回丢失的书↔书连线
   4. 写回 书籍知识图谱模板.html
@@ -19,7 +19,7 @@ import os
 # ---- 路径：相对仓库根 ----
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HTML = os.path.join(REPO_ROOT, "书籍知识图谱模板.html")
-CATALOG = os.path.join(REPO_ROOT, "data", "书单数据源.md")
+CATALOG = os.path.join(REPO_ROOT, "书单数据源.md")
 OUT = HTML  # 写回当前 书籍知识图谱模板.html
 
 def imp(uc):

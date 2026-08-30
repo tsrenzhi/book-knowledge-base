@@ -19,7 +19,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 |---|---|---|---|
 | ① 建卡 | `book-knowledge-card` | 可视化卡片 + 双格式 md | `cards/<拼音>/<书名>-知识卡片.html` + `<书名>.md` |
 | ② 分类 | `book-category-classify` | 归 15 大类（边界真值） | 分类判定 |
-| ② 提词 | `book-core-points` | 抽 2-4 可迁移关键词 | `data/书单数据源.md`（人读）+ `书单数据源.json`（机读） |
+| ② 提词 | `book-core-points` | 抽 2-4 可迁移关键词 | `书单数据源.md`（人读）+ `书单数据源.json`（机读） |
 | ③ 建图 | `book-knowledge-graph` | 增量节点 + 出图 | `书籍知识图谱模板.html`（图谱可双击打开） |
 | 总控 | `book-knowledge-workflow`（本文） | 只编排不写内容 | — |
 
@@ -30,7 +30,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 ```
 本仓库/
 ├── 书籍知识图谱模板.html                    ← 图谱主力（双击即开，演示版含 426 本示例数据）
-├── data/书单数据源.md         ← 【分类唯一真值·人读】你只改这一份
+├── 书单数据源.md         ← 【分类唯一真值·人读】你只改这一份
 ├── 书单数据源.json            ← 【机读副本】图谱 build 脚本读它
 ├── graph.json                    ← 旧版全量关系网（机器真值，已锁死不再增量）
 ├── graph.points.json             ← 核心要点新图数据
@@ -42,7 +42,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 ```
 
 **三处真值链（改一处必同步另外两处）**：
-- 卡片笔记 frontmatter 的 `category` ← 来自 `data/书单数据源.md`（15 大类）
+- 卡片笔记 frontmatter 的 `category` ← 来自 `书单数据源.md`（15 大类）
 - `书单数据源.json` 的分类 ← 同上
 - 图谱节点的 `category` ← 同上
 
@@ -53,7 +53,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 - **B. 只给书名（没读过）→ 速读模式**：`book-knowledge-card` 调微信读书接口取真实重点（章号/热门划线必须来自真实返回，**严禁编造**）。
 - **C. 微信读书书架批量**：`book-knowledge-card` 的 `pull_weread` 通道拉书架 → 标 15 类 → 批量建卡。
 
-> **分类纪律（贯穿全程）**：动笔/归类前先查 `data/书单数据源.md` + `book-category-classify` 这本归哪类；`category` 在卡片/清单/图谱三处必须一致。
+> **分类纪律（贯穿全程）**：动笔/归类前先查 `书单数据源.md` + `book-category-classify` 这本归哪类；`category` 在卡片/清单/图谱三处必须一致。
 
 ### Phase 1 · 建卡（book-knowledge-card）
 1. 写前强制预读标杆（`cards/guo-fu-lun/国富论-知识卡片.html` / `cards/na-wa-er-bao-dian/纳瓦尔宝典-知识卡片.html` / `assets/sample-国富论.html`）+ 跑写前输入闸门。
@@ -65,12 +65,12 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 1. **分类归属先走 `book-category-classify`**（15 类唯一真值：边界/用户三铁律/迭代版本纪律）。
 2. 从 Phase 1 的 md 抽可学内容 → 给 2-4 个**可迁移短关键词**（≤8 字）。
 3. 过 `book-core-points` 的「9 类必杀」自检 + `references/check_points.py` 自检（0 违规才收）。
-4. 追加进 `data/书单数据源.md`（人读）+ `书单数据源.json`（机读），归到对应 15 类。
-5. **迭代时永远先 Read 当前磁盘 `data/书单数据源.md`**，绝不凭记忆补回用户删的书。
+4. 追加进 `书单数据源.md`（人读）+ `书单数据源.json`（机读），归到对应 15 类。
+5. **迭代时永远先 Read 当前磁盘 `书单数据源.md`**，绝不凭记忆补回用户删的书。
 
 ### Phase 3 · 增量建图谱（book-knowledge-graph）
 1. **当前主力产物是 `书籍知识图谱模板.html`（手改内嵌 HTML + `_EMBEDDED_GRAPH`，0 fetch）**，不是模板注入架构。新增/改书后：
-   - 改 `data/书单数据源.md` → 跑 `scripts/rebuild_final.py --write` 重建 `书籍知识图谱模板.html`；
+   - 改 `书单数据源.md` → 跑 `scripts/rebuild_final.py --write` 重建 `书籍知识图谱模板.html`；
    - 或直接在 书籍知识图谱模板.html 上做力导向/交互微调（这是日常迭代方式）。
 2. **核心要点新图**：跑 `_build_points_graph.py`（如本仓库未含，可从 `book-knowledge-graph` skill 拷）从 `书籍核心要点清单.md` 出 `graph.points.json` + `书籍知识图谱-核心要点.html`。
 3. **CARD_MAP 跳转**：构建时扫描 `cards/` 下所有 `<书名>/*知识卡片*.html`，建立节点 click → 卡片跳转。没有卡片的书节点 click 静默不响应。
@@ -79,7 +79,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 > **现实与旧文档的差异（务必知道）**：早期 `book-knowledge-graph` 描述的 `gen_spatial.py` 模板注入 `galaxy-template.html` 架构，在当前主力产物上**未采用**——书籍知识图谱模板.html 是手改内嵌 HTML。开源版若要长期可维护，建议回到"模板 + 脚本注入"架构（改 UI 改模板、改数据改 json、跑脚本出图），避免手改 600KB HTML 难维护。**但无论哪种，交付前必过三关（见下）。**
 
 ### Phase 4 · 回灌与校验（选跑）
-- **三向一致性**：`data/书单数据源.md` / `书单数据源.json` / 图谱节点 的 `category` 必须一致。
+- **三向一致性**：`书单数据源.md` / `书单数据源.json` / 图谱节点 的 `category` 必须一致。
 - **用户审阅门**：清单分类/剔除等"动用户书库"的动作，死守不擅自动——先呈现给用户，用户改完再回灌。
 - **备份机制**：改前 `cp 书籍知识图谱模板.html index-pre-改前.html`，出问题 `cp` 救回。
 
