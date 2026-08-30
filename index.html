@@ -33,10 +33,9 @@
   body.light #themeBtn{background:rgba(255,255,255,0.6);border:1px solid rgba(0,0,0,0.10);color:#201914}
   /* v25.29 搜索框（移植自 thinking-model growth-brain.html） */
   #searchWrap{position:relative;display:flex;align-items:center;flex:0 0 auto;min-width:0}
-  /* v25u: 搜索框字大；v9: 锁 280px 不再 focus 跳宽，与 #searchDropdown 严格对齐（治"参差不齐"） */
-  #searchInput{font-size:13px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.08);
-    color:#E8E6E2;border-radius:16px;padding:6px 14px 6px 30px;width:280px;outline:none;transition:background .2s,border-color .2s;font-family:inherit}
-  #searchInput:focus{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.35)}  /* v9: 不再 width:280px 跳宽，治与 dropdown 对不齐 */
+  #searchInput{font-size:13px;  /* v25u: 搜索框字大 */border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.08);
+    color:#E8E6E2;border-radius:16px;padding:6px 14px 6px 30px;width:230px;  /* v25u */outline:none;transition:all .2s;font-family:inherit}
+  #searchInput:focus{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.35);width:280px}  /* v25u */
   body.light #searchInput{background:rgba(255,255,255,0.6);border:1px solid rgba(0,0,0,0.10);color:#201914}
   #searchIcon{position:absolute;left:10px;font-size:11px;opacity:.6;pointer-events:none}
   #searchDropdown{position:absolute;top:34px;left:0;width:280px;  /* v25u: 固定 280px 与 input:focus 同宽（去 max-content/min-width，前者导致单结果列收到内容宽（窄）、后者无意义） */max-height:360px;  /* v25u */overflow-y:auto;
@@ -52,6 +51,15 @@
   .searchItem .name{flex:1 1 auto;min-width:0;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}  /* v25u: 书名大 14px */
   /* 作者次之：max-width 控住让书名能完整 */
   .searchItem .author{flex:0 1 auto;max-width:130px;font-size:9px;opacity:.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:6px}
+  /* v10: 右侧评分 + 跳转入口（仅出现在搜索结果列表里，不在节点上堆） */
+  .searchItem .metaRight{flex:0 0 auto;margin-left:auto;display:flex;align-items:center;gap:8px}
+  .searchItem .metaRating{font-size:11px;font-weight:600;min-width:30px;text-align:right}
+  .searchItem .metaEmpty{opacity:.35;font-weight:400}
+  .searchItem .metaLink{font-size:10.5px;color:#7eb6ff;text-decoration:none;padding:2px 7px;border-radius:4px;background:rgba(126,182,255,0.12);transition:background .15s}
+  .searchItem .metaLink:hover{background:rgba(126,182,255,0.25);color:#a3ccff}
+  body.light .searchItem .metaLink{color:#1d6fcc;background:rgba(29,111,204,0.10)}
+  body.light .searchItem .metaLink:hover{background:rgba(29,111,204,0.20);color:#1558a8}
+  .searchItem .metaLink.metaEmpty{color:inherit;background:transparent;cursor:default}
   .searchEmpty{padding:12px;font-size:12px;opacity:.6;color:#E8E6E2}
   body.light .searchEmpty{color:#201914}
   .filters{display:flex;flex-wrap:wrap;gap:6px}
@@ -419,20 +427,6 @@ node.append("circle")
 
 node.filter(d=>d.type==="book").append("text")
   .attr("text-anchor","middle").attr("dy", d=>radius(d)+17).text(d=>d.label);
-/* v9: 节点下方副标 = 豆瓣评分 ★X.X（分类色）+ 已制卡 ↗。用户一眼看出哪些可点开看。
-   评分未抓到的（N/A）不显示；has_card 用单独的 ↗ 字符，有 ↗ 节点视觉强提示。 */
-node.filter(d=>d.type==="book").append("text")
-  .attr("text-anchor","middle").attr("dy", d=>radius(d)+31)
-  .style("font-size","11px").style("font-weight",700)
-  .style("fill", d => CAT_COLOR[d.category] || "#888")
-  .style("pointer-events","none")
-  .attr("class","book-meta")
-  .text(d => {
-    const parts = [];
-    if(typeof d.rating === "number") parts.push("★ " + d.rating.toFixed(1));
-    if(d.has_card) parts.push("↗");
-    return parts.join("   ");
-  });
 /* v25.31 概念文字标签：全部都显示文字（user: "光秃秃的点儿上它有文字啊"）
    v25.38 取消跨类桥文字加亮加粗 —— RC133：所有 concept 平等 */
 node.filter(d=>d.type==="concept").append("text")
@@ -607,9 +601,7 @@ node.on("click", function(ev){
   const d = d3.select(this).datum();
   ev.stopPropagation();
   if(d && d.type==="book" && d.status!=="referenced"){
-    /* v9: 数据驱动 card_path 优先（写在内联 _EMBEDDED_GRAPH.nodes 里，路径直接校准过）；
-       兜底走历史 CARD_MAP（兼容未来数据没灌的旧 graph）。 */
-    const f = d.card_path || CARD_MAP[d.id];
+    const f = CARD_MAP[d.id];
     if(f) window.open(f,"_blank");
   }
 });
@@ -720,8 +712,27 @@ searchInput.addEventListener("input", ()=>{
       const dotColor = CAT_COLOR[n.category] || "#888";
       const au = cleanAuthorDisplay(n.author);
       const authorHtml = au ? `<span class="author">${au}</span>` : "";
-      item.innerHTML = `<span class="dot" style="background:${dotColor}"></span><span class="name">${n.label}</span>${authorHtml}`;
+
+      // v10: 右侧信息 — 豆瓣评分 + 跳转详情（已制卡的书才显示「详细」入口）
+      let rightInfoHtml = "";
+      if(typeof n.rating === "number"){
+        rightInfoHtml += `<span class="metaRating" style="color:${dotColor}">★ ${n.rating.toFixed(1)}</span>`;
+      } else {
+        rightInfoHtml += `<span class="metaRating metaEmpty">—</span>`;
+      }
+      if(n.has_card && n.card_path){
+        rightInfoHtml += `<a class="metaLink" href="${n.card_path}" target="_blank" rel="noopener" title="打开这本书的知识卡片">详细</a>`;
+      } else {
+        rightInfoHtml += `<span class="metaLink metaEmpty" title="还没有制作这本书的知识卡片">暂无</span>`;
+      }
+
+      item.innerHTML = `<span class="dot" style="background:${dotColor}"></span>` +
+        `<span class="name">${n.label}</span>${authorHtml}` +
+        `<span class="metaRight">${rightInfoHtml}</span>`;
       item.onclick = () => { centerNode(n); searchDropdown.style.display = "none"; };
+      // v10: 点「详细」链接不冒泡到 item（避免 centerNode 抢焦点）
+      const link = item.querySelector(".metaLink");
+      if(link) link.addEventListener("click", (e) => e.stopPropagation());
       searchDropdown.appendChild(item);
     });
   }
