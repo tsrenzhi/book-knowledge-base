@@ -40,7 +40,7 @@
   body.light #searchInput{background:rgba(255,255,255,0.6);border:1px solid rgba(0,0,0,0.10);color:#201914}
   #searchIcon{position:absolute;left:10px;font-size:11px;opacity:.6;pointer-events:none}
   #searchDropdown{position:absolute;top:34px;left:0;width:280px;  /* v11: 锁 280px 与 searchInput 同宽（删掉 input listener 强制改宽） */
-    max-height:360px;overflow-y:auto;
+    /* v17: 删 max-height + overflow-y:auto，12 条内自然撑开，绝不出现滚动条 */
     background:rgba(10,14,26,0.92);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.12);
     border-radius:10px;display:none;z-index:30;box-shadow:0 8px 24px rgba(0,0,0,0.5);min-width:170px}
   body.light #searchDropdown{background:rgba(255,253,250,0.96);border:1px solid rgba(0,0,0,0.08)}
@@ -62,26 +62,21 @@
   /* v15: 删除每行的 .metaRight/.metaLink 占位（13/426 本才有 card，97% 行右侧白白空着） — 改用搜索框右侧独立浮动按钮实现跳转 */
   .searchEmpty{padding:12px;font-size:12px;opacity:.6;color:#E8E6E2}
   body.light .searchEmpty{color:#201914}
-  /* v16: 每行自带的"弱角标" — 用对应分类色（同左侧 dot 同色），小、弱、渐变脉动；无 card 的行不渲染任何东西（绝不占位） */
+  /* v17: 极简弱角标 — 仅闪烁 + 独立可点；删 hover translate / hover 暂停脉动 / 鼠标反馈，角标就这么一闪一闪；删 letter-spacing 用绝对宽度统一 3 键号间距 */
   .searchItem .metaArrow{
     flex:0 0 auto;
-    margin-left:auto;padding-left:10px;
+    margin-left:8px;
     font-size:13px;font-weight:700;line-height:1;
     text-decoration:none;cursor:pointer;
-    background:linear-gradient(90deg, currentColor 0%, currentColor 100%);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;color:transparent;
-    opacity:.55;transition:opacity .18s,transform .18s;
+    color:inherit;
+    opacity:.55;
+    font-variant-numeric:tabular-nums;
+    font-feature-settings:"tnum";
     animation:metaArrowPulse 2.2s ease-in-out infinite;
-    letter-spacing:1px
+    display:inline-flex;align-items:center
   }
-  .searchItem .metaArrow::after{content:"› ›";}
-  .searchItem .metaArrow:hover{opacity:1;transform:translate(2px,-1px);animation-play-state:paused}
-  @keyframes metaArrowPulse{0%,100%{opacity:.45}50%{opacity:.85}}
-  /* v16: 滚动条样式（dropdown 多本可点时列表变长） */
-  .searchDropdown::-webkit-scrollbar{width:6px}
-  .searchDropdown::-webkit-scrollbar-track{background:transparent}
-  .searchDropdown::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:3px}
+  .searchItem .metaArrow::after{content:"\203A\203A\203A";letter-spacing:0}
+  @keyframes metaArrowPulse{0%,100%{opacity:.40}50%{opacity:.95}}
   @keyframes cardLaunchPulse{
     0%,100%{ transform:translate(8px,-50%) translateX(0) }
     50%   { transform:translate(8px,-50%) translateX(4px) }
