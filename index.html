@@ -49,36 +49,30 @@
   .searchItem:hover{background:rgba(255,255,255,0.08)}
   body.light .searchItem:hover{background:rgba(0,0,0,0.05)}
   /* v15: 当前激活行高亮 — 跟 hover 区分（hover 是浅灰、active 是带分类色微染），独立按钮锁的就是这一行 */
-  .searchItem.active{background:rgba(255,107,107,0.12);box-shadow:inset 3px 0 0 #ff5e5e}
-  body.light .searchItem.active{background:rgba(255,107,107,0.08);box-shadow:inset 3px 0 0 #ff5e5e}
+  .searchItem.has-card:hover{background:rgba(255,255,255,0.08)}
+  body.light .searchItem.has-card:hover{background:rgba(0,0,0,0.05)}
   .searchItem .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
-  /* 书名优先 + 完整：flex:1 占用剩余空间，溢出才省略号；永不截断书名主体 */
-  .searchItem .name{flex:1 1 auto;min-width:0;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}  /* v25u: 书名大 14px */
-  /* v14: 作者不挤压、不参与 flex 收缩，永远完整显示 */
-  .searchItem .author{flex:0 0 auto;max-width:90px;font-size:10.5px;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:14px;line-height:1;align-self:center;font-style:italic}
+  /* v20: 评分紧贴书名（5px），作者后置（margin-left:14px 大间距与评分拉开）；悬停可点击行（has-card）时作者向左滑出 -120%、metaArrow 从 translateX(20px) 滑入 */
+  .searchItem .name{flex:1 1 auto;min-width:0;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .searchItem .metaRating{font-size:11px;font-weight:700;color:inherit;min-width:22px;text-align:right;margin-left:5px;font-variant-numeric:tabular-nums;flex:0 0 auto}
+  .searchItem .author{flex:0 0 auto;max-width:120px;font-size:10.5px;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:14px;line-height:1;align-self:center;font-style:italic;transition:transform .22s ease-out,opacity .22s ease-out}
   body.light .searchItem .author{opacity:.6}
-  /* v14: 评分是书名的嫡系 — name 和 rating 之间用 -2px 让它俩视觉绑定，作者和评分之间用 14px 拉开 */
-  .searchItem .metaRating{font-size:11px;font-weight:700;color:inherit;min-width:26px;text-align:right;margin-left:-2px;margin-right:6px;font-variant-numeric:tabular-nums}
-  /* v15: 删除每行的 .metaRight/.metaLink 占位（13/426 本才有 card，97% 行右侧白白空着） — 改用搜索框右侧独立浮动按钮实现跳转 */
+  /* v20: metaArrow 平时不可见（隐藏+不可点），仅在 has-card 行悬停时滑入；颜色由 inline style 注入对应分类色 */
+  .searchItem .metaArrow{
+    flex:0 0 auto;margin-left:8px;
+    font-size:14px;font-weight:700;line-height:1;letter-spacing:1px;
+    text-decoration:none;cursor:pointer;
+    padding:2px 6px;border-radius:4px;
+    opacity:0;transform:translateX(20px);pointer-events:none;
+    transition:transform .22s ease-out,opacity .22s ease-out;
+  }
+  .searchItem.has-card:hover .author{transform:translateX(-120%);opacity:0}
+  .searchItem.has-card:hover .metaArrow{opacity:1;transform:translateX(0);pointer-events:auto}
+  .searchItem.has-card:hover .metaArrow:hover{filter:brightness(1.2)}
   .searchEmpty{padding:12px;font-size:12px;opacity:.6;color:#E8E6E2}
   body.light .searchEmpty{color:#201914}
-  /* v19: dropdown 列表外右侧独立小角标（不放在搜索框外、不放在行内） — 永远 1 个，颜色随当前激活行分类色，垂直位置 JS 同步当前行，14px 字号、3 键号等距、闪烁 */
-  #cardLaunchBtn{
-    position:absolute;display:none;align-items:center;justify-content:center;
-    background:transparent;border:none;cursor:pointer;
-    font-size:14px;font-weight:700;line-height:1;
-    letter-spacing:1px;
-    padding:0;color:inherit;
-    font-variant-numeric:tabular-nums;
-    animation:cardBtnPulse 1.8s ease-in-out infinite;
-    transition:top .15s ease-out;
-    z-index:31
-  }
-  #cardLaunchBtn.active{display:inline-flex}
-  #cardLaunchBtn:hover{animation-play-state:paused;opacity:1}
-  @keyframes cardBtnPulse{0%,100%{opacity:.45}50%{opacity:1}}
-  .searchItem.active{background:rgba(255,107,107,0.10);box-shadow:inset 3px 0 0 #ff5e5e}
-  body.light .searchItem.active{background:rgba(255,107,107,0.06);box-shadow:inset 3px 0 0 #ff5e5e}
+  /* v18 之前的外置按钮已废：v20 改为每行 hover 滑出作者+滑入角标 */
+  /* v20: 激活行高亮已废（hover 滑出效果本身已视觉明确，不再需要额外高亮） */
   @keyframes cardLaunchPulse{
     0%,100%{ transform:translate(8px,-50%) translateX(0) }
     50%   { transform:translate(8px,-50%) translateX(4px) }
@@ -156,8 +150,6 @@
     <input id="searchInput" type="search" placeholder="搜索书名" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true"/>
     <div id="searchDropdown"></div>
   </div>
-  <!-- v19: 独立小角标外置于 dropdown 列表外右侧（不放在搜索框外、也不放在 dropdown 行内） — 永远 1 个，颜色随当前激活行分类色变化，垂直位置跟当前行同步 -->
-  <button id="cardLaunchBtn" type="button" aria-label="打开当前选中书的知识卡片" title="">›››</button>
 </div>
 <div class="filters" id="relFilters" style="gap:8px;align-items:center;display:none"></div>
 <div id="wrap"><svg id="svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet"></svg></div>
@@ -731,8 +723,6 @@ function cleanAuthorDisplay(a){
 searchInput.addEventListener("input", ()=>{
   const q = searchInput.value.trim().toLowerCase();
   searchDropdown.innerHTML = "";
-  const btn = document.getElementById("cardLaunchBtn");
-  btn.classList.remove("active");
   searchHL = null;
   if(!q){
     searchDropdown.style.display = "none";
@@ -750,63 +740,41 @@ searchInput.addEventListener("input", ()=>{
   } else {
     matches.forEach(n => {
       const item = document.createElement("div");
-      item.className = "searchItem";
+      const hasCard = n.has_card && n.card_path;
+      item.className = "searchItem" + (hasCard ? " has-card" : "");
       const dotColor = CAT_COLOR[n.category] || "#888";
       const au = cleanAuthorDisplay(n.author);
       const authorHtml = au ? `<span class="author">${au}</span>` : "";
 
-      // v18: 评分紧贴书名（用分类色），**每行不再画跳转角标**（97% 行无 card，空着浪费版面）— 跳转走搜索框右外的 #cardLaunchBtn
+      // v20: 评分紧贴书名（margin-left:5px）；每行都渲染 .metaArrow 但仅 has-card 行靠 CSS hover 滑入显示；角标颜色 = 分类色
       const ratingHtml = typeof n.rating === "number"
         ? `<span class="metaRating" style="color:${dotColor}">${n.rating.toFixed(1)}</span>`
         : "";
+      const arrowHtml = hasCard
+        ? `<a class="metaArrow" style="color:${dotColor}" href="${n.card_path}" target="_blank" rel="noopener" title="打开《${n.label}》的知识卡片" aria-label="打开《${n.label}》的知识卡片">›</a>`
+        : "";
 
       item.innerHTML = `<span class="dot" style="background:${dotColor}"></span>` +
-        `<span class="name">${n.label}</span>${ratingHtml}${authorHtml}`;
+        `<span class="name">${n.label}</span>${ratingHtml}${authorHtml}${arrowHtml}`;
 
-      // v18: hover 任一行 → 切换激活行（高亮 + 同步 #cardLaunchBtn 颜色/跳转目标）
-      item.onmouseenter = () => activateLaunchBtn(n, item);
-      // 点击行 = 选中节点 + 收起下拉
+      // v20: 角标独立可点（stopPropagation 阻止冒泡到 item.onclick，否则会同时 centerNode + 跳转）
+      const arrow = item.querySelector(".metaArrow");
+      if(arrow){
+        arrow.addEventListener("click", (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          window.open(arrow.href, "_blank", "noopener");
+        });
+      }
+      // 点击行（非角标）= 选中节点 + 收起下拉
       item.onclick = () => {
-        activateLaunchBtn(n, item);
         centerNode(n);
         searchDropdown.style.display = "none";
       };
       searchDropdown.appendChild(item);
     });
-    // 默认激活第一行（让按钮从 dropdown 打开就立刻可用）
-    const first = searchDropdown.querySelector(".searchItem");
-    if(first) activateLaunchBtn(matches[0], first);
   }
   searchDropdown.style.display = "block";
-});
-
-/* v19: 激活当前行 + 同步 #cardLaunchBtn 颜色 / 位置 / 跳转目标；按钮 absolute 相对 #top 容器，贴在 dropdown 列表**外右**侧（不放在搜索框外、不在行内），top 跟当前激活行同步 */
-function activateLaunchBtn(n, itemEl){
-  document.querySelectorAll(".searchItem.active").forEach(el => el.classList.remove("active"));
-  itemEl.classList.add("active");
-  const btn = document.getElementById("cardLaunchBtn");
-  const topEl = document.getElementById("top");
-  /* 计算位置：贴 dropdown 列表外右、垂直对齐当前行 */
-  const topRect = topEl.getBoundingClientRect();
-  const itemRect = itemEl.getBoundingClientRect();
-  btn.style.left = (searchDropdown.getBoundingClientRect().right - topRect.left + 8) + "px";
-  btn.style.top = (itemRect.top - topRect.top + 4) + "px";
-  if(n.has_card && n.card_path){
-    const dotColor = CAT_COLOR[n.category] || "#888";
-    btn.style.color = dotColor;
-    btn.dataset.href = n.card_path;
-    btn.title = `打开《${n.label}》的知识卡片`;
-    btn.classList.add("active");
-  } else {
-    btn.classList.remove("active");
-    btn.title = `《${n.label}》还没有知识卡片`;
-  }
-}
-/* v18: 按钮独立点击 = 跳当前激活行的 card（用 dataset.href 拿到动态设置的路径） */
-document.getElementById("cardLaunchBtn").addEventListener("click", (e) => {
-  e.preventDefault();
-  const href = e.currentTarget.dataset.href;
-  if(href) window.open(href, "_blank", "noopener");
 });
 searchInput.addEventListener("keydown", (e) => {
   if(e.key === "Enter"){
