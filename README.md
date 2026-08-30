@@ -103,7 +103,7 @@
 |---|---|
 | `cards/guo-fu-lun/` | 《国富论》知识卡片模板（md + html） |
 | `cards/na-wa-er-bao-dian/` | 《纳瓦尔宝典》知识卡片模板（md + html） |
-| `cards/da-fen-qi-zhuan/` | 《列奥纳多·达·芬奇传》知识卡片模板（md + html，含内嵌图片） |
+| `cards/lie-na-duo-da-fen-qi-zhuan/` | 《列奥纳多·达·芬奇传》知识卡片模板（md + html，含内嵌图片） |
 | `cards/ren-lei-jian-shi/` | 《人类简史》知识卡片模板（md + html） |
 | `cards/fu-ba-ba-qiong-ba-ba/` | 《富爸爸穷爸爸》知识卡片模板（md + html） |
 | `cards/sun-zi-bing-fa/` | 《孙子兵法》知识卡片模板（md + html） |
