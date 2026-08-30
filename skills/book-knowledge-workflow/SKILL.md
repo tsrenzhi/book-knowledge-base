@@ -56,7 +56,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 > **分类纪律（贯穿全程）**：动笔/归类前先查 `data/books-catalog.md` + `book-category-classify` 这本归哪类；`category` 在卡片/清单/图谱三处必须一致。
 
 ### Phase 1 · 建卡（book-knowledge-card）
-1. 写前强制预读标杆（`cards/guo-fu-lun/国富论-知识卡片-优化版.html` / `cards/na-wa-er-bao-dian/纳瓦尔宝典-知识卡片.html` / `assets/sample-国富论.html`）+ 跑写前输入闸门。
+1. 写前强制预读标杆（`cards/guo-fu-lun/国富论-知识卡片.html` / `cards/na-wa-er-bao-dian/纳瓦尔宝典-知识卡片.html` / `assets/sample-国富论.html`）+ 跑写前输入闸门。
 2. 产 `<书名>.md`（frontmatter 带 `category` + `concepts` + `related_books`）+ `<书名>-知识卡片.html`（六段骨架/四块必含/语言铁律/视觉规范全过）。
 3. **先 HTML 后 PNG**：HTML 改完、用户说"可以出图"才生 PNG。**注意：开源版故意不存 PNG**，让用户用 skill 自己生成。
 4. 双格式落盘到 `cards/<拼音>/`，**绝不覆盖标杆母版**。
