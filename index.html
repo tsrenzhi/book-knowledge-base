@@ -202,15 +202,29 @@ const viewport = svg.append("g").attr("class","viewport");
    7) viewBox 扩到 -W -H W*3 H*3（自由散出去的节点仍在画内）
    8) 初始 zoom scale 0.5（用户进图直接看大范围，用滚轮探索）
 ================================================================ */
-/* v25z-fix7: bookAnchor force — slot-based placement
-   1) init: 给每个 concept 算 slotAngle（按归属书内序号均分 360°，-90°/12点钟方向起）
-   2) slotDist = 38 + label.length * 4（长概念远、短概念近）
-   3) tick: 找最近归属书，把 concept 拉向 (book + 极坐标(slotAngle, slotDist))
-   4) 拉力不乘 alpha（永远稳定，不被 charge 平衡掉），strength 0.05（让 charge 也能调）
-   离线对账（sim_v25z_fix7.cjs，500 ticks）：fix6 概念拥挤对 < 35px = 很多 → 0 对 ✅；
-   跑到别书 16.6% → 12.5%；单书 3 概念角度 -90°/30°/150° 均分，距离 46-50px，邻居 c 距 82-84px。
-   fix6 → fix7 改动只动这一个 force，其他 5 个 force 全保留。 */
+/* v25z-fix8: bookAnchor force — slot-based placement（slot 随机化版，源自用户截图反馈"按序号均分 360° 太死板成三角形/正方形"）
+   1) init: 给每个 concept 算 slotAngle/slotDist（基于 concept.id 的可复现哈希种子，不再按书序号均分）
+      - angle: djb2(c.id) → mulberry32 → [0, 2π)（不均分，但 id 锁定，刷新前后稳定，避免出三角/正方/T 字等死板形状）
+      - dist:  (38 + labelLen * 4) × (0.85~1.15) id-seed 随机系数（保留字数梯度，宽窄有起伏）
+   2) tick: 找最近归属书，把 concept 拉向 (book + 极坐标(slotAngle, slotDist))
+   3) 拉力不乘 alpha（永远稳定，不被 charge 平衡掉），strength 0.05（让 charge 也能调）
+   fix7 → fix8 改动只动这一个 force 的 init 公式，其他 5 个 force 全保留。共享 concept 仍按现有行为：取首次进入 map 的 slot。 */
 const bookAnchor = (() => {
+  // 稳定 PRNG：mulberry32 + djb2 字符串哈希（保证每个 concept.id → 同样的 (angle, dist)，刷新前后不会跳）
+  function djb2(s) {
+    let h = 5381;
+    for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+    return h;
+  }
+  function mulberry32(a) {
+    return function() {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
   // 预计算：每个 concept 的 slotAngle/slotDist（init 时一次性算完）
   let _slotMap = new Map();
   function precompute(nodesArr, linksArr) {
@@ -228,26 +242,27 @@ const bookAnchor = (() => {
         bookConcepts.get(t.id).push(s);
       }
     }
-    // 第二遍：按 book 内 concept 序号均分 360°，距离按 label 长度梯度
+    // 第二遍：基于 concept.id 的可复现 seed 算 slotAngle/slotDist（不按书序号均分，避免多边形）
     for (const [bid, cs] of bookConcepts) {
       cs.sort((a, b) => a.id.localeCompare(b.id));
-      const n = cs.length;
       cs.forEach((c, i) => {
-        // 主 slot：均匀角度（首概念 -90°/12点钟方向起，顺时针）
-        const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-        // 距离：基础 38 + label 长度 * 4（中文每字 ~14-16px，4 字 ≈ 54-62px，5 字 ≈ 70-78px，留出 label 互不重叠）
+        if (_slotMap.has(c.id)) return;  // 多书共享：取首次进入的 slot（沿用 fix7 行为）
+        const seed = djb2(c.id);
+        const rng = mulberry32(seed);
+        // 角度：[0, 2π) 由 id 锁定，刷新前后稳定
+        const angle = rng() * Math.PI * 2;
+        // 距离：38 + labelLen * 4（保留字数梯度），乘 (0.85~1.15) id-seed 随机系数
         const labelLen = (c.label || "").length;
-        const dist = 38 + labelLen * 4;
-        // 多书共享：取 slot key = 概念id 唯一（避免 slot 被多个 book 抢）
-        if (!_slotMap.has(c.id)) {
-          _slotMap.set(c.id, { angle, dist, primaryBook: bid });
-        }
+        const dist = (38 + labelLen * 4) * (0.85 + rng() * 0.30);
+        _slotMap.set(c.id, { angle, dist, primaryBook: bid });
       });
     }
-    // 没 slot 的 concept（孤儿）：随便给一个
+    // 没 slot 的 concept（孤儿）：用 id hash 给一个稳定 slot（不再用 Math.random，避免每次刷新跳）
     for (const c of nodesArr) {
       if (c.type === "concept" && !_slotMap.has(c.id)) {
-        _slotMap.set(c.id, { angle: Math.random() * Math.PI * 2, dist: 60, primaryBook: null });
+        const seed = djb2(c.id || (Math.random().toString()));
+        const rng = mulberry32(seed);
+        _slotMap.set(c.id, { angle: rng() * Math.PI * 2, dist: 60, primaryBook: null });
       }
     }
   }
