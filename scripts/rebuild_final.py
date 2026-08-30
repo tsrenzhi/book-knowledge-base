@@ -27,7 +27,7 @@ def imp(uc):
 
 # ---- parse 分类总览 ----
 cat_pat = re.compile(r'^###\s+\d+\.\s*【(.+?)】')
-book_pat = re.compile(r'^(\d+)\.\s*《(.+?)》\s*作者[:：](.*?)\s*概念词[:：](.*?)\s*豆瓣评分[:：](\S+)\s*$')
+book_pat = re.compile(r'^(\d+)\.\s*《(.+?)》\s*作者[:：](.*?)\s*关键词[:：](.*?)\s*豆瓣评分[:：](\S+)\s*$')
 catalog = {}   # title -> (author, category, [concepts])
 cur = None
 with open(CATALOG, encoding="utf-8") as f:

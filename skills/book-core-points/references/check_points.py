@@ -78,7 +78,7 @@ JARGON = {
 }
 
 # ---------- RC306-granular 罗列堆砌黑名单（用户六连击 12 种谈判策略案）----------
-# 概念词里出现「X种策略/N个法则/五种方法/N个步骤/N个习惯/N个维度/X个要素」类罗列
+# 关键词里出现「X种策略/N个法则/五种方法/N个步骤/N个习惯/N个维度/X个要素」类罗列
 # = 看完了跟没看一样，必须重组为 2-3 个核心方法名。
 # 例外：本身是词典/工具书/合集的书允许列「N 个词条」（如字典的 ~3 万字 = 正常）。
 LIST_STUFFING = {
@@ -296,7 +296,7 @@ CATEGORY_RULES = {
 }
 
 def scan_misclassified(title, points, cur_cat):
-    """RC306-fix-misclassified：书的概念词强烈指向另一类目但当前在 cur_cat → 报疑似错归。
+    """RC306-fix-misclassified：书的关键词强烈指向另一类目但当前在 cur_cat → 报疑似错归。
     只警告不自动迁移，因为：
     1) 同主题词可能合法存在于多个类目（沟通技巧 既在人际也可能在销售）；
     2) 用户授权后才动清单；
@@ -304,8 +304,8 @@ def scan_misclassified(title, points, cur_cat):
 
     防再犯规则（RC306-fix-misclassified v2）：
     - 文学经典 是统一大类，绝不报“外迁/细分”（用户铁律：文学不细分）。
-    - 思维认知 是“思考总类”，凡概念词含思考类信号就不该被迁走；
-      仅当“另一类目命中的概念词数 严格多于 当前类自身命中数”才报，
+    - 思维认知 是“思考总类”，凡关键词含思考类信号就不该被迁走；
+      仅当“另一类目命中的关键词数 严格多于 当前类自身命中数”才报，
       避免把思考书误判去 能力提升/哲学思辨/人性洞察（第12/13轮踩过的坑）。
     """
     if not points:
@@ -319,7 +319,7 @@ def scan_misclassified(title, points, cur_cat):
         if c_target == cur_cat:
             continue
         matched = [kw for kw in kws if kw in points]
-        # 至少两个概念词命中，且该目标类命中数严格多于当前类（当前类才是更优归属）
+        # 至少两个关键词命中，且该目标类命中数严格多于当前类（当前类才是更优归属）
         if len(matched) >= 2 and len(matched) > len(cur_matched):
             hits.append((c_target, matched))
     if not hits:
@@ -343,7 +343,7 @@ def load_md(path):
             title = ln[4:].strip()
             books[title] = {'title': title, 'category': cat, 'points': []}
             continue
-        if ln.strip().startswith('- 概念词：') and title:
+        if ln.strip().startswith('- 关键词：') and title:
             words = _re.findall(r'`([^`]+)`', ln)
             books[title]['points'] = words
     return books

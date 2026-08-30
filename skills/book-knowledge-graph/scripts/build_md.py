@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """把 书籍核心要点.json 渲染成 15 类清单 md，供人工审核/编辑。
 
-设计目标：单一结构（RC133）——「带概念词 = 已收核心」「标书架补充且无概念词 = 待筛补充」，
+设计目标：单一结构（RC133）——「带关键词 = 已收核心」「标书架补充且无关键词 = 待筛补充」，
 所有书在同一份 md 里按 15 类分区排列，便于上下通览、不用翻对比。
 
 输入：{book_id: {title, category, points: [...]}} 的 json dict
@@ -64,9 +64,9 @@ def main():
                 pts = info.get("points") or []
                 if pts:
                     quoted = "、".join(f"`{p}`" for p in pts)
-                    f.write(f"- 概念词：{quoted}\n")
+                    f.write(f"- 关键词：{quoted}\n")
                 else:
-                    f.write(f"- 概念词：`⚠️ **未匹配要点**（请补）`\n")
+                    f.write(f"- 关键词：`⚠️ **未匹配要点**（请补）`\n")
                     f.write(f"  - ⚠️ graph label: `{info.get('title', bid)}` / id: `{bid}`\n")
                 f.write("\n")
             f.write("\n")
@@ -75,12 +75,12 @@ def main():
             f.write(f"\n## 【未分类】（{len(missing_pts)} 本 · 需手动归类）\n")
             for info in missing_pts:
                 f.write(f"### {info.get('title', '?')}\n")
-                f.write(f"- 概念词：`⚠️ **未分类**（请指定 category）`\n\n")
+                f.write(f"- 关键词：`⚠️ **未分类**（请指定 category）`\n\n")
 
     n_book = sum(len(v) for v in by_cat.values())
     print(f"✅ 清单已生成：{out_path}")
     print(f"   共 {n_book} 本 · {len(by_cat)} 个分类")
-    print(f"   缺概念词：{sum(1 for items in by_cat.values() for _, i in items if not i.get('points'))}")
+    print(f"   缺关键词：{sum(1 for items in by_cat.values() for _, i in items if not i.get('points'))}")
 
 
 if __name__ == "__main__":

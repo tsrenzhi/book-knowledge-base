@@ -242,7 +242,7 @@ def main():
     with open(md_path, encoding="utf-8") as f:
         text = f.read()
 
-    # 在每个分类章节尾部追加 书架补充 本（无概念词、仅标补充标记）
+    # 在每个分类章节尾部追加 书架补充 本（无关键词、仅标补充标记）
     insert_count_by_cat = {}
     for cat in CATS_15:
         items = sorted(by_cat.get(cat, []), key=lambda x: (not x["finished"], x["title"]))

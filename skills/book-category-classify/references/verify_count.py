@@ -10,7 +10,7 @@
     - 总本数
     - 类别数（必须 = 15，否则报错）
     - 总本数是否 = 各类之和
-    - 书名行是否带 作者/概念词 字段（用于最终化清单体检）
+    - 书名行是否带 作者/关键词 字段（用于最终化清单体检）
 
 设计铁律（RC306）：标题写的数字作废，按实际《》出现数实算；跳号=已删，不补号。
 """
@@ -20,7 +20,7 @@ import sys
 # 兼容两类段标题： "## 【类名】" / "### N. 【类名】"
 SEC_RE = re.compile(r'^#{1,4}\s+.*?【(.+?)】')
 BOOK_RE = re.compile(r'^\s*\d+\.\s*《(.+?)》')
-META_RE = re.compile(r'《.+?》.*?(作者[:：].*?)(概念词[:：].*?)$|《.+?》.*?(概念词[:：].*?)(作者[:：].*?)$')
+META_RE = re.compile(r'《.+?》.*?(作者[:：].*?)(关键词[:：].*?)$|《.+?》.*?(关键词[:：].*?)(作者[:：].*?)$')
 
 
 def parse(path):
@@ -40,7 +40,7 @@ def parse(path):
         bm = BOOK_RE.match(ln)
         if bm and cur:
             data[cur].append(bm.group(1))
-            if '作者' not in ln or '概念词' not in ln:
+            if '作者' not in ln or '关键词' not in ln:
                 missing_meta += 1
     return data, order, missing_meta
 
@@ -62,7 +62,7 @@ def main():
     sum_check = sum(len(v) for v in data.values())
     print(f'  总=各类之和：{"✅" if total==sum_check else "❌"} ({sum_check})')
     if missing_meta:
-        print(f'  ⚠️  {missing_meta} 本书名行缺 作者/概念词 字段（最终化清单应补全）')
+        print(f'  ⚠️  {missing_meta} 本书名行缺 作者/关键词 字段（最终化清单应补全）')
     print('=' * 50)
     if len(order) != 15:
         sys.exit(2)

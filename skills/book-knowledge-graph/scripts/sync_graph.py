@@ -6,14 +6,14 @@
   - title（书名）
   - author
   - category
-  - 是否带概念词（带 = 已收核心；标书架补充且无概念词 = 忽略/标 referenced）
+  - 是否带关键词（带 = 已收核心；标书架补充且无关键词 = 忽略/标 referenced）
 
 操作 graph.json：
   - 已存在的 book 节点：category 改了 → 更新；raw_label 保留原值
-  - md 里有但 graph.json 没有的「带概念词」book：新建为 done（需要 user 提供基础字段）
-  - md 里标「书架补充」且无概念词的：跳过（不污染 graph.json，只在 md 里待筛）
+  - md 里有但 graph.json 没有的「带关键词」book：新建为 done（需要 user 提供基础字段）
+  - md 里标「书架补充」且无关键词的：跳过（不污染 graph.json，只在 md 里待筛）
 
-⚠️ 「带概念词的补充书」新建节点需要 fields（id/type/label/author/year/category/concepts[]）。
+⚠️ 「带关键词的补充书」新建节点需要 fields（id/type/label/author/year/category/concepts[]）。
    本脚本只在用户改完 md、给图谱补新书时跑；新建节点逻辑由调用方补全或人工介入。
    本脚本的主战场是「已有书 category 修正」+「交叉验证」。
 
@@ -34,7 +34,7 @@ CATS_15 = [
 # 解析 md 行
 HEADING_RE = re.compile(r"^## 【(.+?)】")           # 分类标题
 BOOK_RE = re.compile(r"^### (.+?)$")                 # 书名小标题
-CONCEPT_LINE_RE = re.compile(r"^- 概念词：(.+)$")     # 概念词行（带 backtick 词）
+CONCEPT_LINE_RE = re.compile(r"^- 关键词：(.+)$")     # 关键词行（带 backtick 词）
 AUTHOR_LINE_RE = re.compile(r"^- 作者：(.+?)（书架补充")  # 书架补充行
 
 CONCEPT_TOKEN_RE = re.compile(r"`([^`]+)`")
