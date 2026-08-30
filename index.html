@@ -52,7 +52,7 @@
   .searchItem.has-card:hover{background:rgba(255,255,255,0.08)}
   body.light .searchItem.has-card:hover{background:rgba(0,0,0,0.05)}
   .searchItem .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
-  /* v26: name 永远不缩（flex:0 0 auto + 无 ellipsis）; authorSlot 减到 50px（author 末端 ellipsis 接受，name 完整优先） */
+  /* v27: name 永远不缩不 ellipsis（书名完整优先 · v26 铁律）; authorSlot 按内容自适应（不写死 50px）— 短作者 2 字、长作者 8 字都自然展开；metaArrow 永远不可见（opacity:0）只作为详情热区 */
   .searchItem .nameWrap{
     flex:0 0 auto;
     display:flex;align-items:baseline;
@@ -69,44 +69,37 @@
     white-space:nowrap;
     font-variant-numeric:tabular-nums;
   }
-  /* v26: authorSlot 50px（减半，author 末端 ellipsis，name 完整优先） */
+  /* v27: authorSlot 按内容自适应（不写死宽度）— 短作者 2 字、长作者 8 字都自然展开；margin-left:auto 推最右 */
   .searchItem .authorSlot{
-    flex:0 0 50px;
+    flex:0 1 auto;min-width:0;
     margin-left:auto;
     position:relative;
     height:18px;
-    overflow:hidden;
     text-align:right;
     cursor:default;
   }
   .searchItem.has-card .authorSlot{cursor:pointer}
   .searchItem .author{
-    position:absolute;top:50%;right:0;transform:translateY(-50%);
     font-size:10.5px;font-style:italic;opacity:.55;color:inherit;
-    max-width:50px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-    text-align:right;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    text-align:right;display:block;
     pointer-events:none;
-    transition:transform .25s ease-out,opacity .25s ease-out;
   }
   body.light .searchItem .author{opacity:.6}
-  /* v26: metaArrow 绝对铺满整个 authorSlot 50px（top/right/bottom/left:0），让整 50px 区域都可点跳详情 */
+  /* v27: metaArrow 完全不可见（opacity:0 + 0 宽 + 不可显示字符），但绝对铺满整个 authorSlot 作为详情热区 */
   .searchItem .metaArrow{
     position:absolute;top:0;right:0;bottom:0;left:0;
-    display:flex;align-items:center;justify-content:flex-end;
-    padding:0 4px 0 6px;
-    color:inherit;text-decoration:none;
-    font-size:14px;font-weight:700;line-height:1;letter-spacing:1px;
+    display:block;
+    color:transparent;font-size:0;line-height:0;
+    text-decoration:none;
     border-radius:4px;
-    opacity:0;pointer-events:none;
-    transform:translateX(20px);
-    transition:transform .25s ease-out,opacity .25s ease-out,background .15s;
+    opacity:0;
   }
+  .searchItem.has-card .metaArrow{cursor:pointer}
   .searchItem.has-card:hover .authorSlot{background:rgba(255,255,255,0.05)}
-  .searchItem.has-card:hover .author{transform:translateY(-50%) translateX(-100%);opacity:0}
-  .searchItem.has-card:hover .metaArrow{transform:translateX(0);opacity:1;pointer-events:auto}
-  .searchItem.has-card:hover .metaArrow:hover{background:rgba(255,255,255,0.10);filter:brightness(1.15)}
+  .searchItem.has-card:hover .metaArrow{background:rgba(255,255,255,0.08)}
   body.light .searchItem.has-card:hover .authorSlot{background:rgba(0,0,0,0.03)}
-  body.light .searchItem.has-card:hover .metaArrow:hover{background:rgba(0,0,0,0.05)}
+  body.light .searchItem.has-card:hover .metaArrow{background:rgba(0,0,0,0.05)}
   .searchEmpty{padding:12px;font-size:12px;opacity:.6;color:#E8E6E2}
   body.light .searchEmpty{color:#201914}
   /* v18 之前的外置按钮已废：v20 改为每行 hover 滑出作者+滑入角标 */
@@ -789,7 +782,7 @@ searchInput.addEventListener("input", ()=>{
         ? `<span class="metaRating" style="color:${dotColor}">${n.rating.toFixed(1)}</span>`
         : "";
       const arrowHtml = hasCard
-        ? `<a class="metaArrow" style="color:${dotColor}" href="${n.card_path}" target="_blank" rel="noopener" title="打开《${n.label}》的知识卡片" aria-label="打开《${n.label}》的知识卡片">\u203A\u203A\u203A</a>`
+        ? `<a class="metaArrow" style="color:${dotColor}" href="${n.card_path}" target="_blank" rel="noopener" title="打开《${n.label}》的知识卡片" aria-label="打开《${n.label}》的知识卡片"></a>`
         : "";
       const nameWrapHtml = `<span class="nameWrap"><span class="name">${n.label}</span>${ratingHtml}</span>`;
       const authorSlotHtml = `<span class="authorSlot">${authorHtml}${arrowHtml}</span>`;
