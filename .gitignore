@@ -27,3 +27,6 @@ __pycache__/
 
 # 装配脚本残留（不应入库）
 _assemble*.py
+
+# 临时工作区（备份/草稿/迭代中间产物都放这里，磁盘留、git 不入）
+.workbuddy-scratch/
