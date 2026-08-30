@@ -44,30 +44,59 @@
     background:rgba(10,14,26,0.92);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.12);
     border-radius:10px;display:none;z-index:30;box-shadow:0 8px 24px rgba(0,0,0,0.5);min-width:170px}
   body.light #searchDropdown{background:rgba(255,253,250,0.96);border:1px solid rgba(0,0,0,0.08)}
-  .searchItem{padding:7px 12px;cursor:pointer;font-size:11px;  /* v25u */border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:6px;color:#E8E6E2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* v24: 圆点 | nameWrap(name + 评分 5px 紧贴) | authorSlot(margin-left:auto 推最右，author 紧贴 dropdown 右边界；author/arrow 共用此 100px 位置) */
+  .searchItem{padding:7px 12px;cursor:pointer;font-size:11px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:6px;color:#E8E6E2;white-space:nowrap;overflow:hidden}
   body.light .searchItem{color:#201914;border-bottom:1px solid rgba(0,0,0,0.05)}
   .searchItem:hover{background:rgba(255,255,255,0.08)}
   body.light .searchItem:hover{background:rgba(0,0,0,0.05)}
-  /* v15: 当前激活行高亮 — 跟 hover 区分（hover 是浅灰、active 是带分类色微染），独立按钮锁的就是这一行 */
   .searchItem.has-card:hover{background:rgba(255,255,255,0.08)}
   body.light .searchItem.has-card:hover{background:rgba(0,0,0,0.05)}
   .searchItem .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
-  /* v20: 评分紧贴书名（5px），作者后置（margin-left:14px 大间距与评分拉开）；悬停可点击行（has-card）时作者向左滑出 -120%、metaArrow 从 translateX(20px) 滑入 */
-  .searchItem .name{flex:1 1 auto;min-width:0;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .searchItem .metaRating{font-size:11px;font-weight:700;color:inherit;min-width:22px;text-align:right;margin-left:5px;font-variant-numeric:tabular-nums;flex:0 0 auto}
-  .searchItem .author{flex:0 0 auto;max-width:120px;font-size:10.5px;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:14px;line-height:1;align-self:center;font-style:italic;transition:transform .22s ease-out,opacity .22s ease-out}
-  body.light .searchItem .author{opacity:.6}
-  /* v20: metaArrow 平时不可见（隐藏+不可点），仅在 has-card 行悬停时滑入；颜色由 inline style 注入对应分类色 */
-  .searchItem .metaArrow{
-    flex:0 0 auto;margin-left:8px;
-    font-size:14px;font-weight:700;line-height:1;letter-spacing:1px;
-    text-decoration:none;cursor:pointer;
-    padding:2px 6px;border-radius:4px;
-    opacity:0;transform:translateX(20px);pointer-events:none;
-    transition:transform .22s ease-out,opacity .22s ease-out;
+  /* nameWrap: 内部 name + rating 5px 紧贴，name 完整优先（不缩）、rating 紧跟；超出 nameWrap 宽度的部分裁掉 */
+  .searchItem .nameWrap{
+    flex:0 1 auto;min-width:0;
+    display:flex;align-items:baseline;
+    overflow:hidden;
   }
-  .searchItem.has-card:hover .author{transform:translateX(-120%);opacity:0}
-  .searchItem.has-card:hover .metaArrow{opacity:1;transform:translateX(0);pointer-events:auto}
+  .searchItem .name{
+    flex:0 0 auto;
+    font-size:13px;font-weight:600;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .searchItem .metaRating{
+    flex:0 0 auto;
+    font-size:11px;font-weight:700;color:inherit;
+    margin-left:5px;
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  /* v24: authorSlot — 100px 固定宽、margin-left:auto 推最右；author 平时 right:0 贴右，hover has-card 时滑出；metaArrow 从右 20px 滑入 */
+  .searchItem .authorSlot{
+    flex:0 0 100px;
+    margin-left:auto;
+    position:relative;
+    height:18px;
+    overflow:hidden;
+    text-align:right;
+  }
+  .searchItem .author{
+    position:absolute;top:50%;right:0;transform:translateY(-50%);
+    font-size:10.5px;font-style:italic;opacity:.55;color:inherit;
+    max-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    text-align:right;
+    transition:transform .25s ease-out,opacity .25s ease-out;
+  }
+  body.light .searchItem .author{opacity:.6}
+  .searchItem .metaArrow{
+    position:absolute;top:50%;right:0;transform:translateY(-50%) translateX(20px);
+    font-size:14px;font-weight:700;line-height:1;letter-spacing:1px;
+    color:inherit;text-decoration:none;cursor:pointer;
+    padding:2px 4px;border-radius:4px;
+    opacity:0;pointer-events:none;
+    transition:transform .25s ease-out,opacity .25s ease-out;
+  }
+  .searchItem.has-card:hover .author{transform:translateY(-50%) translateX(-100%);opacity:0}
+  .searchItem.has-card:hover .metaArrow{transform:translateY(-50%) translateX(0);opacity:1;pointer-events:auto}
   .searchItem.has-card:hover .metaArrow:hover{filter:brightness(1.2)}
   .searchEmpty{padding:12px;font-size:12px;opacity:.6;color:#E8E6E2}
   body.light .searchEmpty{color:#201914}
@@ -746,16 +775,17 @@ searchInput.addEventListener("input", ()=>{
       const au = cleanAuthorDisplay(n.author);
       const authorHtml = au ? `<span class="author">${au}</span>` : "";
 
-      // v20: 评分紧贴书名（margin-left:5px）；每行都渲染 .metaArrow 但仅 has-card 行靠 CSS hover 滑入显示；角标颜色 = 分类色
+      // v24: nameWrap 包裹 name + rating（5px 紧贴）；authorSlot 包裹 author + arrow（100px 宽，margin-left:auto 推最右，author 紧贴 dropdown 右边）；hover has-card 时 author 滑出 / arrow 滑入；箭头用 3 键号 ›››
       const ratingHtml = typeof n.rating === "number"
         ? `<span class="metaRating" style="color:${dotColor}">${n.rating.toFixed(1)}</span>`
         : "";
       const arrowHtml = hasCard
-        ? `<a class="metaArrow" style="color:${dotColor}" href="${n.card_path}" target="_blank" rel="noopener" title="打开《${n.label}》的知识卡片" aria-label="打开《${n.label}》的知识卡片">›</a>`
+        ? `<a class="metaArrow" style="color:${dotColor}" href="${n.card_path}" target="_blank" rel="noopener" title="打开《${n.label}》的知识卡片" aria-label="打开《${n.label}》的知识卡片">\u203A\u203A\u203A</a>`
         : "";
+      const nameWrapHtml = `<span class="nameWrap"><span class="name">${n.label}</span>${ratingHtml}</span>`;
+      const authorSlotHtml = `<span class="authorSlot">${authorHtml}${arrowHtml}</span>`;
 
-      item.innerHTML = `<span class="dot" style="background:${dotColor}"></span>` +
-        `<span class="name">${n.label}</span>${ratingHtml}${authorHtml}${arrowHtml}`;
+      item.innerHTML = `<span class="dot" style="background:${dotColor}"></span>` + nameWrapHtml + authorSlotHtml;
 
       // v20: 角标独立可点（stopPropagation 阻止冒泡到 item.onclick，否则会同时 centerNode + 跳转）
       const arrow = item.querySelector(".metaArrow");
