@@ -1,19 +1,36 @@
 # -*- coding: utf-8 -*-
-import json, re, sys, hashlib
+"""重生成书籍知识图谱 index.html
 
-HTML = "/Users/zhenghui/WorkBuddy/books/书籍知识图谱-真实版.html"
-V8   = "/Users/zhenghui/WorkBuddy/books/分类总览-v8.md"
-OUT  = "/Users/zhenghui/WorkBuddy/books/书籍知识图谱-最终版.html"
+工作流：
+  1. 读 data/books-catalog.md 作为唯一数据真值
+  2. 以当前 index.html 为 baseline，提取内嵌的 _EMBEDDED_GRAPH
+  3. 按 books-catalog 过滤 / 增删 / 改书名；补回丢失的书↔书连线
+  4. 写回 index.html
+
+用法：
+  python3 scripts/rebuild_final.py             # 干跑：只打印统计
+  python3 scripts/rebuild_final.py --write     # 落盘：写回 index.html
+
+路径默认相对仓库根目录（脚本在 scripts/ 下），clone 到任何位置都能跑。
+"""
+import json, re, sys, hashlib
+import os
+
+# ---- 路径：相对仓库根 ----
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HTML = os.path.join(REPO_ROOT, "index.html")
+CATALOG = os.path.join(REPO_ROOT, "data", "books-catalog.md")
+OUT = HTML  # 写回当前 index.html
 
 def imp(uc):
     return 2 if uc <= 1 else 3 if uc <= 2 else 4 if uc == 3 else 5
 
-# ---- parse V8 ----
+# ---- parse books-catalog ----
 cat_pat = re.compile(r'^###\s+\d+\.\s*【(.+?)】')
 book_pat = re.compile(r'^(\d+)\.\s*《(.+?)》\s*作者[:：](.*?)\s*概念词[:：](.*?)\s*豆瓣评分[:：](\S+)\s*$')
-v8 = {}   # title -> (author, category, [concepts])
+catalog = {}   # title -> (author, category, [concepts])
 cur = None
-with open(V8, encoding="utf-8") as f:
+with open(CATALOG, encoding="utf-8") as f:
     for line in f:
         s = line.rstrip("\n")
         m = cat_pat.match(s)
@@ -22,9 +39,9 @@ with open(V8, encoding="utf-8") as f:
         if bm:
             t = bm.group(2).strip()
             cons = [c.strip() for c in bm.group(4).split("、") if c.strip()]
-            v8[t] = (bm.group(3).strip(), cur, cons)
-V8TITLES = set(v8.keys())
-print(f"[V8] {len(V8TITLES)} 本书待对齐")
+            catalog[t] = (bm.group(3).strip(), cur, cons)
+CATALOG_TITLES = set(catalog.keys())
+print(f"[books-catalog] {len(CATALOG_TITLES)} 本书待对齐")
 
 # ---- extract embedded ----
 html = open(HTML, encoding="utf-8").read()
@@ -49,10 +66,10 @@ print(f"[embedded] 原 nodes={len(G['nodes'])} links={len(G['links'])}")
 
 nodes = G["nodes"]; links = G["links"]
 book_nodes = [n for n in nodes if n.get("type") == "book"]
-kept_book_ids = {n["id"] for n in book_nodes if n.get("label") in V8TITLES}
+kept_book_ids = {n["id"] for n in book_nodes if n.get("label") in CATALOG_TITLES}
 kept_labels = {n.get("label") for n in book_nodes if n["id"] in kept_book_ids}
-missing = [t for t in V8TITLES if t not in kept_labels]
-print(f"[对齐] 命中 {len(kept_book_ids)} 本；V8 缺失于图：{missing}")
+missing = [t for t in CATALOG_TITLES if t not in kept_labels]
+print(f"[对齐] 命中 {len(kept_book_ids)} 本；books-catalog 缺失于图：{missing}")
 
 # ---- filter concept nodes + book nodes ----
 kept_concept_ids = set()
@@ -70,7 +87,7 @@ for n in nodes:
     else:
         filtered_nodes.append(n)
 
-# ---- add missing V8 books (merge concepts) ----
+# ---- add missing books-catalog books (merge concepts) ----
 def hid(s): return hashlib.md5(s.encode("utf-8")).hexdigest()[:10]
 def short_name(t):
     """去副标取短名，用于「同名不同版」识别。"""
@@ -78,15 +95,15 @@ def short_name(t):
         if sep in t: return t.split(sep)[0].strip()
     return t.strip()
 
-# 先扫一遍被丢弃的书（label 不在 V8TITLES），后续给 missing book 继承书↔书连线
-dropped_books = [n for n in nodes if n.get("type")=="book" and n.get("label") not in V8TITLES]
-print(f"[丢弃] {len(dropped_books)} 本（label 与 V8 不一致或 V8 删了的书）")
+# 先扫一遍被丢弃的书（label 不在 CATALOG_TITLES），后续给 missing book 继承书↔书连线
+dropped_books = [n for n in nodes if n.get("type")=="book" and n.get("label") not in CATALOG_TITLES]
+print(f"[丢弃] {len(dropped_books)} 本（label 与 books-catalog 不一致或被删除的书）")
 
 new_nodes = []
 new_links = []
-new_bid_map = {}   # V8 title -> 新 bid
+new_bid_map = {}   # books-catalog title -> 新 bid
 for title in missing:
-    author, cat, cons = v8[title]
+    author, cat, cons = catalog[title]
     bid = "b_" + hid(title)
     new_bid_map[title] = bid
     filtered_nodes.append({"id": bid, "type": "book", "label": title,
@@ -119,14 +136,14 @@ for title in missing:
         new_links.append({"source": bid, "target": cid, "relation": "包含", "concept": c})
 
 # ---- 改名继承：missing book（如「第19版」）继承被丢弃的老书（如「第18版」）的书↔书连线 ----
-# 这是开源用户改 V8 副标/版本号不丢脸的核心兜底
+# 这是开源用户改副标/版本号不丢脸的核心兜底
 inherited_count = 0
 inherited_pairs = set()
 for t in missing:
     t_short = short_name(t)
     candidate = None
     for db in dropped_books:
-        if short_name(db.get("label","")) == t_short and (db.get("category") or "").strip() == (v8[t][1] or "").strip():
+        if short_name(db.get("label","")) == t_short and (db.get("category") or "").strip() == (catalog[t][1] or "").strip():
             candidate = db; break
     if not candidate: continue
     old_bid = candidate["id"]; new_bid = new_bid_map[t]
@@ -169,14 +186,14 @@ G2["meta"]["node_count"] = len(filtered_nodes)
 G2["meta"]["link_count"] = len(filtered_links)
 G2["meta"]["book_count"] = len([n for n in filtered_nodes if n["type"] == "book"])
 G2["meta"]["concept_count"] = len([n for n in filtered_nodes if n["type"] == "concept"])
-G2["meta"]["gen_time"] = "2026-08-30 最终版 · 基于 V8(426 本)"
+G2["meta"]["gen_time"] = f"基于 books-catalog.md ({len(CATALOG_TITLES)} 本)"
 
 # ---- validate ----
 nids = {n["id"] for n in filtered_nodes}
 bad = [l for l in filtered_links if l["source"] not in nids or l["target"] not in nids]
 nb = G2["meta"]["book_count"]
 print(f"[产出] nodes={len(filtered_nodes)} books={nb} concepts={G2['meta']['concept_count']} links={len(filtered_links)}")
-print(f"[校验] 悬空连线={len(bad)} ；书数应=V8({len(V8TITLES)}) -> {'OK' if nb==len(V8TITLES) else 'MISMATCH'}")
+print(f"[校验] 悬空连线={len(bad)} ；书数应=books-catalog({len(CATALOG_TITLES)}) -> {'OK' if nb==len(CATALOG_TITLES) else 'MISMATCH'}")
 empty_con = [n['id'] for n in filtered_nodes if n.get('type')=='concept' and not n.get('books')]
 print(f"[校验] 空概念节点={len(empty_con)}")
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""vN-core.json / vN markdown 真重复扫描器 · RC-fix v8 新增
+"""books-catalog.json / books-catalog.md 真重复扫描器
 
 铁律（用户原话："思考，快与慢你怎么能直接截断"）：
 - 同 author（去 [美]/[英]/[日] 等前缀后归一比对）
@@ -10,14 +10,15 @@
 → 必报「真重复」并提示：保留长名，删除短名
 
 典型场景：
-- 《思考，快与慢》（丹尼尔·卡尼曼） vs 《思考》（丹尼尔·卡尼曼） ← v8 真重复，已删
+- 《思考，快与慢》（丹尼尔·卡尼曼） vs 《思考》（丹尼尔·卡尼曼） ← 真重复，已删
 - 《先发影响力》（西奥迪尼） vs 《影响力》（西奥迪尼） ← 系列两本，**非重复**，保留
 - 《汉书》（尹小林校注） vs 《后汉书》（尹小林校注） ← 系列两本，**非重复**，保留
 
 用法：
-  /Users/zhenghui/.workbuddy/binaries/python/versions/3.13.12/bin/python3 \\
+  python3 \\
       ~/.workbuddy/skills/book-category-classify/references/check_dup.py \\
-      ~/WorkBuddy/books/v8-core.json
+      <books-catalog.json>
+  # 或干跑：直接 python3 check_dup.py（用默认相对路径 books-catalog.json）
 """
 import json, re, sys
 from collections import defaultdict
@@ -55,7 +56,7 @@ def scan(path):
     return suspects
 
 if __name__ == "__main__":
-    path = sys.argv[1] if len(sys.argv) > 1 else "/Users/zhenghui/WorkBuddy/books/v8-core.json"
+    path = sys.argv[1] if len(sys.argv) > 1 else "books-catalog.json"
     sus = scan(path)
     print(f"=== 真重复候选（同 author + title 子串 + 长度差≤5）· {path} ===")
     for s in sus:
