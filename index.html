@@ -62,21 +62,23 @@
   /* v15: 删除每行的 .metaRight/.metaLink 占位（13/426 本才有 card，97% 行右侧白白空着） — 改用搜索框右侧独立浮动按钮实现跳转 */
   .searchEmpty{padding:12px;font-size:12px;opacity:.6;color:#E8E6E2}
   body.light .searchEmpty{color:#201914}
-  /* v17: 极简弱角标 — 仅闪烁 + 独立可点；删 hover translate / hover 暂停脉动 / 鼠标反馈，角标就这么一闪一闪；删 letter-spacing 用绝对宽度统一 3 键号间距 */
-  .searchItem .metaArrow{
-    flex:0 0 auto;
-    margin-left:8px;
-    font-size:13px;font-weight:700;line-height:1;
-    text-decoration:none;cursor:pointer;
-    color:inherit;
-    opacity:.55;
+  /* v18: 搜索框右外独立小角标 — 紧贴 searchInput 右外，14px 字号、3 键号等距、对应分类色、闪烁；无 card 的书不显示（彻底不占位） */
+  #cardLaunchBtn{
+    flex:0 0 auto;margin-left:6px;
+    display:none;align-items:center;justify-content:center;
+    background:transparent;border:none;cursor:pointer;
+    font-size:14px;font-weight:700;line-height:1;
+    letter-spacing:1px;
+    padding:0;color:inherit;
     font-variant-numeric:tabular-nums;
-    font-feature-settings:"tnum";
-    animation:metaArrowPulse 2.2s ease-in-out infinite;
-    display:inline-flex;align-items:center
+    animation:cardBtnPulse 1.8s ease-in-out infinite;
+    transition:opacity .2s
   }
-  .searchItem .metaArrow::after{content:"\203A\203A\203A";letter-spacing:0}
-  @keyframes metaArrowPulse{0%,100%{opacity:.40}50%{opacity:.95}}
+  #cardLaunchBtn.active{display:inline-flex}
+  #cardLaunchBtn:hover{animation-play-state:paused;opacity:1}
+  @keyframes cardBtnPulse{0%,100%{opacity:.45}50%{opacity:1}}
+  .searchItem.active{background:rgba(255,107,107,0.10);box-shadow:inset 3px 0 0 #ff5e5e}
+  body.light .searchItem.active{background:rgba(255,107,107,0.06);box-shadow:inset 3px 0 0 #ff5e5e}
   @keyframes cardLaunchPulse{
     0%,100%{ transform:translate(8px,-50%) translateX(0) }
     50%   { transform:translate(8px,-50%) translateX(4px) }
@@ -153,6 +155,8 @@
     <span id="searchIcon">🔎</span>
     <input id="searchInput" type="search" placeholder="搜索书名" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true"/>
     <div id="searchDropdown"></div>
+    <!-- v18: 搜索框右侧外独立小角标 — 紧贴 searchInput 右外，永远 1 个，颜色随当前激活行分类色变化，3 键号等距闪烁。无 card 的行不显示按钮 -->
+    <button id="cardLaunchBtn" type="button" aria-label="打开当前选中书的知识卡片" title="">›››</button>
   </div>
 </div>
 <div class="filters" id="relFilters" style="gap:8px;align-items:center;display:none"></div>
@@ -727,6 +731,8 @@ function cleanAuthorDisplay(a){
 searchInput.addEventListener("input", ()=>{
   const q = searchInput.value.trim().toLowerCase();
   searchDropdown.innerHTML = "";
+  const btn = document.getElementById("cardLaunchBtn");
+  btn.classList.remove("active");
   searchHL = null;
   if(!q){
     searchDropdown.style.display = "none";
@@ -749,35 +755,53 @@ searchInput.addEventListener("input", ()=>{
       const au = cleanAuthorDisplay(n.author);
       const authorHtml = au ? `<span class="author">${au}</span>` : "";
 
-      // v16: 评分紧贴书名（用分类色，与左侧 dot 同色）; **每行自带的弱角标**（用分类色、渐变、双›、脉动）— 有 card 的才渲染；无则连这玩意都不渲染（绝不占位）
+      // v18: 评分紧贴书名（用分类色），**每行不再画跳转角标**（97% 行无 card，空着浪费版面）— 跳转走搜索框右外的 #cardLaunchBtn
       const ratingHtml = typeof n.rating === "number"
         ? `<span class="metaRating" style="color:${dotColor}">${n.rating.toFixed(1)}</span>`
         : "";
-      const arrowHtml = (n.has_card && n.card_path)
-        ? `<a class="metaArrow" style="color:${dotColor}" href="${n.card_path}" target="_blank" rel="noopener" title="打开《${n.label}》的知识卡片" aria-label="打开《${n.label}》的知识卡片">›</a>`
-        : "";
 
       item.innerHTML = `<span class="dot" style="background:${dotColor}"></span>` +
-        `<span class="name">${n.label}</span>${ratingHtml}${authorHtml}${arrowHtml}`;
+        `<span class="name">${n.label}</span>${ratingHtml}${authorHtml}`;
 
-      // v16: 角标独立可点（必须 stopPropagation 阻止冒泡到 item.onclick，否则会同时 centerNode + 跳转，体验混乱）
-      const arrow = item.querySelector(".metaArrow");
-      if(arrow){
-        arrow.addEventListener("click", (e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          window.open(arrow.href, "_blank", "noopener");
-        });
-      }
-      // 点击行（非角标）= 选中节点 + 收起下拉
+      // v18: hover 任一行 → 切换激活行（高亮 + 同步 #cardLaunchBtn 颜色/跳转目标）
+      item.onmouseenter = () => activateLaunchBtn(n, item);
+      // 点击行 = 选中节点 + 收起下拉
       item.onclick = () => {
+        activateLaunchBtn(n, item);
         centerNode(n);
         searchDropdown.style.display = "none";
       };
       searchDropdown.appendChild(item);
     });
+    // 默认激活第一行（让按钮从 dropdown 打开就立刻可用）
+    const first = searchDropdown.querySelector(".searchItem");
+    if(first) activateLaunchBtn(matches[0], first);
   }
   searchDropdown.style.display = "block";
+});
+
+/* v18: 激活当前行 + 同步 #cardLaunchBtn 颜色/跳转目标；无 card 的书 → 按钮不显示（绝不留占位） */
+function activateLaunchBtn(n, itemEl){
+  document.querySelectorAll(".searchItem.active").forEach(el => el.classList.remove("active"));
+  itemEl.classList.add("active");
+  const btn = document.getElementById("cardLaunchBtn");
+  if(n.has_card && n.card_path){
+    const dotColor = CAT_COLOR[n.category] || "#888";
+    btn.style.color = dotColor;
+    btn.href = n.card_path;
+    btn.dataset.href = n.card_path;
+    btn.title = `打开《${n.label}》的知识卡片`;
+    btn.classList.add("active");
+  } else {
+    btn.classList.remove("active");
+    btn.title = `《${n.label}》还没有知识卡片`;
+  }
+}
+/* v18: 按钮独立点击 = 跳当前激活行的 card（用 dataset.href 拿到动态设置的路径） */
+document.getElementById("cardLaunchBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+  const href = e.currentTarget.dataset.href;
+  if(href) window.open(href, "_blank", "noopener");
 });
 searchInput.addEventListener("keydown", (e) => {
   if(e.key === "Enter"){
