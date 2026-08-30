@@ -62,17 +62,17 @@
   /* v15: 删除每行的 .metaRight/.metaLink 占位（13/426 本才有 card，97% 行右侧白白空着） — 改用搜索框右侧独立浮动按钮实现跳转 */
   .searchEmpty{padding:12px;font-size:12px;opacity:.6;color:#E8E6E2}
   body.light .searchEmpty{color:#201914}
-  /* v18: 搜索框右外独立小角标 — 紧贴 searchInput 右外，14px 字号、3 键号等距、对应分类色、闪烁；无 card 的书不显示（彻底不占位） */
+  /* v19: dropdown 列表外右侧独立小角标（不放在搜索框外、不放在行内） — 永远 1 个，颜色随当前激活行分类色，垂直位置 JS 同步当前行，14px 字号、3 键号等距、闪烁 */
   #cardLaunchBtn{
-    flex:0 0 auto;margin-left:6px;
-    display:none;align-items:center;justify-content:center;
+    position:absolute;display:none;align-items:center;justify-content:center;
     background:transparent;border:none;cursor:pointer;
     font-size:14px;font-weight:700;line-height:1;
     letter-spacing:1px;
     padding:0;color:inherit;
     font-variant-numeric:tabular-nums;
     animation:cardBtnPulse 1.8s ease-in-out infinite;
-    transition:opacity .2s
+    transition:top .15s ease-out;
+    z-index:31
   }
   #cardLaunchBtn.active{display:inline-flex}
   #cardLaunchBtn:hover{animation-play-state:paused;opacity:1}
@@ -155,9 +155,9 @@
     <span id="searchIcon">🔎</span>
     <input id="searchInput" type="search" placeholder="搜索书名" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true"/>
     <div id="searchDropdown"></div>
-    <!-- v18: 搜索框右侧外独立小角标 — 紧贴 searchInput 右外，永远 1 个，颜色随当前激活行分类色变化，3 键号等距闪烁。无 card 的行不显示按钮 -->
-    <button id="cardLaunchBtn" type="button" aria-label="打开当前选中书的知识卡片" title="">›››</button>
   </div>
+  <!-- v19: 独立小角标外置于 dropdown 列表外右侧（不放在搜索框外、也不放在 dropdown 行内） — 永远 1 个，颜色随当前激活行分类色变化，垂直位置跟当前行同步 -->
+  <button id="cardLaunchBtn" type="button" aria-label="打开当前选中书的知识卡片" title="">›››</button>
 </div>
 <div class="filters" id="relFilters" style="gap:8px;align-items:center;display:none"></div>
 <div id="wrap"><svg id="svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet"></svg></div>
@@ -780,15 +780,20 @@ searchInput.addEventListener("input", ()=>{
   searchDropdown.style.display = "block";
 });
 
-/* v18: 激活当前行 + 同步 #cardLaunchBtn 颜色/跳转目标；无 card 的书 → 按钮不显示（绝不留占位） */
+/* v19: 激活当前行 + 同步 #cardLaunchBtn 颜色 / 位置 / 跳转目标；按钮 absolute 相对 #top 容器，贴在 dropdown 列表**外右**侧（不放在搜索框外、不在行内），top 跟当前激活行同步 */
 function activateLaunchBtn(n, itemEl){
   document.querySelectorAll(".searchItem.active").forEach(el => el.classList.remove("active"));
   itemEl.classList.add("active");
   const btn = document.getElementById("cardLaunchBtn");
+  const topEl = document.getElementById("top");
+  /* 计算位置：贴 dropdown 列表外右、垂直对齐当前行 */
+  const topRect = topEl.getBoundingClientRect();
+  const itemRect = itemEl.getBoundingClientRect();
+  btn.style.left = (searchDropdown.getBoundingClientRect().right - topRect.left + 8) + "px";
+  btn.style.top = (itemRect.top - topRect.top + 4) + "px";
   if(n.has_card && n.card_path){
     const dotColor = CAT_COLOR[n.category] || "#888";
     btn.style.color = dotColor;
-    btn.href = n.card_path;
     btn.dataset.href = n.card_path;
     btn.title = `打开《${n.label}》的知识卡片`;
     btn.classList.add("active");
