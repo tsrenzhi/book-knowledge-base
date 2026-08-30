@@ -52,14 +52,14 @@
   .searchItem.has-card:hover{background:rgba(255,255,255,0.08)}
   body.light .searchItem.has-card:hover{background:rgba(0,0,0,0.05)}
   .searchItem .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
-  /* nameWrap: 内部 name + rating 5px 紧贴，name 完整优先（不缩）、rating 紧跟；超出 nameWrap 宽度的部分裁掉 */
+  /* v25: name 改 flex:0 1 auto + ellipsis（rating 永远紧跟不会被裁）；authorSlot 整 100px 是"详情热区"（hover 显示箭头，整块可点跳详情） */
   .searchItem .nameWrap{
     flex:0 1 auto;min-width:0;
     display:flex;align-items:baseline;
     overflow:hidden;
   }
   .searchItem .name{
-    flex:0 0 auto;
+    flex:0 1 auto;min-width:0;
     font-size:13px;font-weight:600;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
@@ -70,7 +70,7 @@
     white-space:nowrap;
     font-variant-numeric:tabular-nums;
   }
-  /* v24: authorSlot — 100px 固定宽、margin-left:auto 推最右；author 平时 right:0 贴右，hover has-card 时滑出；metaArrow 从右 20px 滑入 */
+  /* v25: authorSlot 100px 整块 = 详情热区（cursor pointer、整 100px 区域点哪都跳详情） */
   .searchItem .authorSlot{
     flex:0 0 100px;
     margin-left:auto;
@@ -78,26 +78,36 @@
     height:18px;
     overflow:hidden;
     text-align:right;
+    cursor:default;
   }
+  .searchItem.has-card .authorSlot{cursor:pointer}
   .searchItem .author{
     position:absolute;top:50%;right:0;transform:translateY(-50%);
     font-size:10.5px;font-style:italic;opacity:.55;color:inherit;
     max-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     text-align:right;
+    pointer-events:none;
     transition:transform .25s ease-out,opacity .25s ease-out;
   }
   body.light .searchItem .author{opacity:.6}
+  /* v25: metaArrow 绝对铺满整个 authorSlot（top:0/right:0/bottom:0/left:0），让整 100px 区域都可点跳详情；文字靠右 */
   .searchItem .metaArrow{
-    position:absolute;top:50%;right:0;transform:translateY(-50%) translateX(20px);
+    position:absolute;top:0;right:0;bottom:0;left:0;
+    display:flex;align-items:center;justify-content:flex-end;
+    padding:0 4px 0 8px;
+    color:inherit;text-decoration:none;
     font-size:14px;font-weight:700;line-height:1;letter-spacing:1px;
-    color:inherit;text-decoration:none;cursor:pointer;
-    padding:2px 4px;border-radius:4px;
+    border-radius:4px;
     opacity:0;pointer-events:none;
-    transition:transform .25s ease-out,opacity .25s ease-out;
+    transform:translateX(20px);
+    transition:transform .25s ease-out,opacity .25s ease-out,background .15s;
   }
+  .searchItem.has-card:hover .authorSlot{background:rgba(255,255,255,0.05)}
   .searchItem.has-card:hover .author{transform:translateY(-50%) translateX(-100%);opacity:0}
-  .searchItem.has-card:hover .metaArrow{transform:translateY(-50%) translateX(0);opacity:1;pointer-events:auto}
-  .searchItem.has-card:hover .metaArrow:hover{filter:brightness(1.2)}
+  .searchItem.has-card:hover .metaArrow{transform:translateX(0);opacity:1;pointer-events:auto}
+  .searchItem.has-card:hover .metaArrow:hover{background:rgba(255,255,255,0.10);filter:brightness(1.15)}
+  body.light .searchItem.has-card:hover .authorSlot{background:rgba(0,0,0,0.03)}
+  body.light .searchItem.has-card:hover .metaArrow:hover{background:rgba(0,0,0,0.05)}
   .searchEmpty{padding:12px;font-size:12px;opacity:.6;color:#E8E6E2}
   body.light .searchEmpty{color:#201914}
   /* v18 之前的外置按钮已废：v20 改为每行 hover 滑出作者+滑入角标 */
