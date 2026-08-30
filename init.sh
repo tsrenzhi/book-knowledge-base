@@ -58,7 +58,7 @@ echo
 echo "🔍 校验关键文件..."
 problems=0
 
-for f in README.md LICENSE 更新记录.md 操作手册.md 如何维护书单.md data/分类总览.md index.html scripts/rebuild_final.py; do
+for f in README.md LICENSE 更新记录.md 操作手册.md 如何维护书单.md data/分类总览.md 书籍知识图谱模板.html scripts/rebuild_final.py; do
   if [ ! -f "$REPO_ROOT/$f" ]; then
     echo "  ❌ 缺：$f"
     problems=$((problems+1))
@@ -83,6 +83,6 @@ echo
 echo "🎉 初始化完成。下一步："
 echo "  1. 打开 操作手册.md 看场景化使用示例"
 echo "  2. 打开 data/分类总览.md 看怎么加自己的书"
-echo "  3. 双击 index.html 预览演示图谱"
+echo "  3. 双击 书籍知识图谱模板.html 预览演示图谱"
 echo
 echo "🗑  卸载：bash init.sh --uninstall"

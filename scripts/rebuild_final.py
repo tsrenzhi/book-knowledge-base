@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-"""重生成书籍知识图谱 index.html
+"""重生成书籍知识图谱 书籍知识图谱模板.html
 
 工作流：
   1. 读 data/分类总览.md 作为唯一数据真值
-  2. 以当前 index.html 为 baseline，提取内嵌的 _EMBEDDED_GRAPH
+  2. 以当前 书籍知识图谱模板.html 为 baseline，提取内嵌的 _EMBEDDED_GRAPH
   3. 按 分类总览 过滤 / 增删 / 改书名；补回丢失的书↔书连线
-  4. 写回 index.html
+  4. 写回 书籍知识图谱模板.html
 
 用法：
   python3 scripts/rebuild_final.py             # 干跑：只打印统计
-  python3 scripts/rebuild_final.py --write     # 落盘：写回 index.html
+  python3 scripts/rebuild_final.py --write     # 落盘：写回 书籍知识图谱模板.html
 
 路径默认相对仓库根目录（脚本在 scripts/ 下），clone 到任何位置都能跑。
 """
@@ -18,9 +18,9 @@ import os
 
 # ---- 路径：相对仓库根 ----
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-HTML = os.path.join(REPO_ROOT, "index.html")
+HTML = os.path.join(REPO_ROOT, "书籍知识图谱模板.html")
 CATALOG = os.path.join(REPO_ROOT, "data", "分类总览.md")
-OUT = HTML  # 写回当前 index.html
+OUT = HTML  # 写回当前 书籍知识图谱模板.html
 
 def imp(uc):
     return 2 if uc <= 1 else 3 if uc <= 2 else 4 if uc == 3 else 5

@@ -20,7 +20,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 | ① 建卡 | `book-knowledge-card` | 可视化卡片 + 双格式 md | `cards/<拼音>/<书名>-知识卡片.html` + `<书名>.md` |
 | ② 分类 | `book-category-classify` | 归 15 大类（边界真值） | 分类判定 |
 | ② 提词 | `book-core-points` | 抽 2-4 可迁移概念词 | `data/分类总览.md`（人读）+ `分类总览.json`（机读） |
-| ③ 建图 | `book-knowledge-graph` | 增量节点 + 出图 | `index.html`（图谱可双击打开） |
+| ③ 建图 | `book-knowledge-graph` | 增量节点 + 出图 | `书籍知识图谱模板.html`（图谱可双击打开） |
 | 总控 | `book-knowledge-workflow`（本文） | 只编排不写内容 | — |
 
 > 注：`book-reading-framework`（长文阅读框架）和 `book-theory-support`（写稿时找书撑观点）是另外两个独立 skill，**跟搭库本身没关系**，是创作用途，没列进本表。
@@ -29,7 +29,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 ```
 本仓库/
-├── index.html                    ← 图谱主力（双击即开，演示版含 426 本示例数据）
+├── 书籍知识图谱模板.html                    ← 图谱主力（双击即开，演示版含 426 本示例数据）
 ├── data/分类总览.md         ← 【分类唯一真值·人读】你只改这一份
 ├── 分类总览.json            ← 【机读副本】图谱 build 脚本读它
 ├── graph.json                    ← 旧版全量关系网（机器真值，已锁死不再增量）
@@ -37,7 +37,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 ├── cards/<拼音>/
 │   ├── <书名>.md                 ← 双格式之一：结构化文本（带 frontmatter）
 │   └── <书名>-知识卡片.html       ← 双格式之二：可视化卡片（最高优先真值）
-├── scripts/rebuild_final.py      ← 内部脚本：读 分类总览.md → 出 index.html
+├── scripts/rebuild_final.py      ← 内部脚本：读 分类总览.md → 出 书籍知识图谱模板.html
 └── skills/                       ← 5 个 book-* 技能源
 ```
 
@@ -69,19 +69,19 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 5. **迭代时永远先 Read 当前磁盘 `data/分类总览.md`**，绝不凭记忆补回用户删的书。
 
 ### Phase 3 · 增量建图谱（book-knowledge-graph）
-1. **当前主力产物是 `index.html`（手改内嵌 HTML + `_EMBEDDED_GRAPH`，0 fetch）**，不是模板注入架构。新增/改书后：
-   - 改 `data/分类总览.md` → 跑 `scripts/rebuild_final.py --write` 重建 `index.html`；
-   - 或直接在 index.html 上做力导向/交互微调（这是日常迭代方式）。
+1. **当前主力产物是 `书籍知识图谱模板.html`（手改内嵌 HTML + `_EMBEDDED_GRAPH`，0 fetch）**，不是模板注入架构。新增/改书后：
+   - 改 `data/分类总览.md` → 跑 `scripts/rebuild_final.py --write` 重建 `书籍知识图谱模板.html`；
+   - 或直接在 书籍知识图谱模板.html 上做力导向/交互微调（这是日常迭代方式）。
 2. **核心要点新图**：跑 `_build_points_graph.py`（如本仓库未含，可从 `book-knowledge-graph` skill 拷）从 `书籍核心要点清单.md` 出 `graph.points.json` + `书籍知识图谱-核心要点.html`。
 3. **CARD_MAP 跳转**：构建时扫描 `cards/` 下所有 `<书名>/*知识卡片*.html`，建立节点 click → 卡片跳转。没有卡片的书节点 click 静默不响应。
 4. 双击 HTML（file:// 即可）验证新节点出现、同大类成团、相悖红线连。
 
-> **现实与旧文档的差异（务必知道）**：早期 `book-knowledge-graph` 描述的 `gen_spatial.py` 模板注入 `galaxy-template.html` 架构，在当前主力产物上**未采用**——index.html 是手改内嵌 HTML。开源版若要长期可维护，建议回到"模板 + 脚本注入"架构（改 UI 改模板、改数据改 json、跑脚本出图），避免手改 600KB HTML 难维护。**但无论哪种，交付前必过三关（见下）。**
+> **现实与旧文档的差异（务必知道）**：早期 `book-knowledge-graph` 描述的 `gen_spatial.py` 模板注入 `galaxy-template.html` 架构，在当前主力产物上**未采用**——书籍知识图谱模板.html 是手改内嵌 HTML。开源版若要长期可维护，建议回到"模板 + 脚本注入"架构（改 UI 改模板、改数据改 json、跑脚本出图），避免手改 600KB HTML 难维护。**但无论哪种，交付前必过三关（见下）。**
 
 ### Phase 4 · 回灌与校验（选跑）
 - **三向一致性**：`data/分类总览.md` / `分类总览.json` / 图谱节点 的 `category` 必须一致。
 - **用户审阅门**：清单分类/剔除等"动用户书库"的动作，死守不擅自动——先呈现给用户，用户改完再回灌。
-- **备份机制**：改前 `cp index.html index-pre-改前.html`，出问题 `cp` 救回。
+- **备份机制**：改前 `cp 书籍知识图谱模板.html index-pre-改前.html`，出问题 `cp` 救回。
 
 ## 交付前三关验证（铁律 · 少一道都可能把图改崩）
 
@@ -93,7 +93,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 ## 红线速查（编排层最易翻车）
 
-- **graph.json 锁死**：旧版全量关系网不再增量；新图只产 `graph.points.json` + 改 `index.html`。
+- **graph.json 锁死**：旧版全量关系网不再增量；新图只产 `graph.points.json` + 改 `书籍知识图谱模板.html`。
 - **RC110（用户审阅门）**：改用户书库分类/删书/重分类必须等用户确认。
 - **RC304（小白文档）**：面向人的操作文档以"对 WorkBuddy 说话"为单位，禁终端代码块/多平台分支/技术黑话；见 `操作手册.md`。
 - **三关验证**：交付前必过（语法/内嵌/真渲染）。
@@ -107,7 +107,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 1. **本仓库已经是开源版**：6 本示例 + 演示图谱 + 5 个 skill + 数据真值 + 脚本，开箱即用。
 2. **开发过程中的副本不要入库**：所有 `⏸️回滚备份-*`、`✅当前基线-*`、`baseline-*`、`.bak`、`.pre-*`、`__pycache__`、`.DS_Store` 用 `.gitignore` 挡掉（见仓库根 `.gitignore`）。
 3. **GitHub Pages 直接托管**：因 HTML 100% 内嵌（0 fetch），push 后 Settings→Pages→main/(root) 即可访问，无需后端。
-4. **回滚机制随仓库走**：每次 `index.html` 重大变更前 `cp` 备份，commit message 里写清楚；更新记录.md 同步记录。
+4. **回滚机制随仓库走**：每次 `书籍知识图谱模板.html` 重大变更前 `cp` 备份，commit message 里写清楚；更新记录.md 同步记录。
 
 ## 子 skill 索引（写法纪律看各自）
 
