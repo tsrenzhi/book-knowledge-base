@@ -1,13 +1,13 @@
 ---
 name: book-knowledge-graph
-description: 把书籍知识库（~/WorkBuddy/books/）的书与核心概念构建成可可视化的「知识星系 / 知识图谱」。核心数据是一个机器可读的全局关系网络 graph.json，星云 Demo 直接消费它。触发词：书籍知识图谱、知识星系、跨书关联、书与书怎么关联、把书做成星云、图谱、graph.json、relation。同时作为 book-knowledge-card 产出后的强制联动环节——每做完一本书的卡片，必须增量更新 graph.json 并刷新 Demo（不要等所有书做完再补）。
+description: 把书籍知识库（你的书籍库/）的书与核心概念构建成可可视化的「知识星系 / 知识图谱」。核心数据是一个机器可读的全局关系网络 graph.json，星云 Demo 直接消费它。触发词：书籍知识图谱、知识星系、跨书关联、书与书怎么关联、把书做成星云、图谱、graph.json、relation。同时作为 book-knowledge-card 产出后的强制联动环节——每做完一本书的卡片，必须增量更新 graph.json 并刷新 Demo（不要等所有书做完再补）。
 ---
 
 # 书籍知识图谱（Book Knowledge Graph）
 
 ## Overview
 
-把 `~/WorkBuddy/books/` 里的书及其核心概念，构建成可可视化的「知识星系 / 知识图谱」。核心数据是一个机器可读的全局关系网络 `graph.json`，可视化 Demo（力导向图）直接消费它。
+把 `你的书籍库/` 里的书及其核心概念，构建成可可视化的「知识星系 / 知识图谱」。核心数据是一个机器可读的全局关系网络 `graph.json`，可视化 Demo（力导向图）直接消费它。
 
 本 skill 是 **`book-knowledge-card` 的强制联动环节**：每做完一本书的卡片，必须回到这里增量更新 `graph.json` 并刷新 Demo。书少时关系不强、不好看，是正常现象——图谱随书增多自然变密，不要等「全做完了」再补（那样等于把存量重做一遍，还容易忘细节）。
 
@@ -19,8 +19,8 @@ description: 把书籍知识库（~/WorkBuddy/books/）的书与核心概念构�
 
 ## 数据架构（真值源）
 
-- `~/WorkBuddy/books/graph.json` —— 全局关系网络，**机器真值**，可视化直接读它。
-- `~/WorkBuddy/books/GRAPH.md` —— 给人看的图谱规范文档（节点/关系字典 + 增量流程）。
+- `你的书籍库/graph.json` —— 全局关系网络，**机器真值**，可视化直接读它。
+- `你的书籍库/GRAPH.md` —— 给人看的图谱规范文档（节点/关系字典 + 增量流程）。
 - 每本书 `《书名》.md` 的 frontmatter（`book_id` + `concepts[].id` + 结构化 `related_books`）是 graph.json 的**来源**：写书时按规范写，增量时直接搬进 graph.json。
 
 ## 增量流程（每做完一本就做，4 步）

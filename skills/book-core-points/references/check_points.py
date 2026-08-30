@@ -16,8 +16,8 @@ usage: python3 check_points.py [--md] [--fix]
 """
 import json, re, sys
 
-D = '/Users/zhenghui/WorkBuddy/books/书籍核心要点.json'
-OUT = '/Users/zhenghui/WorkBuddy/books/书籍核心要点.json'
+D = 'data/书籍核心要点.json'
+OUT = 'data/书籍核心要点.json'
 
 # ---------- 金标准书（13卡片 + 9用户验收），跳过不查 ----------
 GOLD = {
@@ -352,7 +352,7 @@ def main():
     fix = '--fix' in sys.argv
     use_md = '--md' in sys.argv
     if use_md:
-        d = load_md('/Users/zhenghui/WorkBuddy/books/书籍核心要点清单.md')
+        d = load_md('data/书籍核心要点清单.md')
     else:
         d = json.load(open(D, encoding='utf-8'))
     items = list(d.items())

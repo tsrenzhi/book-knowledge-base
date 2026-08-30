@@ -88,7 +88,7 @@ def main():
     dry_run = "--dry-run" in sys.argv
     from_graph = "--from-graph" in sys.argv
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    books_dir = os.path.expanduser("~/WorkBuddy/books")
+    books_dir = os.environ.get("BOOKS_DIR", os.path.join(os.getcwd(), "books"))
     md_path = args[0] if len(args) > 0 else os.path.join(books_dir, "书籍核心要点清单.md")
     g_path = args[1] if len(args) > 1 else os.path.join(books_dir, "graph.json")
     core_path = os.path.join(books_dir, "书籍核心要点.json")

@@ -26,7 +26,7 @@ CATS_15 = [
 def main():
     args_clean = [a for a in sys.argv[1:] if not a.startswith("--")]
     force = "--force" in sys.argv
-    books_dir = os.path.expanduser("~/WorkBuddy/books")
+    books_dir = os.environ.get("BOOKS_DIR", os.path.join(os.getcwd(), "books"))
     in_path = args_clean[0] if len(args_clean) >= 1 else os.path.join(books_dir, "书籍核心要点.json")
     out_path = args_clean[1] if len(args_clean) >= 2 else os.path.join(books_dir, "书籍核心要点清单.md")
 

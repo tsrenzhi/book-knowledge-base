@@ -2,9 +2,9 @@
 """重生成书籍知识图谱 index.html
 
 工作流：
-  1. 读 data/books-catalog.md 作为唯一数据真值
+  1. 读 data/分类总览.md 作为唯一数据真值
   2. 以当前 index.html 为 baseline，提取内嵌的 _EMBEDDED_GRAPH
-  3. 按 books-catalog 过滤 / 增删 / 改书名；补回丢失的书↔书连线
+  3. 按 分类总览 过滤 / 增删 / 改书名；补回丢失的书↔书连线
   4. 写回 index.html
 
 用法：
@@ -19,13 +19,13 @@ import os
 # ---- 路径：相对仓库根 ----
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HTML = os.path.join(REPO_ROOT, "index.html")
-CATALOG = os.path.join(REPO_ROOT, "data", "books-catalog.md")
+CATALOG = os.path.join(REPO_ROOT, "data", "分类总览.md")
 OUT = HTML  # 写回当前 index.html
 
 def imp(uc):
     return 2 if uc <= 1 else 3 if uc <= 2 else 4 if uc == 3 else 5
 
-# ---- parse books-catalog ----
+# ---- parse 分类总览 ----
 cat_pat = re.compile(r'^###\s+\d+\.\s*【(.+?)】')
 book_pat = re.compile(r'^(\d+)\.\s*《(.+?)》\s*作者[:：](.*?)\s*概念词[:：](.*?)\s*豆瓣评分[:：](\S+)\s*$')
 catalog = {}   # title -> (author, category, [concepts])
@@ -41,7 +41,7 @@ with open(CATALOG, encoding="utf-8") as f:
             cons = [c.strip() for c in bm.group(4).split("、") if c.strip()]
             catalog[t] = (bm.group(3).strip(), cur, cons)
 CATALOG_TITLES = set(catalog.keys())
-print(f"[books-catalog] {len(CATALOG_TITLES)} 本书待对齐")
+print(f"[分类总览] {len(CATALOG_TITLES)} 本书待对齐")
 
 # ---- extract embedded ----
 html = open(HTML, encoding="utf-8").read()
@@ -69,7 +69,7 @@ book_nodes = [n for n in nodes if n.get("type") == "book"]
 kept_book_ids = {n["id"] for n in book_nodes if n.get("label") in CATALOG_TITLES}
 kept_labels = {n.get("label") for n in book_nodes if n["id"] in kept_book_ids}
 missing = [t for t in CATALOG_TITLES if t not in kept_labels]
-print(f"[对齐] 命中 {len(kept_book_ids)} 本；books-catalog 缺失于图：{missing}")
+print(f"[对齐] 命中 {len(kept_book_ids)} 本；分类总览 缺失于图：{missing}")
 
 # ---- filter concept nodes + book nodes ----
 kept_concept_ids = set()
@@ -87,7 +87,7 @@ for n in nodes:
     else:
         filtered_nodes.append(n)
 
-# ---- add missing books-catalog books (merge concepts) ----
+# ---- add missing 分类总览 books (merge concepts) ----
 def hid(s): return hashlib.md5(s.encode("utf-8")).hexdigest()[:10]
 def short_name(t):
     """去副标取短名，用于「同名不同版」识别。"""
@@ -97,11 +97,11 @@ def short_name(t):
 
 # 先扫一遍被丢弃的书（label 不在 CATALOG_TITLES），后续给 missing book 继承书↔书连线
 dropped_books = [n for n in nodes if n.get("type")=="book" and n.get("label") not in CATALOG_TITLES]
-print(f"[丢弃] {len(dropped_books)} 本（label 与 books-catalog 不一致或被删除的书）")
+print(f"[丢弃] {len(dropped_books)} 本（label 与 分类总览 不一致或被删除的书）")
 
 new_nodes = []
 new_links = []
-new_bid_map = {}   # books-catalog title -> 新 bid
+new_bid_map = {}   # 分类总览 title -> 新 bid
 for title in missing:
     author, cat, cons = catalog[title]
     bid = "b_" + hid(title)
@@ -186,14 +186,14 @@ G2["meta"]["node_count"] = len(filtered_nodes)
 G2["meta"]["link_count"] = len(filtered_links)
 G2["meta"]["book_count"] = len([n for n in filtered_nodes if n["type"] == "book"])
 G2["meta"]["concept_count"] = len([n for n in filtered_nodes if n["type"] == "concept"])
-G2["meta"]["gen_time"] = f"基于 books-catalog.md ({len(CATALOG_TITLES)} 本)"
+G2["meta"]["gen_time"] = f"基于 分类总览.md ({len(CATALOG_TITLES)} 本)"
 
 # ---- validate ----
 nids = {n["id"] for n in filtered_nodes}
 bad = [l for l in filtered_links if l["source"] not in nids or l["target"] not in nids]
 nb = G2["meta"]["book_count"]
 print(f"[产出] nodes={len(filtered_nodes)} books={nb} concepts={G2['meta']['concept_count']} links={len(filtered_links)}")
-print(f"[校验] 悬空连线={len(bad)} ；书数应=books-catalog({len(CATALOG_TITLES)}) -> {'OK' if nb==len(CATALOG_TITLES) else 'MISMATCH'}")
+print(f"[校验] 悬空连线={len(bad)} ；书数应=分类总览({len(CATALOG_TITLES)}) -> {'OK' if nb==len(CATALOG_TITLES) else 'MISMATCH'}")
 empty_con = [n['id'] for n in filtered_nodes if n.get('type')=='concept' and not n.get('books')]
 print(f"[校验] 空概念节点={len(empty_con)}")
 

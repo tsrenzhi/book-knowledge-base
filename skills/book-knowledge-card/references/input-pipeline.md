@@ -72,7 +72,7 @@
 ## 五、微信读书真实接口速查（curl 模板）
 
 ```bash
-KEY=$(cat ~/.workbuddy/skills/wxds123__skillhub/.weread_key)
+KEY=$(cat skills/wxds123__skillhub/.weread_key)
 GATE="https://i.weread.qq.com/api/agent/gateway"
 # ① 书籍信息
 curl -s -X POST "$GATE" -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \

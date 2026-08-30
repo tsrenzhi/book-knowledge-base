@@ -5,7 +5,7 @@ from pathlib import Path
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--repair-concepts", action="store_true")
-ap.add_argument("--graph", default="/Users/zhenghui/WorkBuddy/books/graph.json")
+ap.add_argument("--graph", default="graph.json")
 ap.add_argument("--dry-run", action="store_true")
 args = ap.parse_args()
 

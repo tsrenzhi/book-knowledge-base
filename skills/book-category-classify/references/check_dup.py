@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""books-catalog.json / books-catalog.md 真重复扫描器
+"""分类总览.json / 分类总览.md 真重复扫描器
 
 铁律（用户原话："思考，快与慢你怎么能直接截断"）：
 - 同 author（去 [美]/[英]/[日] 等前缀后归一比对）
@@ -16,9 +16,9 @@
 
 用法：
   python3 \\
-      ~/.workbuddy/skills/book-category-classify/references/check_dup.py \\
-      <books-catalog.json>
-  # 或干跑：直接 python3 check_dup.py（用默认相对路径 books-catalog.json）
+      skills/book-category-classify/references/check_dup.py \\
+      <分类总览.json>
+  # 或干跑：直接 python3 check_dup.py（用默认相对路径 分类总览.json）
 """
 import json, re, sys
 from collections import defaultdict
@@ -56,7 +56,7 @@ def scan(path):
     return suspects
 
 if __name__ == "__main__":
-    path = sys.argv[1] if len(sys.argv) > 1 else "books-catalog.json"
+    path = sys.argv[1] if len(sys.argv) > 1 else "分类总览.json"
     sus = scan(path)
     print(f"=== 真重复候选（同 author + title 子串 + 长度差≤5）· {path} ===")
     for s in sus:

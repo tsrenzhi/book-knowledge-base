@@ -164,7 +164,7 @@ def main():
     if not key:
         raise SystemExit("❌ 未设置环境变量 WEREAD_KEY。微信读书开放 API 的 Bearer Token，请勿入库。")
 
-    books_dir = os.path.expanduser("~/WorkBuddy/books")
+    books_dir = os.environ.get("BOOKS_DIR", os.path.join(os.getcwd(), "books"))
     core_json = os.path.join(books_dir, "书籍核心要点.json")
     md_path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(books_dir, "书籍核心要点清单.md")
 

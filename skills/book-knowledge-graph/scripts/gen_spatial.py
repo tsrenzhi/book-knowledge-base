@@ -19,7 +19,7 @@
 重跑脚本不会丢失任何手调优化（v25.27 旧版内嵌模板曾因脱节导致偏右/挤一团回退）。
 
 用法：
-    python3 scripts/gen_spatial.py                # 默认 ~/WorkBuddy/books/graph.json → 同名 html
+    python3 scripts/gen_spatial.py                # 默认读 BOOKS_DIR 指定的书库（或当前目录下的 books/graph.json）→ 同名 html
     python3 scripts/gen_spatial.py G.json OUT.html  # 指定输入/输出（开源 example 用）
 依赖：assets/galaxy-template.html + assets/d3.v7.min.js（与输出 html 同目录的 ./assets/ 下）
 """
@@ -32,7 +32,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL_DIR = os.path.dirname(HERE)
 TEMPLATE_PATH = os.path.join(SKILL_DIR, "assets", "galaxy-template.html")
 
-BOOKS_DIR = os.path.expanduser("~/WorkBuddy/books")
+BOOKS_DIR = os.environ.get("BOOKS_DIR", os.path.join(os.getcwd(), "books"))
 GRAPH_PATH = os.path.join(BOOKS_DIR, "graph.json")
 OUT_PATH = os.path.join(BOOKS_DIR, "书籍知识图谱.html")
 
@@ -145,7 +145,7 @@ def main():
         with open(graph_path, "w", encoding="utf-8") as f:
             json.dump(g, f, ensure_ascii=False, indent=1)
 
-    # 卡片映射：用输出 html 所在目录作为 books_dir 根（默认即 ~/WorkBuddy/books）
+    # 卡片映射：用输出 html 所在目录作为 books_dir 根（默认即 BOOKS_DIR 或当前目录下的 books/）
     books_dir = os.path.dirname(out_path)
     card_map = build_card_map(g, books_dir)
 
