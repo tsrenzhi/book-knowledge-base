@@ -29,7 +29,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 ```
 本仓库/
-├── 书籍知识图谱模板.html                    ← 图谱主力（双击即开，演示版含 426 本示例数据）
+├── 书籍知识图谱模板.html                    ← 图谱主力（双击即开，演示版含 22 本示例数据）
 ├── 书单数据源.md         ← 【分类唯一真值·人读】你只改这一份
 ├── 书单数据源.json            ← 【机读副本】图谱 build 脚本读它
 ├── graph.json                    ← 旧版全量关系网（机器真值，已锁死不再增量）
@@ -37,7 +37,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 ├── cards/<拼音>/
 │   ├── <书名>.md                 ← 双格式之一：结构化文本（带 frontmatter）
 │   └── <书名>-知识卡片.html       ← 双格式之二：可视化卡片（最高优先真值）
-├── scripts/rebuild_final.py      ← 内部脚本：读 书单数据源.md → 出 书籍知识图谱模板.html
+├── scripts/rebuild_clean.py      ← 内部脚本：从 书单数据源.md 干净重建 书籍知识图谱模板.html（不继承旧概念）
 └── skills/                       ← 5 个 book-* 技能源
 ```
 
@@ -70,7 +70,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 ### Phase 3 · 增量建图谱（book-knowledge-graph）
 1. **当前主力产物是 `书籍知识图谱模板.html`（手改内嵌 HTML + `_EMBEDDED_GRAPH`，0 fetch）**，不是模板注入架构。新增/改书后：
-   - 改 `书单数据源.md` → 跑 `scripts/rebuild_final.py --write` 重建 `书籍知识图谱模板.html`；
+   - 改 `书单数据源.md` → 跑 `scripts/rebuild_clean.py --write` 重建 `书籍知识图谱模板.html`；
    - 或直接在 书籍知识图谱模板.html 上做力导向/交互微调（这是日常迭代方式）。
 2. **核心要点新图**：跑 `_build_points_graph.py`（如本仓库未含，可从 `book-knowledge-graph` skill 拷）从 `书籍核心要点清单.md` 出 `graph.points.json` + `书籍知识图谱-核心要点.html`。
 3. **CARD_MAP 跳转**：构建时扫描 `cards/` 下所有 `<书名>/*知识卡片*.html`，建立节点 click → 卡片跳转。没有卡片的书节点 click 静默不响应。

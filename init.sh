@@ -58,15 +58,15 @@ echo
 echo "🔍 校验关键文件..."
 problems=0
 
-for f in README.md LICENSE 更新记录.md 书单数据源.md 书籍知识图谱模板.html scripts/rebuild_final.py; do
+for f in README.md LICENSE 更新记录.md 书单数据源.md 书籍知识图谱模板.html scripts/rebuild_clean.py; do
   if [ ! -f "$REPO_ROOT/$f" ]; then
     echo "  ❌ 缺：$f"
     problems=$((problems+1))
   fi
 done
 
-# 6 本示例书必须都在
-for book in guo-fu-lun na-wa-er-bao-dian lie-na-duo-da-fen-qi-zhuan ren-lei-jian-shi fu-ba-ba-qiong-ba-ba sun-zi-bing-fa; do
+# 公开示例卡片必须都在（当前开源版含 2 套：纳瓦尔宝典 + 国富论）
+for book in guo-fu-lun na-wa-er-bao-dian; do
   if [ ! -d "$REPO_ROOT/cards/$book" ]; then
     echo "  ❌ 缺示例书：cards/$book"
     problems=$((problems+1))
