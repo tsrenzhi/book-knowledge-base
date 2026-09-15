@@ -8,7 +8,7 @@
   - category
   - 是否带关键词（带 = 已收核心；标书架补充且无关键词 = 忽略/标 referenced）
 
-操作 graph.json：
+作 graph.json：
   - 已存在的 book 节点：category 改了 → 更新；raw_label 保留原值
   - md 里有但 graph.json 没有的「带关键词」book：新建为 done（需要 user 提供基础字段）
   - md 里标「书架补充」且无关键词的：跳过（不污染 graph.json，只在 md 里待筛）
