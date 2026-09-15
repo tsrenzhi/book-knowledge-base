@@ -6,7 +6,7 @@
 <title>书籍知识图谱模板.html</title>
 <style>
   *{box-sizing:border-box}
-  /* 径向渐变 · 中心亮四周深（克制立体感，无中间黑洞/星云/光晕） */
+  /* 径向渐变 · 中心亮四周深（克制立体感，无中间黑洞/图谱/光晕） */
   html,body{margin:0;height:100%;overflow:hidden;
     background: radial-gradient(circle at 50% 44%, #27374F 0%, #1A2238 48%, #0C1120 100%);
     background-attachment: fixed;
@@ -624,7 +624,7 @@ cats.forEach(c=>{
   lab.append("span").attr("class","cnt").text(catBookCount[c]||0);
 });
 /* v25.30 点 svg 空白处 = 一键清掉所有筛选（类别 + 搜索 hl + 复位 pan）
-   v25.37 修复：清的是图谱高亮，不是搜索操作区——点空白不清空搜索框/下拉列表 */
+   v25.37 修复：清的是图谱高亮，不是搜索作区——点空白不清空搜索框/下拉列表 */
 let hadSelection = false;
 svg.on("click", function(ev){
   hadSelection = !!(selectedCategory || searchHL);
@@ -649,7 +649,7 @@ dbox.selectAll(".cat-btn").on("click",function(ev){
   selectedCategory = newCat;
   dbox.selectAll(".cat-btn").classed("active", function(){ return (this.dataset.cat || "") === selectedCategory; });
   updateVisual();
-  if(selectedCategory) fitCategory(selectedCategory); sim.alpha(0.2).restart();  // v25z-fix7d: 切换分类后重启 sim，让新的 clusterX/Y 目标（强 pinner / catCenters）生效；取消那一击镜头不动（用户原话"取消选择我看全部了，你他妈回到原位干嘛"）
+  if(selectedCategory) fitCategory(selectedCategory); sim.alpha(0.2).restart();  // v25z-fix7d: 切换分类后重启 sim，让新的 clusterX/Y 目标（强 pinner / catCenters）生效；取消那一击镜头不动（用户原话"取消选择我看全部了，回到原位干嘛"）
 });
 /* 点节点时阻止冒泡到外层 svg（避免点 book 节点被同时当成"点空白取消"）*/
 node.on("click", function(ev){

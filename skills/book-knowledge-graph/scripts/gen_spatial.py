@@ -3,7 +3,7 @@
 """从 graph.json 生成「书籍知识图谱」自包含 HTML（力导向知识图谱）。
 
 设计原则（v25.48l 终审，所有 RC 修复已固化进 assets/galaxy-template.html）：
-  - 背景克制：径向渐变（中心浅、四周深），绝不加中间黑洞/星云/光晕/四角羽化
+  - 背景克制：径向渐变（中心浅、四周深），绝不加中间黑洞/图谱/光晕/四角羽化
   - 节点清亮：大类实色填充 + 细白描边 + 柔和 drop-shadow，不灰头巴脸、不虚边
   - 居中三件套（RC131）：viewBox = 0 0 W H（不带偏移）；initialT = d3.zoomIdentity（不平移！
     元素级平移会把整图推到右下角造成左半空白）；forceCenter(W/2,H/2).strength(0.45)
