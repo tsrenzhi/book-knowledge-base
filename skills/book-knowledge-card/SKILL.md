@@ -39,7 +39,7 @@ book-knowledge-workflow（总控 SOP）
  │
  ├─> ① book-knowledge-card 产出《书名》-知识卡片.html（可视化卡片）
  │ │
- │ ├─> ② book-core-points 从卡片内容提炼 2-4 个可迁移关键词 → 书籍核心要点清单.md / .json
+ │ ├─> ② book-core-points 从卡片内容提炼 2-4 个可迁移关键词 → 写进 书单数据源.md 的「关键词」字段
  │ │ │ 关键词 = 图谱跨书关联的"钩子"（共享词把书连起来）
  │ │ │
  │ └─> ③ book-knowledge-graph 增量更新 graph.json（book 节点 + concept 节点 + links）
