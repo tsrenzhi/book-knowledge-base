@@ -27,12 +27,12 @@ description: 把书籍知识库（你的书籍库/）的书与核心概念构建
 
 1. **新书写进 `书单数据源.md`**：`数字. 《书名》｜作者：X｜关键词：a、b、c｜豆瓣评分：X`，归到 15 类里对应那一类。字段规范见 [references/schema.md](references/schema.md)。
 2. **增量 graph.json**：在 `nodes` 加这本书（type=book, status=done, category/subcategory）+ 它的代表概念（type=concept, book=book_id, category=继承）；在 `links` 加书↔书、书↔概念的连线，relation 用统一字典。引用了但还没收录的书，标 `status: "referenced"`（虚线圆），收录后改 `done`。
-3. **跑一次 `python3 scripts/gen_spatial.py`**：默认输出 `书籍知识图谱.html`（**v25 起唯一准版本，旧的 `书籍知识图谱-demo.html` 已冻住不再用**）。脚本会自动扫描 books/ 下所有"知识卡片"html 文件构建 CARD_MAP；**默认内嵌完整 graph.json 到 `_EMBEDDED_GRAPH`**（双击 file:// 立即能用，绝不报"必须 server 打开"红色 fail box）+ async fetch('./graph.json') 作为可选升级（HTTP server 打开时拿最新数据替换内嵌）。**判别**：改 HTML 数据流时 grep `_EMBEDDED_GRAPH = {` 锚点；fetch 写进 try/catch + catch 静默回退到内嵌（**绝不在 catch 里 throw / 弹错误框**）。
+3. **跑一次 `python3 scripts/gen_spatial.py`**：默认输出 `书籍知识图谱.html`（**唯一准版本**）。脚本会自动扫描 books/ 下所有"知识卡片"html 文件构建 CARD_MAP；**默认内嵌完整 graph.json 到 `_EMBEDDED_GRAPH`**（双击 file:// 立即能用，绝不报"必须 server 打开"红色 fail box）+ async fetch('./graph.json') 作为可选升级（HTTP server 打开时拿最新数据替换内嵌）。**判别**：改 HTML 数据流时 grep `_EMBEDDED_GRAPH = {` 锚点；fetch 写进 try/catch + catch 静默回退到内嵌（**绝不在 catch 里 throw / 弹错误框**）。
 4. **验证布局**：双击 `书籍知识图谱.html`（file:// 即可，**无需起 server**）→ 应秒开并显示新节点；不显示就重跑第 3 步。同大类自然成团、关系相近的自动聚类、相悖用红线连、待收录书是虚线圆。
 
 > **🔴 demo.html 数据源铁律（v23 暴怒新立、v24 修正、v25 改主版）**。**所有由本 skill 产出的图谱 HTML** 必须**默认内嵌 graph.json**——用户历来是双击 file:// 打开，绝不能改成 fetch-only 报"必须 server 打开"的红色 fail box。**正确写法**：默认 `const GRAPH = _EMBEDDED_GRAPH;` → try fetch 升级 → catch 静默回退到内嵌（不报错）。改任何图谱 HTML 的数据源前先 grep `_EMBEDDED_GRAPH` 锚点和 `必须 server` fail 字样。
 
-> **🔴 空间感版唯一主版（v25 立 · v25.3）**：`gen_spatial.py` 输出的 `书籍知识图谱.html` 是唯一准版本。**旧的 `书籍知识图谱-demo.html` 已冻住、禁止再手动改动或用作交付**——以后每做完一本书只刷新空间感版。背景铁律（v25.3）：径向渐变 `中心浅 / 四周深`（深色 `#27374F→#1A2238→#0C1120`，浅色 `#FFFCF5→#ECE0C8→#C8B596`）；**绝不加中间黑洞、图谱、光晕、四角羽化**；节点实色清亮 + 细白描边 + 柔 drop-shadow，不灰头巴脸不虚边。
+> **🔴 空间感版唯一主版（v25 立 · v25.3）**：`gen_spatial.py` 输出的 `书籍知识图谱.html` 是唯一准版本——每做完一本书只刷新这一份，不要另存调试副本。背景铁律（v25.3）：径向渐变 `中心浅 / 四周深`（深色 `#27374F→#1A2238→#0C1120`，浅色 `#FFFCF5→#ECE0C8→#C8B596`）；**绝不加中间黑洞、图谱、光晕、四角羽化**；节点实色清亮 + 细白描边 + 柔 drop-shadow，不灰头巴脸不虚边。
 
 ## 关系字典（速查）
 
@@ -94,7 +94,6 @@ description: 把书籍知识库（你的书籍库/）的书与核心概念构建
  - 改东西 → "对 WorkBuddy 说『把《XXX》删掉』"
  - 找文件 → "问 WorkBuddy『我的书库在哪』"
 - **检验**：用户拿到文档后，**能否只在对话里完成所有事、不用碰任何编辑器/终端**。能 = 通过；不能 = 立刻精简。
-- **位置**：repo 根 `书籍知识图谱.md` + workflow skill 源同文件。两份必须一致。
 
 ## 🔴 ·HTML 数据源单一真值铁律（适用于所有图谱 HTML）
 
