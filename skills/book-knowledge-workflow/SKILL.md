@@ -7,7 +7,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 ## Overview
 
-把「一本书 / 一段笔记 / 一个书名 → 一张可视化卡片 + 一份结构化 md + 2-4 个可迁移关键词 + 知识图谱里的一个节点」这条链路**标准化成可复用的 SOP**。
+把「一本书 / 一段笔记 / 一个书名 → 一张可视化卡片 + 2-4 个可迁移关键词 + 知识图谱里的一个节点」这条链路**标准化成可复用的 SOP**。
 
 本 skill 是**总控 / 编排层**，自己不写卡片、不提炼词、不画图谱，而是按顺序调用子 skill + 内部 build 脚本。具体写法纪律在各自子 skill 里。
 
@@ -17,9 +17,9 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 | 角色 | skill | 职责 | 产物 |
 |---|---|---|---|
-| ① 建卡 | `book-knowledge-card` | 可视化卡片 + 双格式 md | `cards/<拼音>/<书名>-知识卡片.html` + `<书名>.md` |
+| ① 建卡 | `book-knowledge-card` | 可视化卡片 | `cards/<拼音>/<书名>-知识卡片.html` |
 | ② 分类 | `book-category-classify` | 归 15 大类（边界真值） | 分类判定 |
-| ② 提词 | `book-core-points` | 抽 2-4 可迁移关键词 | `书单数据源.md`（人读）+ `书单数据源.json`（机读） |
+| ② 提词 | `book-core-points` | 抽 2-4 可迁移关键词 | `书单数据源.md`（唯一真值：分类 + 关键词） |
 | ③ 建图 | `book-knowledge-graph` | 增量节点 + 出图 | `书籍知识图谱模板.html`（图谱可双击打开） |
 | 总控 | `book-knowledge-workflow`（本文） | 只编排不写内容 | — |
 
@@ -31,18 +31,14 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 本仓库/
 ├── 书籍知识图谱模板.html ← 图谱主力（双击即开，演示版含 22 本示例数据）
 ├── 书单数据源.md ← 【分类唯一真值·人读】你只改这一份
-├── 书单数据源.json ← 【机读副本】图谱 build 脚本读它
-├── graph.json ← 旧版全量关系网（机器真值，已锁死不再增量）
-├── graph.points.json ← 核心要点新图数据
 ├── cards/<拼音>/
-│ ├── <书名>.md ← 双格式之一：结构化文本（带 frontmatter）
-│ └── <书名>-知识卡片.html ← 双格式之二：可视化卡片（最高优先真值）
+│ └── <书名>-知识卡片.html ← 可视化卡片（最高优先真值）
 ├── scripts/rebuild_clean.py ← 内部脚本：从 书单数据源.md 干净重建 书籍知识图谱模板.html（不继承旧概念）
 └── skills/ ← 5 个 book-* 技能源
 ```
 
 **三处真值链（改一处必同步另外两处）**：
-- 卡片笔记 frontmatter 的 `category` ← 来自 `书单数据源.md`（15 大类）
+- 卡片的分类 `category` ← 来自 `书单数据源.md`（15 大类）
 - `书单数据源.json` 的分类 ← 同上
 - 图谱节点的 `category` ← 同上
 
@@ -57,29 +53,28 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 ### Phase 1 · 建卡（book-knowledge-card）
 1. 写前强制预读标杆（`cards/guo-fu-lun/国富论-知识卡片.html` / `cards/na-wa-er-bao-dian/纳瓦尔宝典-知识卡片.html` / `assets/sample-国富论.html`）+ 跑写前输入闸门。
-2. 产 `<书名>.md`（frontmatter 带 `category` + `concepts` + `related_books`）+ `<书名>-知识卡片.html`（六段骨架/四块必含/语言铁律/视觉规范全过）。
+2. 产 `<书名>-知识卡片.html`（六段骨架/四块必含/语言铁律/视觉规范全过）。
 3. **先 HTML 后 PNG**：HTML 改完、需求：可以出图才生 PNG。**注意：开源版故意不存 PNG**，让用户用 skill 自己生成。
-4. 双格式落盘到 `cards/<拼音>/`，**绝不覆盖标杆母版**。
+4. 落盘到 `cards/<拼音>/`，**绝不覆盖标杆母版**。
 
 ### Phase 2 · 提要点 + 分类（book-core-points + book-category-classify）
 1. **分类归属先走 `book-category-classify`**（15 类唯一真值：边界/）。
-2. 从 Phase 1 的 md 抽可学内容 → 给 2-4 个**可迁移短关键词**（≤8 字）。
+2. 从 Phase 1 的卡片抽可学内容 → 给 2-4 个**可迁移短关键词**（≤8 字）。
 3. 过 `book-core-points` 的「9 类必杀」自检 + `references/check_points.py` 自检（0 违规才收）。
-4. 追加进 `书单数据源.md`（人读）+ `书单数据源.json`（机读），归到对应 15 类。
+4. 追加进 `书单数据源.md`，归到对应 15 类。
 5. **迭代时永远先 Read 当前磁盘 `书单数据源.md`**，绝不凭记忆补回用户删的书。
 
 ### Phase 3 · 增量建图谱（book-knowledge-graph）
 1. **当前主力产物是 `书籍知识图谱模板.html`（手改内嵌 HTML + `_EMBEDDED_GRAPH`，0 fetch）**，不是模板注入架构。新增/改书后：
  - 改 `书单数据源.md` → 跑 `scripts/rebuild_clean.py --write` 重建 `书籍知识图谱模板.html`；
  - 或直接在 书籍知识图谱模板.html 上做力导向/交互微调（这是日常迭代方式）。
-2. **核心要点新图**：跑 `_build_points_graph.py`（如本仓库未含，可从 `book-knowledge-graph` skill 拷）从 `书籍核心要点清单.md` 出 `graph.points.json` + `书籍知识图谱-核心要点.html`。
 3. **CARD_MAP 跳转**：构建时扫描 `cards/` 下所有 `<书名>/*知识卡片*.html`，建立节点 click → 卡片跳转。没有卡片的书节点 click 静默不响应。
 4. 双击 HTML（file:// 即可）验证新节点出现、同大类成团、相悖红线连。
 
 > **现实与旧文档的差异（务必知道）**：早期 `book-knowledge-graph` 描述的 `gen_spatial.py` 模板注入 `galaxy-template.html` 架构，在当前主力产物上**未采用**——书籍知识图谱模板.html 是手改内嵌 HTML。开源版若要长期可维护，建议回到"模板 + 脚本注入"架构（改 UI 改模板、改数据改 json、跑脚本出图），避免手改 600KB HTML 难维护。**但无论哪种，交付前必过三关（见下）。**
 
 ### Phase 4 · 回灌与校验（选跑）
-- **三向一致性**：`书单数据源.md` / `书单数据源.json` / 图谱节点 的 `category` 必须一致。
+- **两处一致性**：`书单数据源.md` 与 图谱节点 的 `category` 必须一致。
 - **用户审阅门**：清单分类/剔除等"动用户书库"的动作，死守不擅自动——先呈现给用户，用户改完再回灌。
 - **备份机制**：改前 `cp 书籍知识图谱模板.html index-pre-改前.html`，出问题 `cp` 救回。
 
@@ -93,8 +88,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 ## 红线速查（编排层最易翻车）
 
-- **graph.json 锁死**：旧版全量关系网不再增量；新图只产 `graph.points.json` + 改 `书籍知识图谱模板.html`。
-- ****：改用户书库分类/删书/重分类必须等用户确认。
+- **用户审阅门**：改用户书库分类/删书/重分类必须等用户确认。
 - **（小白文档）**：面向人的作文档以"对 WorkBuddy 说话"为单位，禁终端代码块/多平台分支/技术黑话；见 `README.md` 的「场景对话示例」段。
 - **三关验证**：交付前必过（语法/内嵌/真渲染）。
 
@@ -111,7 +105,7 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 ## 子 skill 索引（写法纪律看各自）
 
-- `book-knowledge-card` —— 建卡 + 双格式 md（视觉/语言/结构/红线最全）。
+- `book-knowledge-card` —— 建卡（视觉/语言/结构/红线最全）。
 - `book-core-points` —— 提炼 2-4 个可迁移关键词（9 类必杀 + check_points.py）。
 - `book-category-classify` —— 归 15 大类（边界/迭代版本纪律）。
 - `book-knowledge-graph` —— 增量节点 + 出图（RC 红线速查 + 脚本架构）。

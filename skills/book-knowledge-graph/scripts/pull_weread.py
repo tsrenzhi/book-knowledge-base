@@ -183,7 +183,7 @@ def main():
     else:
         existing_norm = set()
 
-    # 已建卡（= books/<书名>/<书名>.md 已存在）
+    # 已建卡（= cards/ 下已有 <书名>-知识卡片.html）
     archived_norm = set()
     bd = Path(books_dir)
     if bd.is_dir():

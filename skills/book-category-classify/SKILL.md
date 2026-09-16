@@ -100,8 +100,8 @@ python3 skills/book-category-classify/references/check_dup.py 书单数据源.js
 
 ## 九、与其它 skill 的关系
 
-- **book-core-points**：提每本书关键词/作者，并做"最终化管线"（合并关键词+作者进分类清单、类内相关性排序、出 `书单数据源.json` 图谱核心真值）。
-- **book-knowledge-graph**：消费 `书单数据源.json` 建图谱（走 第十四/十七节管线，不动原 `graph.json`）。
+- **book-core-points**：提每本书关键词/作者，并做"最终化管线"（合并关键词+作者进分类清单、类内相关性排序）。
+- **book-knowledge-graph**：消费 `书单数据源.md` 重建图谱（跑 `scripts/rebuild_clean.py`）。
 - **book-knowledge-workflow**：总控编排，Phase 2 调 book-core-points，分类判定走本 skill。
 
 ## 十、自检清单（交付前过一遍）
