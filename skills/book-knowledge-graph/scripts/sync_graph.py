@@ -32,8 +32,8 @@ CATS_15 = [
 ]
 
 # 解析 md 行
-HEADING_RE = re.compile(r"^## 【(.+?)】")           # 分类标题
-BOOK_RE = re.compile(r"^### (.+?)$")                 # 书名小标题
+HEADING_RE = re.compile(r"^## 【(.+?)】") # 分类标题
+BOOK_RE = re.compile(r"^### (.+?)$") # 书名小标题
 CONCEPT_LINE_RE = re.compile(r"^- 关键词：(.+)$")     # 关键词行（带 backtick 词）
 AUTHOR_LINE_RE = re.compile(r"^- 作者：(.+?)（书架补充")  # 书架补充行
 

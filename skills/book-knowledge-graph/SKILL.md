@@ -30,9 +30,9 @@ description: 把书籍知识库（你的书籍库/）的书与核心概念构建
 3. **跑一次 `python3 scripts/gen_spatial.py`**：默认输出 `书籍知识图谱.html`（**v25 起唯一准版本，旧的 `书籍知识图谱-demo.html` 已冻住不再用**）。脚本会自动扫描 books/ 下所有"知识卡片"html 文件构建 CARD_MAP；**默认内嵌完整 graph.json 到 `_EMBEDDED_GRAPH`**（双击 file:// 立即能用，绝不报"必须 server 打开"红色 fail box）+ async fetch('./graph.json') 作为可选升级（HTTP server 打开时拿最新数据替换内嵌）。**判别**：改 HTML 数据流时 grep `_EMBEDDED_GRAPH = {` 锚点；fetch 写进 try/catch + catch 静默回退到内嵌（**绝不在 catch 里 throw / 弹错误框**）。
 4. **验证布局**：双击 `书籍知识图谱.html`（file:// 即可，**无需起 server**）→ 应秒开并显示新节点；不显示就重跑第 3 步。同大类自然成团、关系相近的自动聚类、相悖用红线连、待收录书是虚线圆。
 
-> **🔴 RC71 demo.html 数据源铁律（v23 暴怒新立、v24 修正、v25 改主版）**：用户原话"你这个 books 文件夹下已经有这个 HTML 了，你为啥又新建了一个呀？……这个都打不开了"。**所有由本 skill 产出的图谱 HTML** 必须**默认内嵌 graph.json**——用户历来是双击 file:// 打开，绝不能改成 fetch-only 报"必须 server 打开"的红色 fail box。**正确写法**：默认 `const GRAPH = _EMBEDDED_GRAPH;` → try fetch 升级 → catch 静默回退到内嵌（不报错）。改任何图谱 HTML 的数据源前先 grep `_EMBEDDED_GRAPH` 锚点和 `必须 server` fail 字样。
+> **🔴 demo.html 数据源铁律（v23 暴怒新立、v24 修正、v25 改主版）**。**所有由本 skill 产出的图谱 HTML** 必须**默认内嵌 graph.json**——用户历来是双击 file:// 打开，绝不能改成 fetch-only 报"必须 server 打开"的红色 fail box。**正确写法**：默认 `const GRAPH = _EMBEDDED_GRAPH;` → try fetch 升级 → catch 静默回退到内嵌（不报错）。改任何图谱 HTML 的数据源前先 grep `_EMBEDDED_GRAPH` 锚点和 `必须 server` fail 字样。
 
-> **🔴 RC72 空间感版唯一主版（v25 立 · v25.3 用户终审定稿）**：`gen_spatial.py` 输出的 `书籍知识图谱.html` 是唯一准版本。**旧的 `书籍知识图谱-demo.html` 已冻住、禁止再手动改动或用作交付**——以后每做完一本书只刷新空间感版。背景铁律（v25.3 用户拍板）：径向渐变 `中心浅 / 四周深`（深色 `#27374F→#1A2238→#0C1120`，浅色 `#FFFCF5→#ECE0C8→#C8B596`）；**绝不加中间黑洞、图谱、光晕、四角羽化**；节点实色清亮 + 细白描边 + 柔 drop-shadow，不灰头巴脸不虚边。需要回旧版调试样式才用 `gen_demo.py`，且不得反向污染主版。
+> **🔴 空间感版唯一主版（v25 立 · v25.3）**：`gen_spatial.py` 输出的 `书籍知识图谱.html` 是唯一准版本。**旧的 `书籍知识图谱-demo.html` 已冻住、禁止再手动改动或用作交付**——以后每做完一本书只刷新空间感版。背景铁律（v25.3）：径向渐变 `中心浅 / 四周深`（深色 `#27374F→#1A2238→#0C1120`，浅色 `#FFFCF5→#ECE0C8→#C8B596`）；**绝不加中间黑洞、图谱、光晕、四角羽化**；节点实色清亮 + 细白描边 + 柔 drop-shadow，不灰头巴脸不虚边。需要回旧版调试样式才用 `gen_demo.py`，且不得反向污染主版。
 
 ## 关系字典（速查）
 
@@ -62,23 +62,22 @@ description: 把书籍知识库（你的书籍库/）的书与核心概念构建
 
 | 编号 | 红线 | 出处 |
 |---|---|---|
-| **RC71** | 图谱 HTML 必须默认内嵌 `_EMBEDDED_GRAPH` + fetch 静默升级；禁止 fetch-only 弹红色 fail box | v23 暴怒 |
-| **RC72** | `书籍知识图谱.html` 是唯一准版本；旧 `demo.html` 冻住，禁止反向污染主版 | v25 |
-| **RC120** | 搜索框只显示书名+作者（`searchItem` 字号 10px），禁止加概念副行 | 用户原话"干瞎干什么" |
-| **RC124** | 右上角关系图例整行 `display:none`（`#relFilters` 隐藏），只留连线 | 用户原话"我不需这些" |
-| **RC125** | 只有**双击背景**才 `fitContent`；禁止 `sim.on("end")` / `setTimeout` 自动 fit（"我划过去了又跑到中间去了"） | v25.48g |
-| **RC129** | 跨类桥概念=内部标签非视觉特征；靠连线密度自然展现，不单独配色、不进图例 | v25.38 |
-| **RC131** | `initialT = d3.zoomIdentity`（**必须不平移**）；`d3.zoomIdentity.translate(W/2,H/2)` 会把整图推到右下角，左半空白 0-960 | v25.48k 根因 |
-| **RC133** | 生成"待审补充"清单永远并入主结构同一分类，不要另起独立区块重复列 | v25.48l |
+| **** | 图谱 HTML 必须默认内嵌 `_EMBEDDED_GRAPH` + fetch 静默升级；禁止 fetch-only 弹红色 fail box | v23 暴怒 |
+| **** | `书籍知识图谱.html` 是唯一准版本；旧 `demo.html` 冻住，禁止反向污染主版 | v25 |
+| **** | 搜索框只显示书名+作者（`searchItem` 字号 10px），禁止加概念副行 | — |
+| **** | 右上角关系图例整行 `display:none`（`#relFilters` 隐藏），只留连线 | — |
+| **** | 只有**双击背景**才 `fitContent`；禁止 `sim.on("end")` / `setTimeout` 自动 fit（"我划过去了又跑到中间去了"） | v25.48g |
+| **** | 跨类桥概念=内部标签非视觉特征；靠连线密度自然展现，不单独配色、不进图例 | v25.38 |
+| **** | `initialT = d3.zoomIdentity`（**必须不平移**）；`d3.zoomIdentity.translate(W/2,H/2)` 会把整图推到右下角，左半空白 0-960 | v25.48k 根因 |
+| **** | 生成"待审补充"清单永远并入主结构同一分类，不要另起独立区块重复列 | v25.48l |
 | **密度四件套** | 初始位置 `W*0.42 / H*0.65`；charge `-240`；link 距离 `160/85/55` strength `0.45`；collide `radius(d)+12 / 0.7` | v25.48l |
-| **配色** | 15 类沿色相环均布+浅一档：明度≥60%/饱和≤80%；禁灰/褐/米/纯深族 | RC107 |
+| **配色** | 15 类沿色相环均布+浅一档：明度≥60%/饱和≤80%；禁灰/褐/米/纯深族 | |
 | **节点描边** | 书 `rgba(255,255,255,0.75) 1.5px` / 概念 `rgba(255,255,255,0.45) 0.8px`；禁黑边/粗描边；文字不加 stroke | 定稿 |
-| **背景** | 径向渐变中心浅四周深（深 `#27374F→#1A2238→#0C1120`，浅 `#FFFCF5→#ECE0C8→#C8B596`）；禁黑洞/图谱/光晕/四角羽化 | RC71 |
-| **数据源脚本坑** | sync 注入时**用 `let GRAPH = _EMBEDDED_GRAPH;` 作下界锚点**，避开 `const _EMBEDDED_GRAPH = {` 双重花括号永不闭合 | RC116 |
-| **搜索与图谱隔离** | 清图谱高亮绝不污染搜索输入区（不写 `searchInput.value` 复位） | RC130 |
-| **RC300** | 概念节点颜色**必须继承所属书 category**；模板渲染 `fill` 永远先查 `concept.category` 在色板有没有，没有就回退 `nodeById.get(concept.book).category`。重分类只改 book 不改 concept = 视觉颜色错乱（已用 `repair_concepts.py` 修 72 个错位） | v3 重分类漏同步 |
-| **RC303** | `fitCategory` **只平移绝不缩小**：`k = Math.max(cur.k, 1.0)`，bbox 只用来算平移中心，scale 绝不用 bbox-fit 公式。组溢出屏幕正常（让用户自己拖），双击背景才 `fitContent` 复位 | 用户反复骂"搞那么小看不清" |
-| **RC302** | 每次改 `galaxy-template.html` / `scripts/*` 必须 `cp -R` 同步到开源 repo `book-knowledge-skills/skills/<name>/`，否则开源版漂移缺修复 | 开源前铁律 |
+| **背景** | 径向渐变中心浅四周深（深 `#27374F→#1A2238→#0C1120`，浅 `#FFFCF5→#ECE0C8→#C8B596`）；禁黑洞/图谱/光晕/四角羽化 | |
+| **数据源脚本坑** | sync 注入时**用 `let GRAPH = _EMBEDDED_GRAPH;` 作下界锚点**，避开 `const _EMBEDDED_GRAPH = {` 双重花括号永不闭合 | |
+| **搜索与图谱隔离** | 清图谱高亮绝不污染搜索输入区（不写 `searchInput.value` 复位） | |
+| **** | 概念节点颜色**必须继承所属书 category**；模板渲染 `fill` 永远先查 `concept.category` 在色板有没有，没有就回退 `nodeById.get(concept.book).category`。重分类只改 book 不改 concept = 视觉颜色错乱（已用 `repair_concepts.py` 修 72 个错位） | v3 重分类漏同步 |
+| **** | `fitCategory` **只平移绝不缩小**：`k = Math.max(cur.k, 1.0)`，bbox 只用来算平移中心，scale 绝不用 bbox-fit 公式。组溢出屏幕正常（让），双击背景才 `fitContent` 复位 | 需求：搞那么小看不清 |
 
 ## 资源
 
@@ -86,18 +85,18 @@ description: 把书籍知识库（你的书籍库/）的书与核心概念构建
 - `assets/galaxy-template.html`：**UI 真值**，含全部 RC 修复。改 UI/交互改这里（再跑脚本同步到产物），不要直接手改产物 HTML。
 - `references/schema.md`：graph.json 与 frontmatter 的完整字段规范 + 增量流程细节。
 
-## 🔴 RC304 用户面向文档铁律（2026-08-26 用户原话"你搞那么多又是终端又是代码的东西"）
+## 🔴 用户面向文档铁律
 - **任何面向小白的使用文档（小到 README、大到 USAGE.md）必须以"对 WorkBuddy 说话"的提示词为单位组织内容**。
 - **禁止出现**：终端代码块（`export xxx=...`、`cp -R ...`、`python3 ... .py`、`http.server`）、多平台分支（macOS/Linux/Windows 各写一遍）、技术黑话（环境变量/Bearer Token/抓包步骤/绝对路径）。
 - **替代写法**：
-  - 安装 → "在 WorkBuddy 技能市场搜 `book-knowledge` 装一下" 或 "对 WorkBuddy 说『帮我装 book-knowledge-card 这个 skill』"
-  - 拉数据 → "跟 WorkBuddy 说『从我的微信读书拉所有读过的书』，它会让你去 weread.qq.com 复制一段密钥粘贴给它"
-  - 改东西 → "对 WorkBuddy 说『把《XXX》删掉』"
-  - 找文件 → "问 WorkBuddy『我的书库在哪』"
+ - 安装 → "在 WorkBuddy 技能市场搜 `book-knowledge` 装一下" 或 "对 WorkBuddy 说『帮我装 book-knowledge-card 这个 skill』"
+ - 拉数据 → "跟 WorkBuddy 说『从我的微信读书拉所有读过的书』，它会让你去 weread.qq.com 复制一段密钥粘贴给它"
+ - 改东西 → "对 WorkBuddy 说『把《XXX》删掉』"
+ - 找文件 → "问 WorkBuddy『我的书库在哪』"
 - **检验**：用户拿到文档后，**能否只在对话里完成所有事、不用碰任何编辑器/终端**。能 = 通过；不能 = 立刻精简。
 - **位置**：repo 根 `书籍知识图谱.md` + workflow skill 源同文件。两份必须一致。
 
-## 🔴 RC71·HTML 数据源单一真值铁律（适用于所有图谱 HTML）
+## 🔴 ·HTML 数据源单一真值铁律（适用于所有图谱 HTML）
 
 所有由本 skill 生成的图谱 HTML（含旧的 demo.html 和新的 空间感.html）**必须**默认走 `const GRAPH = _EMBEDDED_GRAPH;` + async fetch 升级路径。**禁止**只跑 fetch 不内嵌——历史上 v23 把影响力节点写进 graph.json 后 demo.html 仍"看不见"，v24 又改成 fetch-only 弹 fail box，都是这一条没焊死。
 

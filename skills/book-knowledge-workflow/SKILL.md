@@ -29,16 +29,16 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 ```
 本仓库/
-├── 书籍知识图谱模板.html                    ← 图谱主力（双击即开，演示版含 22 本示例数据）
-├── 书单数据源.md         ← 【分类唯一真值·人读】你只改这一份
-├── 书单数据源.json            ← 【机读副本】图谱 build 脚本读它
-├── graph.json                    ← 旧版全量关系网（机器真值，已锁死不再增量）
-├── graph.points.json             ← 核心要点新图数据
+├── 书籍知识图谱模板.html ← 图谱主力（双击即开，演示版含 22 本示例数据）
+├── 书单数据源.md ← 【分类唯一真值·人读】你只改这一份
+├── 书单数据源.json ← 【机读副本】图谱 build 脚本读它
+├── graph.json ← 旧版全量关系网（机器真值，已锁死不再增量）
+├── graph.points.json ← 核心要点新图数据
 ├── cards/<拼音>/
-│   ├── <书名>.md                 ← 双格式之一：结构化文本（带 frontmatter）
-│   └── <书名>-知识卡片.html       ← 双格式之二：可视化卡片（最高优先真值）
-├── scripts/rebuild_clean.py      ← 内部脚本：从 书单数据源.md 干净重建 书籍知识图谱模板.html（不继承旧概念）
-└── skills/                       ← 5 个 book-* 技能源
+│ ├── <书名>.md ← 双格式之一：结构化文本（带 frontmatter）
+│ └── <书名>-知识卡片.html ← 双格式之二：可视化卡片（最高优先真值）
+├── scripts/rebuild_clean.py ← 内部脚本：从 书单数据源.md 干净重建 书籍知识图谱模板.html（不继承旧概念）
+└── skills/ ← 5 个 book-* 技能源
 ```
 
 **三处真值链（改一处必同步另外两处）**：
@@ -58,11 +58,11 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 ### Phase 1 · 建卡（book-knowledge-card）
 1. 写前强制预读标杆（`cards/guo-fu-lun/国富论-知识卡片.html` / `cards/na-wa-er-bao-dian/纳瓦尔宝典-知识卡片.html` / `assets/sample-国富论.html`）+ 跑写前输入闸门。
 2. 产 `<书名>.md`（frontmatter 带 `category` + `concepts` + `related_books`）+ `<书名>-知识卡片.html`（六段骨架/四块必含/语言铁律/视觉规范全过）。
-3. **先 HTML 后 PNG**：HTML 改完、用户说"可以出图"才生 PNG。**注意：开源版故意不存 PNG**，让用户用 skill 自己生成。
+3. **先 HTML 后 PNG**：HTML 改完、需求：可以出图才生 PNG。**注意：开源版故意不存 PNG**，让用户用 skill 自己生成。
 4. 双格式落盘到 `cards/<拼音>/`，**绝不覆盖标杆母版**。
 
 ### Phase 2 · 提要点 + 分类（book-core-points + book-category-classify）
-1. **分类归属先走 `book-category-classify`**（15 类唯一真值：边界/用户三铁律/迭代版本纪律）。
+1. **分类归属先走 `book-category-classify`**（15 类唯一真值：边界/）。
 2. 从 Phase 1 的 md 抽可学内容 → 给 2-4 个**可迁移短关键词**（≤8 字）。
 3. 过 `book-core-points` 的「9 类必杀」自检 + `references/check_points.py` 自检（0 违规才收）。
 4. 追加进 `书单数据源.md`（人读）+ `书单数据源.json`（机读），归到对应 15 类。
@@ -70,8 +70,8 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 
 ### Phase 3 · 增量建图谱（book-knowledge-graph）
 1. **当前主力产物是 `书籍知识图谱模板.html`（手改内嵌 HTML + `_EMBEDDED_GRAPH`，0 fetch）**，不是模板注入架构。新增/改书后：
-   - 改 `书单数据源.md` → 跑 `scripts/rebuild_clean.py --write` 重建 `书籍知识图谱模板.html`；
-   - 或直接在 书籍知识图谱模板.html 上做力导向/交互微调（这是日常迭代方式）。
+ - 改 `书单数据源.md` → 跑 `scripts/rebuild_clean.py --write` 重建 `书籍知识图谱模板.html`；
+ - 或直接在 书籍知识图谱模板.html 上做力导向/交互微调（这是日常迭代方式）。
 2. **核心要点新图**：跑 `_build_points_graph.py`（如本仓库未含，可从 `book-knowledge-graph` skill 拷）从 `书籍核心要点清单.md` 出 `graph.points.json` + `书籍知识图谱-核心要点.html`。
 3. **CARD_MAP 跳转**：构建时扫描 `cards/` 下所有 `<书名>/*知识卡片*.html`，建立节点 click → 卡片跳转。没有卡片的书节点 click 静默不响应。
 4. 双击 HTML（file:// 即可）验证新节点出现、同大类成团、相悖红线连。
@@ -94,8 +94,8 @@ description: 书籍知识库端到端总控 SOP —— 编排「输入 → 建�
 ## 红线速查（编排层最易翻车）
 
 - **graph.json 锁死**：旧版全量关系网不再增量；新图只产 `graph.points.json` + 改 `书籍知识图谱模板.html`。
-- **RC110（用户审阅门）**：改用户书库分类/删书/重分类必须等用户确认。
-- **RC304（小白文档）**：面向人的作文档以"对 WorkBuddy 说话"为单位，禁终端代码块/多平台分支/技术黑话；见 `README.md` 的「场景对话示例」段。
+- ****：改用户书库分类/删书/重分类必须等用户确认。
+- **（小白文档）**：面向人的作文档以"对 WorkBuddy 说话"为单位，禁终端代码块/多平台分支/技术黑话；见 `README.md` 的「场景对话示例」段。
 - **三关验证**：交付前必过（语法/内嵌/真渲染）。
 
 ## 开源部署到 GitHub（给维护者）

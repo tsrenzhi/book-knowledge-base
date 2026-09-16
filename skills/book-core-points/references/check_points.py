@@ -3,7 +3,7 @@
 """
 book-core-points 全量自检器
 读 书籍核心要点.json（默认）或 书籍核心要点清单.md（--md），按 SKILL.md 的 11 类错误
-（含 RC109 品牌/人名、RC110 书名字面/比喻）+ 判别标准逐条扫描，
+（含  品牌/人名、 书名字面/比喻）+ 判别标准逐条扫描，
 输出违反清单（书名 / 违例句 / 命中规则 / 置信度）。
 
 usage: python3 check_points.py [--md] [--fix]
@@ -39,26 +39,26 @@ OUTER_LABEL = {'FIRE运动','财务独立','反消费主义','奥地利学派','
 # 万金油（未来学/通用词，套任一本同主题书都对得上）
 VOGUE = {'人机结合时代','不可替代价值','一人公司','时间注意力稀缺'}
 
-# ---------- RC109 品牌/企业/人物名（高置信黑名单，本次翻车核心）----------
-# 只列最常见的；人名无穷尽，但以高频 + 本次打回的为准。命中即报，宁可漏不误杀。
+# ---------- 品牌/企业/人物名（高置信黑名单，本次翻车核心）----------
+# 只列最常见的；人名无穷尽，以高频为准。命中即报，宁可漏不误杀。
 BRAND_NAME = {
     '苹果','Apple','PayPal','paypal','麦当劳','英特尔','Intel','乔布斯','巴菲特','芒格',
     '摩根','迪士尼','网飞','奈飞','谷歌','Google','特斯拉','亚马逊','阿里','腾讯','华为',
     '小米','京东','雷·克洛克','克洛克','库克','韦尔奇','郭士纳','马斯克','曾国藩','字节跳动',
     '美团','拼多多','阿里巴巴','脸书','Facebook','微软','IBM','比亚迪','网易',
 }
-# ---------- RC110 书名字面/比喻/书中意象当唯一概念（本次打回，高置信）----------
+# ---------- 书名字面/比喻/书中意象当唯一概念（高置信）----------
 BOOK_METAPHOR = {
     '推石上山','蚊子大象隐喻','MEA情绪公式','MEA','销售信','次贷',
 }
 
-# ---------- RC306-jargon 专业英文缩写（用户六连击 BATNA 案，2026-08-28 锁定）----------
+# ---------- 专业英文缩写（已锁定）----------
 # 家喻户晓已普及的缩写（GTD/OKR/PK/IQ/EQ）不在此列 → 这些词单独用读者一眼能懂。
 # 这里列专业圈/学术界缩写的少数派：大众读者 5 秒内讲不出的 → 必杀，译成中文大白话。
 # 注：用户已多次确认 OKR 在《这就是 OKR》《OKR 工作法》等锁区真值中合法单用，
-#     不放进黑名单（避免误杀已校对书）。
+# 不放进黑名单（避免误杀已校对书）。
 JARGON = {
-    'BATNA','最佳替代方案',     # 谈判圈 Fisher-Ury 派发明缩写（用户原话踩雷）
+    'BATNA','最佳替代方案',     # 谈判圈 Fisher-Ury 派发明缩写（易误判）
     'BAN','基准方案',           # BAN（basic acceptable negotiation）
     'ZOPA','可交易空间',        # Zone of Possible Agreement
     'MAUT','多标准权衡',        # Multi-Attribute Utility Theory
@@ -72,12 +72,12 @@ JARGON = {
     'UGC','用户生产内容',
     'PGC','专业生产内容',
     'BATNA最佳替代方案',         # 常见组合词
-    'GTD',                        # GTD (Get Things Done) 用户2026-08-28原话踩雷「GTD我也看不懂什么意思」 — 但保留作为圈内术语（如 加中文后缀 `GTD工作法` 合法，单用必杀）
+    'GTD',                        # GTD (Get Things Done) 用户懂什么意思」 — 但保留作为圈内术语（如 加中文后缀 `GTD工作法` 合法，单用必杀）
     'GTD工作法',                   # 仍加 - 因为首词位置裸用实质还是 GTD
     '5V5',                        # 用户举例踩雷的烂缩写
 }
 
-# ---------- RC306-granular 罗列堆砌黑名单（用户六连击 12 种谈判策略案）----------
+# ---------- 罗列堆砌黑名单（数字罗列类）----------
 # 关键词里出现「X种策略/N个法则/五种方法/N个步骤/N个习惯/N个维度/X个要素」类罗列
 # = 看完了跟没看一样，必须重组为 2-3 个核心方法名。
 # 例外：本身是词典/工具书/合集的书允许列「N 个词条」（如字典的 ~3 万字 = 正常）。
@@ -88,7 +88,7 @@ LIST_STUFFING = {
     'N种策略','N种方法','N个方法','N个原则','N个法则','N个步骤','N个习惯','N个维度','N个要素',
 }
 
-# ---------- 同书近义重复簇（用于 RC103/RC99 内重复）----------
+# ---------- 同书近义重复簇（用于 / 内重复）----------
 NEAR = [
     ('从众', ['从众','群体无意识','群体平庸','群体盲从','羊群','乌合','随大流']),
     ('复利', ['复利','利滚利','复利的威力','指数增长']),
@@ -101,7 +101,7 @@ NEAR = [
     ('长期', ['长期主义','长期持有']),
 ]
 
-# ---------- RC306-fix-ext「读着像没写的纯泛词」（用户二次打回 2026-08-28 修正）----------
+# ---------- 「读着像没写的纯泛词」----------
 # 关键修正：主题大类词（团队管理/认知偏差/习惯养成/领导力/个人成长/心理学/思维认知/
 # 经济学…）是【合法第一词】，绝不在黑名单！黑名单只含「过程/动作/结果泛词」——
 # 这些词单独作第一词 = "看完了跟没看一样"，永远成不了主题。
@@ -117,14 +117,14 @@ EMPTY_VAGUE = {
     '自律','规划','反思','总结','复盘','练习','专注','坚持','积累','机会','优势',
     '资源','效率','效能','杠杆','机遇','法则','定律','要素','步骤','框架','体系',
     '系统','机制','模型','模式','路径','方案','流程','协作','责任','信任','授权','产出',
-    '战略',    # 用户2026-08-28原话「什么叫战略呀？是企业战略呀，还是什么战略呀？」 — 必须细分为 竞争战略/营销战略/军事战略/大战略/客户战略 等具体类型才允许用
+    '战略',    # 用户业战略呀，还是什么战略呀？」 — 必须细分为 竞争战略/营销战略/军事战略/大战略/客户战略 等具体类型才允许用
 }
 
 
 # ---------- 锁定分类（绝对不可改区，用户已手写校验，agent/自检脚本不可动）----------
-# RC306-fix-locked：用户亲口「经济与商业 verbatim 保真」（见 RC306/RC306-fix-locked 铁律）。
+# 【经济与商业】分类的关键词按真值保真，禁止改写。
 # 任何自检命中一律降级为「警告」、不进违规报告、不进 --fix 写回，永不动这块。
-# 要改这里必须用户显式授权（用户原话「我前面不都有一部分案例都给你写好了吗？还在瞎改什么呀？」）。
+# 要改这里必须先拿到显式授权（真值已定稿，不得擅自改动）。
 LOCKED_CATEGORIES = {'经济与商业'}
 
 def is_locked(v):
@@ -143,50 +143,50 @@ def scan_point(t, p):
     if re.search(r'^(.{0,6}是[^不]{0,8}(职业|现象|表现|特征|状态|本质)|.{0,6}是[^不]{2,8})$', p) and len(p) <= 12:
         # 反常识判断豁免
         if not re.search(r'(是(最大|一个)?(骗局|陷阱|谎言)|是分散|是价值交换|就是推销|才是|不是|非)', p):
-            hits.append('RC98描述型')
+            hits.append('描述型')
     # R2 抽象类目结尾（排除合法 coined：如"存在先于本质"是萨特概念）
     if re.search(r'(本质|意义|精神|要义|精髓|内涵)$', p) and len(p) <= 8 and p != '存在先于本质':
-        hits.append('RC97抽象类目')
+        hits.append('抽象类目')
     # R3 薄词/泛动词 高置信
     if p in THIN_NOUN or p in LONE_VERB:
-        hits.append('RC101/102薄词孤词')
+        hits.append('/102薄词孤词')
     # R4 外部标签
     if p in OUTER_LABEL:
-        hits.append('RC105外部标签')
+        hits.append('外部标签')
     # R5 万金油
     if p in VOGUE:
-        hits.append('RC106万金油')
+        hits.append('万金油')
     # R6 长描述句（>10字且带叙述虚词，排除反常识判断）
     if len(p) > 10 and re.search(r'[的了被靠在为则需便得与在于]', p):
         if not re.search(r'(是(最大|一个)?(骗局|陷阱|谎言)|才是|不是|非)', p):
-            hits.append('RC108长描述句')
+            hits.append('长描述句')
     # R7 书名同名堆砌（科学史具体内容，排除合法 coined：可证伪性/相对论怪圈）
     if re.search(r'(亚里士多德逻辑|牛顿|相对论与量子论|科学哲学导论)', p):
-        hits.append('RC107书名同名堆砌')
+        hits.append('书名同名堆砌')
     # R8 章节/书名当概念（point == title，且非金标准 coined 概念）
     if t.strip() == p.strip() and t not in GOLD:
-        hits.append('RC100书名当概念')
+        hits.append('书名当概念')
     # R9 术语装内行
     if p == '黑天鹅' or p == '黑天鹅不可预测':
-        hits.append('RC104术语装内行')
-    # R10 品牌/企业/人物名（RC109，本次翻车核心）
+        hits.append('术语装内行')
+    # R10 品牌/企业/人物名（，本次翻车核心）
     if p in BRAND_NAME:
-        hits.append('RC109品牌人名')
-    # R11 书名字面/比喻当概念（RC110）
+        hits.append('品牌人名')
+    # R11 书名字面/比喻当概念
     if p in BOOK_METAPHOR:
-        hits.append('RC110书名字面比喻')
-    # R12 纯泛词主词位（RC306-fix-ext：用户连续打回核心，巨人的工具→习惯养成/名人习惯/刻意练习；
-    #   当下的力量→关注当下/精神内耗/活在当下；异类→一万小时定律/机遇优势/文化传承。
-    #   "能力提升/成功/方法/成长/管理/认知/学习…"作为主词 = 看完了跟没看一样）
+        hits.append('书名字面比喻')
+    # R12 纯泛词主词位：巨人的工具→习惯养成/名人习惯/刻意练习；
+    # 当下的力量→关注当下/精神内耗/活在当下；异类→一万小时定律/机遇优势/文化传承。
+    # "能力提升/成功/方法/成长/管理/认知/学习…"作为主词 = 看完了跟没看一样）
     if p in EMPTY_VAGUE:
-        hits.append('RC306-fix纯泛词')
-    # R13 专业英文缩写当概念（RC306-jargon：用户六连击 BATNA 案 2026-08-28）
+        hits.append('纯泛词')
+    # R13 专业英文缩写当概念
     # 通用规则：[A-Z]{2,6} 全大写字母组、且不在大众词豁免（GTD/OKR/PK/IQ/EQ/SWOT）
-    #   → 当点命中即报违规；让点尽量变成大白话。
+    # → 当点命中即报违规；让点尽量变成大白话。
     if re.fullmatch(r'[A-Z]{2,8}', p or ''):
-        # 大众词豁免：GTD 用户2026-08-28原话「GTD我也看不懂」→ 已从豁免名单移除（连同 MECE 也已下沉）— 任何 [A-Z]{2,8} 缩写都触发 R13-jargon；保留极广谱词条做安全垫
+        # 大众词豁免：GTD 用户→ 已从豁免名单移除（连同 MECE 也已下沉）— 任何 [A-Z]{2,8} 缩写都触发 R13-jargon；保留极广谱词条做安全垫
         if p not in {'PK','IQ','EQ','SWOT','PEST','Q1','AI','UI','UX','OKR','KPI','SMART','PDCA','MVP','AQI'}:
-            hits.append('RC306-jargon英文缩写')
+            hits.append('英文缩写')
     # R13-ext 缩写复合词：中文字符前/后夹着英文缩写也算（如「MECE分类」「BATNA方案」「LTV价值」）
     if re.search(r'(?<![A-Za-z])([A-Z]{2,8})(?=[一-龥]|[A-Z]?$)', p or ''):
         # 提取缩写群组
@@ -194,21 +194,21 @@ def scan_point(t, p):
         # 排除合法大众词（GTD 也已移除豁免 → 任何缩写复合词都命中）
         for abbr in m:
             if abbr not in {'PK','IQ','EQ','SWOT','PEST','Q1','AI','UI','UX','OKR','KPI','SMART','PDCA','MVP','AQI'} and abbr not in {'金字塔','法则三'}:
-                hits.append('RC306-jargon缩写复合词')
+                hits.append('缩写复合词')
                 break
-    # R14 罗列堆砌当概念（RC306-granular：用户六连击 12 种谈判策略案 2026-08-28）
+    # R14 罗列堆砌当概念
     # "X种策略/N个法则/五个方法/N个步骤" 类罗列 + 直接命中 LIST_STUFFING 黑名单 → 必报。
     if p in LIST_STUFFING:
-        hits.append('RC306-granular罗列堆砌')
+        hits.append('罗列堆砌')
     # R14-ext：广义罗列模式（即使不在黑名单的具体值）—— 检测"N种/N个"结构
     if re.search(r'\d+种|\d+个(法则|方法|技巧|原则|策略|步骤|习惯|维度|要素|框架)|十几种|数十种|N种', p or ''):
         # 例外：本身就是核心方法名（如「5 个步骤」可以接受当作「步骤A/B/C...」，但更推荐拆词）
         # 这里只报"罗列堆砌"型 warning，置信度 mid 让人工判断
-        hits.append('RC306-granular罗列堆砌(模式)')
+        hits.append('罗列堆砌(模式)')
     return hits
 
-# ---------- RC306-flexible v2「核心主题词必须占首词位」检测 ----------
-# 用户2026-08-28五连击最终定稿：每本书首词必须是「真正在讲」的核心主题
+# ---------- 「核心主题词必须占首词位」检测 ----------
+# 用户词必须是「真正在讲」的核心主题
 # （人际沟通书→沟通技巧/人际关系；谈判书→谈判技巧；演讲书→演讲技巧；
 # 销售书→销售技巧；写作结构书→结构化表达；影响力书→影响力）。
 # 检测：书名里带分类关键词，首词必须落在该分类关键词集合里。
@@ -248,7 +248,7 @@ def scan_core_theme_missing(t, pts):
         # 第一个匹配到的分组生效；head 落在合法集合（含子串匹配 e.g. "人际" 含 "人际沟通") → 通过
         if head in legal or any(h in head for h in [l[:2] for l in legal]):
             return []
-        return [('RC306-flexible-v2核心主题词未占首词位', head, legal)]
+        return [('核心主题词未占首词位', head, legal)]
     return []
 
 def near_dup(pts):
@@ -264,7 +264,7 @@ def near_dup(pts):
                     break
     return res
 
-# ---------- RC306-fix-misclassified 分类错归检测（用户2026-08-28原话：分类要按主题不能贴shelf）----------
+# ---------- 分类错归检测（用户shelf）----------
 # 关键词-分类映射（一个词命中一个或多个「应入」类目）
 CATEGORY_RULES = {
     # 思维认知 = 思考总类（用户铁律：凡“思考/思维/认知/心智/结构化/水平思考/逻辑思考”都归这）
@@ -296,13 +296,13 @@ CATEGORY_RULES = {
 }
 
 def scan_misclassified(title, points, cur_cat):
-    """RC306-fix-misclassified：书的关键词强烈指向另一类目但当前在 cur_cat → 报疑似错归。
+    """：书的关键词强烈指向另一类目但当前在 cur_cat → 报疑似错归。
     只警告不自动迁移，因为：
     1) 同主题词可能合法存在于多个类目（沟通技巧 既在人际也可能在销售）；
     2) 用户授权后才动清单；
     3) GOLD 豁免（已锁定案例）在更上层处理。
 
-    防再犯规则（RC306-fix-misclassified v2）：
+    防再犯规则（）：
     - 文学经典 是统一大类，绝不报“外迁/细分”（用户铁律：文学不细分）。
     - 思维认知 是“思考总类”，凡关键词含思考类信号就不该被迁走；
       仅当“另一类目命中的关键词数 严格多于 当前类自身命中数”才报，
@@ -327,7 +327,7 @@ def scan_misclassified(title, points, cur_cat):
     # 取命中数最多的类目作为首要疑似去向
     hits.sort(key=lambda h: -len(h[1]))
     best, matched = hits[0]
-    return [('RC306-fix-misclassified疑似错归', best, matched, cur_cat)]
+    return [('疑似错归', best, matched, cur_cat)]
 
 def load_md(path):
     """解析 书籍核心要点清单.md 为 {title: {title, category, points}}。"""
@@ -364,7 +364,7 @@ def main():
         t = v['title']
         if t in GOLD:
             continue
-        # RC306-fix-locked：锁定分类整本跳过——任何违例一律降级为「跳过」
+        # ：锁定分类整本跳过——任何违例一律降级为「跳过」
         if is_locked(v):
             locked_kept += 1
             # 仍扫一遍记日志，但不放进 report
@@ -377,12 +377,12 @@ def main():
         for p in pts:
             h = scan_point(t, p)
             if h:
-                conf = 'high' if (set(h) & {'RC101/102薄词孤词','RC105外部标签','RC106万金油','RC104术语装内行','RC100书名当概念','RC109品牌人名','RC110书名字面比喻'}) else 'mid'
+                conf = 'high' if (set(h) & {'/102薄词孤词','外部标签','万金油','术语装内行','书名当概念','品牌人名','书名字面比喻'}) else 'mid'
                 report.append((t, p, h, conf))
         nd = near_dup(pts)
         for i, j, name in nd:
-            report.append((t, f'{pts[i]} ≈ {pts[j]}', [f'RC103/RC99同义重复({name})'], 'mid'))
-        # RC306-flexible v2：核心主题词占首位检测
+            report.append((t, f'{pts[i]} ≈ {pts[j]}', [f'/同义重复({name})'], 'mid'))
+        # ：核心主题词占首位检测
         ct = scan_core_theme_missing(t, pts)
         for rule, head, legal in ct:
             report.append((t, f'首词=「{head}」(应为 {"/".join(legal)})', [rule], 'mid'))
@@ -390,7 +390,7 @@ def main():
         for rule, target, matched, cur in mc:
             report.append((t, f'现{cur or "未分"} → 疑为{target}', [rule + '(' + ','.join(matched) + ')'], 'low'))
     print(f'=== 非金标准书扫描，命中 {len(report)} 项 ===')
-    print(f'=== 【锁定区】已跳过 {locked_kept} 本（分类 ∈ {LOCKED_CATEGORIES}，RC306-fix-locked 永不报） ===\n')
+    print(f'=== 【锁定区】已跳过 {locked_kept} 本（分类 ∈ {LOCKED_CATEGORIES}， 永不报） ===\n')
     if locked_skip:
         print(f'【锁定区扫描明细】（仅日志，不作为违规）—— {len(locked_skip)} 项：')
         for t, p, h in locked_skip[:10]:
@@ -418,7 +418,7 @@ def main():
             t = v['title']
             if t in GOLD:
                 continue
-            # RC306-fix-locked：锁定分类跳过 --fix，绝不写回
+            # ：锁定分类跳过 --fix，绝不写回
             if is_locked(v):
                 continue
             new = [p for p in v.get('points', [])
@@ -430,7 +430,7 @@ def main():
                     auto_fixed += 1
         json.dump(d, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
         print(f'\n自动清理 {auto_fixed} 本（删纯黑名单项），已写回')
-        print(f'锁定区跳过 {locked_kept} 本（RC306-fix-locked，绝不写回）')
+        print(f'锁定区跳过 {locked_kept} 本（，绝不写回）')
 
 if __name__ == '__main__':
     main()

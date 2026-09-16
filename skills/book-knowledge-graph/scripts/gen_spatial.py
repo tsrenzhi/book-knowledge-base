@@ -5,13 +5,13 @@
 设计原则（v25.48l 终审，所有 RC 修复已固化进 assets/galaxy-template.html）：
   - 背景克制：径向渐变（中心浅、四周深），绝不加中间黑洞/图谱/光晕/四角羽化
   - 节点清亮：大类实色填充 + 细白描边 + 柔和 drop-shadow，不灰头巴脸、不虚边
-  - 居中三件套（RC131）：viewBox = 0 0 W H（不带偏移）；initialT = d3.zoomIdentity（不平移！
+  - 居中三件套（）：viewBox = 0 0 W H（不带偏移）；initialT = d3.zoomIdentity（不平移！
     元素级平移会把整图推到右下角造成左半空白）；forceCenter(W/2,H/2).strength(0.45)
   - 密度四件套（v25.48l）：初始位置 W*0.42 / H*0.65（刷新即散开，不挤一团）；charge -240；
     link 距离 book-book 160 / book-concept 85 / concept-concept 55，strength 0.45；
     collide radius(d)+12 / 0.7
-  - 交互红线：搜索只显示书名+作者（RC120）；右上角关系图例整行隐藏只留连线（RC124）；
-    只有双击背景才 fitContent（RC125）；点空白只取消高亮不复位镜头（不蹦回）
+  - 交互红线：搜索只显示书名+作者（）；右上角关系图例整行隐藏只留连线（）；
+    只有双击背景才 fitContent（）；点空白只取消高亮不复位镜头（不蹦回）
   - 卡片：book 节点 click 打开对应知识卡片 HTML（由 CARD_MAP 注入）
 
 【关键架构】本脚本不再内嵌 HTML 模板字符串，而是读取 assets/galaxy-template.html（UI 外壳，

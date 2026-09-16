@@ -1,8 +1,8 @@
-# 《书籍知识卡片》样式权威清单 v1.0（2026-08-19 立）
+# 《书籍知识卡片》样式权威清单 v1.0
 
 > **本文件是 book-knowledge-card skill 的样式真值源**。任何改样式/做新书前必须读完本表，**禁止新增白名单外的 class**。如确需新增，须登记到本表底部的"白名单新增登记"。
 >
-> 立表原因：用户在 2026-08-19 第二十六次暴怒中指出："样式就那么几个，总是自己去造样式，原有那么多样式，都不知道"——本表就是把所有书的母版 class 全收进来，按场景对照选用，禁止自造轮子。
+> 立表原因：用户在 第二十六次暴怒中指出："样式就那么几个，总是自己去造样式，原有那么多样式，都不知道"——本表就是把所有书的母版 class 全收进来，按场景对照选用，禁止自造轮子。
 
 ---
 
@@ -14,15 +14,13 @@
 | **铁律 2** | **复用别书样式须整段带 CSS**。复用前先 grep 源书的 CSS 段和实际 HTML 例子，整段复制到自己书 CSS 里（必要改类名加书前缀），不许只搬 HTML 结构名。| 影响力 v19 翻车：以为 `.vs` 通用，没复制源 CSS 直接用，结果跟 `.col.new` 互冲。|
 | **铁律 3** | **派生 class 覆写须穷举父级全部 CSS**。派生新类时先 grep 父级类的所有规则，把可能继承来的 `border / background / border-radius / padding / 字号 / 颜色` 全部列出，逐条覆写。**要么全清零、要么全保留**——半清半留必漏。| 影响力 v22 翻车：`.vs.s4` 没覆写父级 `.vs .col:first-child{border-right:2.5px dashed}`，出来三种边框（dashed / solid / none）。 |
 
-> *三铁律已写进 MEMORY.md 的 RC67-RC69。*
+> *以上三条是本 skill 的硬性铁律，做新书 / 改样式前逐条自查。*
 
 ---
 
 ## 一·视觉对比四级优先级（HTML 怎么"看起来不一样"）
 
-> **视觉区分只有一个动作：拉对比度**。需要分主次时，按下表顺序挑载体。**可同时叠加，但同一个层级内优先级如下**：
-
-| 优先级 | 载体 | 视觉影响 | 适用场景 |
+> **视觉区分只有一个动作：拉对比度**。需要分主次时，按下表顺序挑载体。**可同时叠加，但同一个层级内优先级如下**| 优先级 | 载体 | 视觉影响 | 适用场景 |
 |--------|------|---------|---------|
 | **L1** | **背景色** | 最强（决定眼睛第一停留 0.5s） | 主块 vs 次块（如机制 vs 应用）|
 | **L2** | **边框样式**（实/虚/粗细） | 中（边框决定"是不是被强调"）| 主块带框，次块无框（如 .gc 红边框 vs .vs.s4 无边框）|
@@ -31,7 +29,7 @@
 
 > **判别口诀**：读者第一眼分得清主次吗？能在 3 秒内扫出"这块是该详读的、那块是该略过的"？能 → 通过；不能 → 拉 L1 背景对比。
 >
-> *已写进 MEMORY.md 的 RC61。*
+> *以上四级优先级是视觉对比的硬标准，按序套用。*
 
 ---
 
@@ -99,7 +97,7 @@
 | **`.sec-sub`** | 节副标题（一行说明本节在讲啥）| 19-21px muted | 每节标题下 | 全部书 |
 | **`.prose` + `.prose p`** | 普通段落容器（默认 .prose p 23px ink） | 23px，行高 1.55 | 主线段落 / 卡内 / 章节末尾 | 全部书 |
 | **`.indent`** | prose 内"层级小段"（开头加粗+缩进块）| 同 prose，左边距 | 段落里"分点小段" | 纳瓦尔 / 影响力 |
-| **`.lead`**（注意：易混，参考 RC60）| 概念卡内"机制一句话总论" | concept/ccard 卡内 23-25px | 卡顶部一句话定义概念 | 别处（要写小卡 → 用 ctitle）| 全部书 |
+| **`.lead`**（注意：易混，参考 ）| 概念卡内"机制一句话总论" | concept/ccard 卡内 23-25px | 卡顶部一句话定义概念 | 别处（要写小卡 → 用 ctitle）| 全部书 |
 | **`.hero` + `.bigq`** | 顶部英雄区（书名+副标题+核心问题）| 64px/21px/大字粗体 | 每本书唯一头部 | 全部书 |
 | **`.tabs` + `.tab`** | 顶部 tab 导航 | 19-21px，当前 accent 红 | 每本书唯一顶部 | 全部书 |
 
@@ -124,18 +122,18 @@
 ```css
 /* 中屏：≤900px *核心卡片变 2 列 */
 @media (max-width:900px){
-  .core-cards,.grid4{grid-template-columns:repeat(2,1fr)}
+ .core-cards,.grid4{grid-template-columns:repeat(2,1fr)}
 }
 
 /* 手机：≤720px *双栏对比合并成单栏，破折号边改破折号底 */
 @media (max-width:720px){
-  .vs,.vs.old,.vs.s4,.mini-vs,.abc-flow{grid-template-columns:1fr;gap:10px}
-  .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
-  .mini-vs .mcol.good,.vs.s4 .col.new{border:2px solid var(--accent)}
-  .wrap{padding:32px 16px 70px}
-  .bigq{font-size:40px}
-  .sec-title{font-size:34px}
-  .tab{font-size:17px;padding:6px 10px}
+ .vs,.vs.old,.vs.s4,.mini-vs,.abc-flow{grid-template-columns:1fr;gap:10px}
+ .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+ .mini-vs .mcol.good,.vs.s4 .col.new{border:2px solid var(--accent)}
+ .wrap{padding:32px 16px 70px}
+ .bigq{font-size:40px}
+ .sec-title{font-size:34px}
+ .tab{font-size:17px;padding:6px 10px}
 }
 ```
 
@@ -145,7 +143,7 @@
 
 | 日期 | 新 class | 引入书 | 父级 | 用途 | 是否替代别类 | 登记人 |
 |------|---------|--------|------|------|------------|--------|
-| 2026-08-19 | `.vs.s4` | 影响力 v21 | `.vs` | s4 应用对照（怎么不中招/怎么用影响他人）| 替代失败版 `.mini-vs` 自造 | AI |
+| | `.vs.s4` | 影响力 v21 | `.vs` | s4 应用对照（怎么不中招/怎么用影响他人）| 替代失败版 `.mini-vs` 自造 | AI |
 
 > *登记完才能在 HTML 里用这条 class，否则视同违规。*
 
@@ -179,4 +177,3 @@
 - SKILL.md「视觉规范」节：本表是延伸
 - references/fc-prevention.md：防 FC 规则
 - references/input-pipeline.md：写前输入闸门
-- MEMORY.md（项目长期记忆）RC61-RC69：根因纪律

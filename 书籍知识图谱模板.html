@@ -6,7 +6,7 @@
 <title>书籍知识图谱模板.html</title>
 <style>
   *{box-sizing:border-box}
-  /* 径向渐变 · 中心亮四周深（克制立体感，无中间黑洞/图谱/光晕） */
+  
   html,body{margin:0;height:100%;overflow:hidden;
     background: radial-gradient(circle at 50% 44%, #27374F 0%, #1A2238 48%, #0C1120 100%);
     background-attachment: fixed;
@@ -31,20 +31,20 @@
     border-radius:14px;padding:4px 12px;cursor:pointer;font-family:inherit;transition:all .2s}
   #themeBtn:hover{background:rgba(255,255,255,0.12)}
   body.light #themeBtn{background:rgba(255,255,255,0.6);border:1px solid rgba(0,0,0,0.10);color:#201914}
-  /* v25.29 搜索框（移植自 thinking-model growth-brain.html） */
+  
   #searchWrap{position:relative;display:flex;align-items:center;flex:0 0 auto;min-width:0}
   #searchInput{font-size:13px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.08);
-    color:#E8E6E2;border-radius:16px;padding:6px 14px 6px 30px;width:280px;  /* v11: 锁 280px，不再 focus 跳变 */
+    color:#E8E6E2;border-radius:16px;padding:6px 14px 6px 30px;width:280px;  
     outline:none;transition:background .2s,border-color .2s;font-family:inherit}
-  #searchInput:focus{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.35)}  /* v11: focus 不再变 width */
+  #searchInput:focus{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.35)}  
   body.light #searchInput{background:rgba(255,255,255,0.6);border:1px solid rgba(0,0,0,0.10);color:#201914}
   #searchIcon{position:absolute;left:10px;font-size:11px;opacity:.6;pointer-events:none}
-  #searchDropdown{position:absolute;top:34px;left:0;width:280px;  /* v11: 锁 280px 与 searchInput 同宽（删掉 input listener 强制改宽） */
-    /* v17: 删 max-height + overflow-y:auto，12 条内自然撑开，绝不出现滚动条 */
+  #searchDropdown{position:absolute;top:34px;left:0;width:280px;  
+    
     background:rgba(10,14,26,0.92);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.12);
     border-radius:10px;display:none;z-index:30;box-shadow:0 8px 24px rgba(0,0,0,0.5);min-width:170px}
   body.light #searchDropdown{background:rgba(255,253,250,0.96);border:1px solid rgba(0,0,0,0.08)}
-  /* v24: 圆点 | nameWrap(name + 评分 5px 紧贴) | authorSlot(margin-left:auto 推最右，author 紧贴 dropdown 右边界；author/arrow 共用此 100px 位置) */
+  
   .searchItem{padding:7px 12px;cursor:pointer;font-size:11px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:6px;color:#E8E6E2;white-space:nowrap;overflow:hidden}
   body.light .searchItem{color:#201914;border-bottom:1px solid rgba(0,0,0,0.05)}
   .searchItem:hover{background:rgba(255,255,255,0.08)}
@@ -52,7 +52,7 @@
   .searchItem.has-card:hover{background:rgba(255,255,255,0.08)}
   body.light .searchItem.has-card:hover{background:rgba(0,0,0,0.05)}
   .searchItem .dot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
-  /* v28: name 永远完整 + authorSlot 按内容自适应 + 角标显示 3 键号（hover author 滑出 → arrow 滑入）+ 删灰色 hover 背景 */
+  
   .searchItem .nameWrap{
     flex:0 0 auto;
     display:flex;align-items:baseline;
@@ -86,7 +86,7 @@
     transition:transform .25s ease-out,opacity .25s ease-out;
   }
   body.light .searchItem .author{opacity:.6}
-  /* v28: metaArrow 3 键号显示 · hover 时从右滑入（替换 author）· 不加 hover 背景框 */
+  
   .searchItem .metaArrow{
     position:absolute;top:0;right:0;bottom:0;left:0;
     display:flex;align-items:center;justify-content:flex-end;
@@ -102,14 +102,14 @@
   .searchItem.has-card:hover .metaArrow{transform:translateX(0);opacity:1;pointer-events:auto}
   .searchEmpty{padding:12px;font-size:12px;opacity:.6;color:#E8E6E2}
   body.light .searchEmpty{color:#201914}
-  /* v18 之前的外置按钮已废：v20 改为每行 hover 滑出作者+滑入角标 */
-  /* v20: 激活行高亮已废（hover 滑出效果本身已视觉明确，不再需要额外高亮） */
+  
+  
   @keyframes cardLaunchPulse{
     0%,100%{ transform:translate(8px,-50%) translateX(0) }
     50%   { transform:translate(8px,-50%) translateX(4px) }
   }
   .filters{display:flex;flex-wrap:wrap;gap:6px}
-  /* v25.32 RC122：关系过滤单独 fixed 到右上角，PC显示/H5隐藏——顶栏右侧本来就挤到第二行左侧，违反用户明确「PC放右边/移动端不显示」的诉求 */
+  
   #relFilters{position:fixed;top:14px;right:18px;z-index:11;display:flex;gap:4px;align-items:center;
     padding:5px 10px;background:rgba(10,14,26,0.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border:1px solid rgba(255,255,255,0.08);border-radius:16px}
@@ -125,15 +125,15 @@
   .filters .cat-btn{user-select:none;cursor:pointer;transition:all .18s;position:relative}
   .filters .cat-btn .cnt{font-size:10.5px;opacity:.55;font-variant-numeric:tabular-nums;margin-left:3px}
   .filters .cat-btn.active .cnt{opacity:.95}
-  /* 默认：未选中 = 普通态 */
+  
   .filters .cat-btn.active{background:rgba(255,255,255,0.22);border-color:rgba(255,255,255,0.7);font-weight:600}
   .filters .cat-btn.active .dot{transform:scale(1.30);box-shadow:0 0 16px currentColor, 0 0 4px rgba(255,255,255,0.65)}
   body.light .filters .cat-btn.active{background:rgba(32,25,20,0.16);border-color:rgba(32,25,20,0.55);font-weight:600}
   body.light .filters .cat-btn.active .dot{transform:scale(1.30);box-shadow:0 0 14px currentColor}
-  /* v25.25 选中类别下 hl 高亮 / 其他保持原色（RC105：用户要"其他类保留可滚动探索"，不能暗化） */
+  
   .node.hl circle{stroke-width:3.0;filter:drop-shadow(0 0 10px rgba(255,255,255,0.55));}
   body.light .node.hl circle{stroke-width:3.0;filter:drop-shadow(0 0 10px rgba(32,25,20,0.45));}
-  /* 关系过滤（次要控件）—— 故意区别于 cat-btn：无胶囊框、无发光、字号小、前缀「连线」、off 态显示删除线+空心点 */
+  
   .filters .rel-btn{user-select:none;cursor:pointer;font-size:11px;background:transparent;border:none;border-radius:0;
     padding:2px 7px 2px 8px;color:rgba(232,230,226,0.6);transition:color .15s}
   .filters .rel-btn:hover{color:rgba(232,230,226,0.95)}
@@ -143,15 +143,15 @@
   .filters .rel-btn.off{text-decoration:line-through;color:rgba(232,230,226,0.30)}
   body.light .filters .rel-btn.off{color:rgba(32,25,20,0.30)}
   .filters .rel-btn.off .dot{background:transparent!important;box-shadow:inset 0 0 0 1.5px currentColor}
-  /* 关系过滤前置分隔符「连线」 */
+  
   .filters .rel-prefix{font-size:11px;color:rgba(232,230,226,0.4);align-self:center;margin-left:6px;border-left:1px solid rgba(255,255,255,0.10);padding-left:10px}
   body.light .filters .rel-prefix{color:rgba(32,25,20,0.4);border-left-color:rgba(0,0,0,0.08)}
   #wrap{position:absolute;top:62px;left:0;right:0;bottom:0;min-height:80vh}
   svg{width:100%;height:100%;display:block;cursor:grab;min-height:80vh}
   svg:active{cursor:grabbing}
-  /* .link stroke 完全交给 JS attr 设置（按关系色染色）—— CSS 这里只设 dim 透明度 */
+  
   .link.dim{stroke-opacity:.04}
-  /* 节点：实色 + 细白描边 + 柔和 drop-shadow（清亮不灰头） */
+  
   .node circle{cursor:pointer;transition:filter .25s}
   .node.book circle{filter:drop-shadow(0 0 7px rgba(255,255,255,0.28))}
   .node.concept circle{filter:drop-shadow(0 0 4px rgba(255,255,255,0.16))}
@@ -192,7 +192,7 @@
 
 <script src="./assets/d3.v7.min.js"></script>
 <script type="module">
-/* 内嵌 graph.json 兜底数据 — 双击 HTML 立即可用，无需 server */
+
 const _EMBEDDED_GRAPH = {"nodes":[{"id":"b_e1704f5417","type":"book","label":"思考，快与慢","title_full":"思考，快与慢","author":"丹尼尔·卡尼曼","category":"思维认知","group":"思维认知","status":"done","rating":8.2,"has_card":false,"card_path":null},{"id":"b_226366ceec","type":"book","label":"穷查理宝典","title_full":"穷查理宝典","author":"彼得·考夫曼","category":"思维认知","group":"思维认知","status":"done","rating":8.6,"has_card":false,"card_path":null},{"id":"b_9b1d0244e8","type":"book","label":"原则","title_full":"原则","author":"瑞·达利欧","category":"思维认知","group":"思维认知","status":"done","rating":8.3,"has_card":false,"card_path":null},{"id":"b_36e74c7e34","type":"book","label":"学会提问","title_full":"学会提问","author":"尼尔·布朗","category":"思维认知","group":"思维认知","status":"done","rating":8.4,"has_card":false,"card_path":null},{"id":"b_2a4656a1e8","type":"book","label":"金字塔原理","title_full":"金字塔原理","author":"芭芭拉·明托","category":"思维认知","group":"思维认知","status":"done","rating":7.9,"has_card":false,"card_path":null},{"id":"b_08da948560","type":"book","label":"非暴力沟通","title_full":"非暴力沟通","author":"马歇尔·卢森堡","category":"人际关系与沟通","group":"人际关系与沟通","status":"done","rating":8.4,"has_card":false,"card_path":null},{"id":"b_7b8428b912","type":"book","label":"关键对话","title_full":"关键对话","author":"科里·帕特森","category":"人际关系与沟通","group":"人际关系与沟通","status":"done","rating":8.4,"has_card":false,"card_path":null},{"id":"b_7221942b08","type":"book","label":"关键冲突","title_full":"关键冲突","author":"科里·帕特森","category":"人际关系与沟通","group":"人际关系与沟通","status":"done","rating":8.0,"has_card":false,"card_path":null},{"id":"b_812684513a","type":"book","label":"纳瓦尔宝典","title_full":"纳瓦尔宝典","author":"埃里克·乔根森","category":"财富认知","group":"财富认知","status":"done","rating":8.4,"has_card":true,"card_path":"cards/na-wa-er-bao-dian/纳瓦尔宝典-知识卡片.html"},{"id":"b_cb12d56f34","type":"book","label":"富爸爸穷爸爸","title_full":"富爸爸穷爸爸","author":"罗伯特·清崎","category":"财富认知","group":"财富认知","status":"done","rating":8.2,"has_card":false,"card_path":null},{"id":"b_b7b23319ec","type":"book","label":"国富论","title_full":"国富论","author":"亚当·斯密","category":"经济与商业","group":"经济与商业","status":"done","rating":9.0,"has_card":true,"card_path":"cards/guo-fu-lun/国富论-知识卡片.html"},{"id":"b_655b5c8e6e","type":"book","label":"资本论","title_full":"资本论","author":"卡尔·马克思","category":"经济与商业","group":"经济与商业","status":"done","rating":9.3,"has_card":false,"card_path":null},{"id":"b_05b434bcb6","type":"book","label":"就业、利息和货币通论","title_full":"就业、利息和货币通论","author":"凯恩斯","category":"经济与商业","group":"经济与商业","status":"done","rating":8.7,"has_card":false,"card_path":null},{"id":"b_383c64a75c","type":"book","label":"通往奴役之路","title_full":"通往奴役之路","author":"弗里德里希·哈耶克","category":"经济与商业","group":"经济与商业","status":"done","rating":8.8,"has_card":false,"card_path":null},{"id":"b_7aaad978ca","type":"book","label":"人类简史","title_full":"人类简史","author":"尤瓦尔·赫拉利","category":"底层规律","group":"底层规律","status":"done","rating":9.1,"has_card":false,"card_path":null},{"id":"b_264222e0a8","type":"book","label":"未来简史","title_full":"未来简史","author":"尤瓦尔·赫拉利","category":"底层规律","group":"底层规律","status":"done","rating":8.7,"has_card":false,"card_path":null},{"id":"b_3d51106643","type":"book","label":"今日简史","title_full":"今日简史","author":"尤瓦尔·赫拉利","category":"底层规律","group":"底层规律","status":"done","rating":8.1,"has_card":false,"card_path":null},{"id":"b_f75f0f6345","type":"book","label":"枪炮、病菌与钢铁","title_full":"枪炮、病菌与钢铁","author":"贾雷德·戴蒙德","category":"底层规律","group":"底层规律","status":"done","rating":8.7,"has_card":false,"card_path":null},{"id":"b_db5faf12ce","type":"book","label":"掌控习惯","title_full":"掌控习惯","author":"詹姆斯·克利尔","category":"习惯养成","group":"习惯养成","status":"done","rating":8.8,"has_card":false,"card_path":null},{"id":"b_ef34fe238f","type":"book","label":"习惯的力量","title_full":"习惯的力量","author":"查尔斯·都希格","category":"习惯养成","group":"习惯养成","status":"done","rating":8.3,"has_card":false,"card_path":null},{"id":"b_c04b9c2f53","type":"book","label":"微习惯","title_full":"微习惯","author":"斯蒂芬·盖斯","category":"习惯养成","group":"习惯养成","status":"done","rating":7.7,"has_card":false,"card_path":null},{"id":"b_01499d2aa3","type":"book","label":"福格行为模型","title_full":"福格行为模型","author":"B.J.福格","category":"习惯养成","group":"习惯养成","status":"done","rating":8.7,"has_card":false,"card_path":null},{"id":"c_7da8c28107","type":"concept","label":"个人自由","books":["b_383c64a75c"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_69601c9906","type":"concept","label":"习惯养成","books":["b_01499d2aa3","b_c04b9c2f53","b_db5faf12ce"],"use_count":3,"category":"习惯养成","group":"习惯养成","importance":4},{"id":"c_16c6e2cde4","type":"concept","label":"习惯叠加","books":["b_db5faf12ce"],"use_count":1,"category":"习惯养成","group":"习惯养成","importance":2},{"id":"c_d4771c9f58","type":"concept","label":"习惯回路","books":["b_ef34fe238f"],"use_count":1,"category":"习惯养成","group":"习惯养成","importance":2},{"id":"c_3929ad61b1","type":"concept","label":"五步流程","books":["b_9b1d0244e8"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_d88dac7df6","type":"concept","label":"人工智能","books":["b_264222e0a8"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_9e7ab488a2","type":"concept","label":"人类史","books":["b_7aaad978ca"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_58923117b2","type":"concept","label":"人类命运","books":["b_264222e0a8"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_4490053d49","type":"concept","label":"人类未来","books":["b_3d51106643"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_23f63e7dd4","type":"concept","label":"全球议题","books":["b_3d51106643"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_61e9947389","type":"concept","label":"共同目的","books":["b_7b8428b912"],"use_count":1,"category":"人际关系与沟通","group":"人际关系与沟通","importance":2},{"id":"c_a1938acdae","type":"concept","label":"写作","books":["b_2a4656a1e8"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_aeb68fed15","type":"concept","label":"冲突化解","books":["b_7221942b08"],"use_count":1,"category":"人际关系与沟通","group":"人际关系与沟通","importance":2},{"id":"c_2616e53de6","type":"concept","label":"决策原则","books":["b_9b1d0244e8"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_80016437b4","type":"concept","label":"分工带来效率","books":["b_b7b23319ec"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_3543c5e944","type":"concept","label":"剩余价值","books":["b_655b5c8e6e"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_b02c71913f","type":"concept","label":"动机识别","books":["b_7221942b08"],"use_count":1,"category":"人际关系与沟通","group":"人际关系与沟通","importance":2},{"id":"c_e51cf6f25e","type":"concept","label":"劳动决定价值","books":["b_b7b23319ec"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_57c3eeb0a3","type":"concept","label":"历史规律","books":["b_f75f0f6345"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_8e129a80d5","type":"concept","label":"双系统思维","books":["b_e1704f5417"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_d40541ff8b","type":"concept","label":"地理决定论","books":["b_f75f0f6345"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_e5450b19b5","type":"concept","label":"复利","books":["b_812684513a"],"use_count":1,"category":"财富认知","group":"财富认知","importance":2},{"id":"c_2377b00d48","type":"concept","label":"多元思维","books":["b_226366ceec"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_a80105e4d3","type":"concept","label":"奖赏","books":["b_ef34fe238f"],"use_count":1,"category":"习惯养成","group":"习惯养成","importance":2},{"id":"c_7b630dc09c","type":"concept","label":"安全氛围","books":["b_7b8428b912"],"use_count":1,"category":"人际关系与沟通","group":"人际关系与沟通","importance":2},{"id":"c_1357847b50","type":"concept","label":"就业","books":["b_05b434bcb6"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_c4446d673b","type":"concept","label":"微习惯","books":["b_c04b9c2f53"],"use_count":1,"category":"习惯养成","group":"习惯养成","importance":2},{"id":"c_515faf40f7","type":"concept","label":"微小起步","books":["b_01499d2aa3"],"use_count":1,"category":"习惯养成","group":"习惯养成","importance":2},{"id":"c_449b3264e3","type":"concept","label":"心智模型","books":["b_226366ceec"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_1470bf9692","type":"concept","label":"感受","books":["b_08da948560"],"use_count":1,"category":"人际关系与沟通","group":"人际关系与沟通","importance":2},{"id":"c_1888612db3","type":"concept","label":"批判性思维","books":["b_36e74c7e34"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_9fa0f932d6","type":"concept","label":"技术冲击","books":["b_3d51106643"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_606914e227","type":"concept","label":"把自己产品化","books":["b_812684513a"],"use_count":1,"category":"财富认知","group":"财富认知","importance":2},{"id":"c_2b17eedc4e","type":"concept","label":"政治经济学","books":["b_655b5c8e6e"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_e946fd8b62","type":"concept","label":"文明差异","books":["b_f75f0f6345"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_f2465a1d43","type":"concept","label":"文明演进","books":["b_7aaad978ca"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_373f00314e","type":"concept","label":"暗示","books":["b_ef34fe238f"],"use_count":1,"category":"习惯养成","group":"习惯养成","importance":2},{"id":"c_7bbdee8819","type":"concept","label":"有效需求","books":["b_05b434bcb6"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_2e4c8d1467","type":"concept","label":"未来学","books":["b_264222e0a8"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_f9acd0bf76","type":"concept","label":"杠杆思维","books":["b_812684513a"],"use_count":1,"category":"财富认知","group":"财富认知","importance":2},{"id":"c_b8c3c36533","type":"concept","label":"极小行动","books":["b_c04b9c2f53"],"use_count":1,"category":"习惯养成","group":"习惯养成","importance":2},{"id":"c_082b00e481","type":"concept","label":"极度透明","books":["b_9b1d0244e8"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_439aee27a8","type":"concept","label":"比较优势","books":["b_b7b23319ec"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_65c643db61","type":"concept","label":"沟通技巧","books":["b_08da948560","b_7221942b08","b_7b8428b912"],"use_count":3,"category":"人际关系与沟通","group":"人际关系与沟通","importance":4},{"id":"c_22fe7a9a5f","type":"concept","label":"流动性陷阱","books":["b_05b434bcb6"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_3c840e25bf","type":"concept","label":"环境设计","books":["b_db5faf12ce"],"use_count":1,"category":"习惯养成","group":"习惯养成","importance":2},{"id":"c_d174128e05","type":"concept","label":"现金流","books":["b_cb12d56f34"],"use_count":1,"category":"财富认知","group":"财富认知","importance":2},{"id":"c_74364d51ab","type":"concept","label":"看不见的手","books":["b_b7b23319ec"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_a74be46895","type":"concept","label":"系统化","books":["b_9b1d0244e8"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_0155b70d6d","type":"concept","label":"经济学经典","books":["b_05b434bcb6","b_383c64a75c","b_655b5c8e6e","b_b7b23319ec"],"use_count":4,"category":"经济与商业","group":"经济与商业","importance":5},{"id":"c_ba33746eed","type":"concept","label":"结构化思维","books":["b_2a4656a1e8"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_c285062cd7","type":"concept","label":"能力圈","books":["b_226366ceec"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_a9bc47d4ec","type":"concept","label":"自由主义","books":["b_383c64a75c"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_5ff7220ed8","type":"concept","label":"行为后果","books":["b_7221942b08"],"use_count":1,"category":"人际关系与沟通","group":"人际关系与沟通","importance":2},{"id":"c_d801c14c43","type":"concept","label":"行为经济学","books":["b_e1704f5417"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_6fe589395d","type":"concept","label":"行为设计","books":["b_01499d2aa3"],"use_count":1,"category":"习惯养成","group":"习惯养成","importance":2},{"id":"c_fc3348075d","type":"concept","label":"观察","books":["b_08da948560"],"use_count":1,"category":"人际关系与沟通","group":"人际关系与沟通","importance":2},{"id":"c_15f989948e","type":"concept","label":"计划经济","books":["b_383c64a75c"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_5a83ff199c","type":"concept","label":"认知偏差","books":["b_e1704f5417"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_fe5b96e803","type":"concept","label":"认知革命","books":["b_7aaad978ca"],"use_count":1,"category":"底层规律","group":"底层规律","importance":2},{"id":"c_6b91483394","type":"concept","label":"论证","books":["b_36e74c7e34"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_35cfbed94a","type":"concept","label":"请求","books":["b_08da948560"],"use_count":1,"category":"人际关系与沟通","group":"人际关系与沟通","importance":2},{"id":"c_d09d896354","type":"concept","label":"财商启蒙","books":["b_cb12d56f34"],"use_count":1,"category":"财富认知","group":"财富认知","importance":2},{"id":"c_352d6be469","type":"concept","label":"财富自由","books":["b_812684513a"],"use_count":1,"category":"财富认知","group":"财富认知","importance":2},{"id":"c_ee1e6b7f84","type":"concept","label":"货币政策","books":["b_05b434bcb6"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_207b156a1a","type":"concept","label":"质疑","books":["b_36e74c7e34"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_a251093eef","type":"concept","label":"资产配置","books":["b_cb12d56f34"],"use_count":1,"category":"财富认知","group":"财富认知","importance":2},{"id":"c_e35d154a78","type":"concept","label":"资本主义","books":["b_655b5c8e6e"],"use_count":1,"category":"经济与商业","group":"经济与商业","importance":2},{"id":"c_8c3ce01cc9","type":"concept","label":"逻辑表达","books":["b_2a4656a1e8"],"use_count":1,"category":"思维认知","group":"思维认知","importance":2},{"id":"c_8df56ea955","type":"concept","label":"陈述事实","books":["b_7b8428b912"],"use_count":1,"category":"人际关系与沟通","group":"人际关系与沟通","importance":2},{"id":"c_3d889e367a","type":"concept","label":"需要","books":["b_08da948560"],"use_count":1,"category":"人际关系与沟通","group":"人际关系与沟通","importance":2}],"links":[{"source":"b_e1704f5417","target":"c_d801c14c43","relation":"包含","concept":"行为经济学"},{"source":"b_e1704f5417","target":"c_8e129a80d5","relation":"包含","concept":"双系统思维"},{"source":"b_e1704f5417","target":"c_5a83ff199c","relation":"包含","concept":"认知偏差"},{"source":"b_226366ceec","target":"c_2377b00d48","relation":"包含","concept":"多元思维"},{"source":"b_226366ceec","target":"c_449b3264e3","relation":"包含","concept":"心智模型"},{"source":"b_226366ceec","target":"c_c285062cd7","relation":"包含","concept":"能力圈"},{"source":"b_9b1d0244e8","target":"c_2616e53de6","relation":"包含","concept":"决策原则"},{"source":"b_9b1d0244e8","target":"c_3929ad61b1","relation":"包含","concept":"五步流程"},{"source":"b_9b1d0244e8","target":"c_082b00e481","relation":"包含","concept":"极度透明"},{"source":"b_9b1d0244e8","target":"c_a74be46895","relation":"包含","concept":"系统化"},{"source":"b_36e74c7e34","target":"c_1888612db3","relation":"包含","concept":"批判性思维"},{"source":"b_36e74c7e34","target":"c_207b156a1a","relation":"包含","concept":"质疑"},{"source":"b_36e74c7e34","target":"c_6b91483394","relation":"包含","concept":"论证"},{"source":"b_2a4656a1e8","target":"c_ba33746eed","relation":"包含","concept":"结构化思维"},{"source":"b_2a4656a1e8","target":"c_8c3ce01cc9","relation":"包含","concept":"逻辑表达"},{"source":"b_2a4656a1e8","target":"c_a1938acdae","relation":"包含","concept":"写作"},{"source":"b_08da948560","target":"c_65c643db61","relation":"包含","concept":"沟通技巧"},{"source":"b_08da948560","target":"c_fc3348075d","relation":"包含","concept":"观察"},{"source":"b_08da948560","target":"c_1470bf9692","relation":"包含","concept":"感受"},{"source":"b_08da948560","target":"c_3d889e367a","relation":"包含","concept":"需要"},{"source":"b_08da948560","target":"c_35cfbed94a","relation":"包含","concept":"请求"},{"source":"b_7b8428b912","target":"c_65c643db61","relation":"包含","concept":"沟通技巧"},{"source":"b_7b8428b912","target":"c_61e9947389","relation":"包含","concept":"共同目的"},{"source":"b_7b8428b912","target":"c_7b630dc09c","relation":"包含","concept":"安全氛围"},{"source":"b_7b8428b912","target":"c_8df56ea955","relation":"包含","concept":"陈述事实"},{"source":"b_7221942b08","target":"c_65c643db61","relation":"包含","concept":"沟通技巧"},{"source":"b_7221942b08","target":"c_aeb68fed15","relation":"包含","concept":"冲突化解"},{"source":"b_7221942b08","target":"c_b02c71913f","relation":"包含","concept":"动机识别"},{"source":"b_7221942b08","target":"c_5ff7220ed8","relation":"包含","concept":"行为后果"},{"source":"b_812684513a","target":"c_352d6be469","relation":"包含","concept":"财富自由"},{"source":"b_812684513a","target":"c_f9acd0bf76","relation":"包含","concept":"杠杆思维"},{"source":"b_812684513a","target":"c_e5450b19b5","relation":"包含","concept":"复利"},{"source":"b_812684513a","target":"c_606914e227","relation":"包含","concept":"把自己产品化"},{"source":"b_cb12d56f34","target":"c_d09d896354","relation":"包含","concept":"财商启蒙"},{"source":"b_cb12d56f34","target":"c_a251093eef","relation":"包含","concept":"资产配置"},{"source":"b_cb12d56f34","target":"c_d174128e05","relation":"包含","concept":"现金流"},{"source":"b_b7b23319ec","target":"c_74364d51ab","relation":"包含","concept":"看不见的手"},{"source":"b_b7b23319ec","target":"c_80016437b4","relation":"包含","concept":"分工带来效率"},{"source":"b_b7b23319ec","target":"c_e51cf6f25e","relation":"包含","concept":"劳动决定价值"},{"source":"b_b7b23319ec","target":"c_439aee27a8","relation":"包含","concept":"比较优势"},{"source":"b_b7b23319ec","target":"c_0155b70d6d","relation":"包含","concept":"经济学经典"},{"source":"b_655b5c8e6e","target":"c_2b17eedc4e","relation":"包含","concept":"政治经济学"},{"source":"b_655b5c8e6e","target":"c_e35d154a78","relation":"包含","concept":"资本主义"},{"source":"b_655b5c8e6e","target":"c_3543c5e944","relation":"包含","concept":"剩余价值"},{"source":"b_655b5c8e6e","target":"c_0155b70d6d","relation":"包含","concept":"经济学经典"},{"source":"b_05b434bcb6","target":"c_7bbdee8819","relation":"包含","concept":"有效需求"},{"source":"b_05b434bcb6","target":"c_22fe7a9a5f","relation":"包含","concept":"流动性陷阱"},{"source":"b_05b434bcb6","target":"c_ee1e6b7f84","relation":"包含","concept":"货币政策"},{"source":"b_05b434bcb6","target":"c_1357847b50","relation":"包含","concept":"就业"},{"source":"b_05b434bcb6","target":"c_0155b70d6d","relation":"包含","concept":"经济学经典"},{"source":"b_383c64a75c","target":"c_a9bc47d4ec","relation":"包含","concept":"自由主义"},{"source":"b_383c64a75c","target":"c_15f989948e","relation":"包含","concept":"计划经济"},{"source":"b_383c64a75c","target":"c_7da8c28107","relation":"包含","concept":"个人自由"},{"source":"b_383c64a75c","target":"c_0155b70d6d","relation":"包含","concept":"经济学经典"},{"source":"b_7aaad978ca","target":"c_9e7ab488a2","relation":"包含","concept":"人类史"},{"source":"b_7aaad978ca","target":"c_fe5b96e803","relation":"包含","concept":"认知革命"},{"source":"b_7aaad978ca","target":"c_f2465a1d43","relation":"包含","concept":"文明演进"},{"source":"b_264222e0a8","target":"c_2e4c8d1467","relation":"包含","concept":"未来学"},{"source":"b_264222e0a8","target":"c_58923117b2","relation":"包含","concept":"人类命运"},{"source":"b_264222e0a8","target":"c_d88dac7df6","relation":"包含","concept":"人工智能"},{"source":"b_3d51106643","target":"c_4490053d49","relation":"包含","concept":"人类未来"},{"source":"b_3d51106643","target":"c_9fa0f932d6","relation":"包含","concept":"技术冲击"},{"source":"b_3d51106643","target":"c_23f63e7dd4","relation":"包含","concept":"全球议题"},{"source":"b_f75f0f6345","target":"c_d40541ff8b","relation":"包含","concept":"地理决定论"},{"source":"b_f75f0f6345","target":"c_e946fd8b62","relation":"包含","concept":"文明差异"},{"source":"b_f75f0f6345","target":"c_57c3eeb0a3","relation":"包含","concept":"历史规律"},{"source":"b_db5faf12ce","target":"c_69601c9906","relation":"包含","concept":"习惯养成"},{"source":"b_db5faf12ce","target":"c_16c6e2cde4","relation":"包含","concept":"习惯叠加"},{"source":"b_db5faf12ce","target":"c_3c840e25bf","relation":"包含","concept":"环境设计"},{"source":"b_ef34fe238f","target":"c_d4771c9f58","relation":"包含","concept":"习惯回路"},{"source":"b_ef34fe238f","target":"c_373f00314e","relation":"包含","concept":"暗示"},{"source":"b_ef34fe238f","target":"c_a80105e4d3","relation":"包含","concept":"奖赏"},{"source":"b_c04b9c2f53","target":"c_c4446d673b","relation":"包含","concept":"微习惯"},{"source":"b_c04b9c2f53","target":"c_b8c3c36533","relation":"包含","concept":"极小行动"},{"source":"b_c04b9c2f53","target":"c_69601c9906","relation":"包含","concept":"习惯养成"},{"source":"b_01499d2aa3","target":"c_69601c9906","relation":"包含","concept":"习惯养成"},{"source":"b_01499d2aa3","target":"c_6fe589395d","relation":"包含","concept":"行为设计"},{"source":"b_01499d2aa3","target":"c_515faf40f7","relation":"包含","concept":"微小起步"},{"source":"b_e1704f5417","target":"b_226366ceec","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"},{"source":"b_9b1d0244e8","target":"b_e1704f5417","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"},{"source":"b_36e74c7e34","target":"b_e1704f5417","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"},{"source":"b_2a4656a1e8","target":"b_e1704f5417","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"},{"source":"b_812684513a","target":"b_cb12d56f34","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"},{"source":"b_7aaad978ca","target":"b_264222e0a8","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"},{"source":"b_3d51106643","target":"b_7aaad978ca","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"},{"source":"b_f75f0f6345","target":"b_7aaad978ca","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"},{"source":"b_db5faf12ce","target":"b_ef34fe238f","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"},{"source":"b_c04b9c2f53","target":"b_ef34fe238f","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"},{"source":"b_01499d2aa3","target":"b_ef34fe238f","relation":"相关","shared":[],"n":0,"family":null,"reason":"同分类兜底(避免孤岛)"}],"meta":{"version":"1.0-lite","description":"开源版 22 本书籍知识图谱","node_types":["book","concept","domain","author","category"],"relation_types":["相似","相悖","互补","应用","引用","批判","包含"],"color_by_relation":{"相似":"#7BC47E","互补":"#5DBDBD","相悖":"#E8483E","包含":"#C9B18A","引用":"#A88BD8","应用":"#F5C84C","批判":"#E8483E"},"group_colors":{"习惯养成":"#C5E063","人际关系与沟通":"#FF8FAB","底层规律":"#4ECDC4","思维认知":"#4D96FF","经济与商业":"#FF6B6B","财富认知":"#FFD166"},"category_colors":{"习惯养成":"#C5E063","人际关系与沟通":"#FF8FAB","底层规律":"#4ECDC4","思维认知":"#4D96FF","经济与商业":"#FF6B6B","财富认知":"#FFD166"},"categories":["习惯养成","人际关系与沟通","底层规律","思维认知","经济与商业","财富认知"],"gen_time":"基于 书单数据源.md (22 本)","node_count":93,"link_count":89,"book_count":22,"concept_count":71},"CARD_MAP":{"b_812684513a":"cards/na-wa-er-bao-dian/纳瓦尔宝典-知识卡片.html","b_b7b23319ec":"cards/guo-fu-lun/国富论-知识卡片.html"}};;;
 let GRAPH = _EMBEDDED_GRAPH;
   
@@ -202,8 +202,8 @@ const CARD_MAP = {
 "b_b7b23319ec": "cards/guo-fu-lun/国富论-知识卡片.html",
 };;
 const REL_COLOR = GRAPH.meta.color_by_relation || {};
-let dark = true;  /* 在 link 创建前定义，避免 stroke-opacity 用 undefined */
-let selectedCategory = null;  /* v25z-fix7d: 必须在 force config (line 290+) 之前声明 —— d3-force v3 forceX(fn).initialize(nodes) 同步调用 fn(node) 预计算目标 x，此时若未声明会 TDZ ReferenceError（fix7d 修：fix7c 回调不引用 selectedCategory 所以没炸） */
+let dark = true;  
+let selectedCategory = null;  
 const CAT_COLOR = GRAPH.meta.category_colors || GRAPH.meta.group_colors || {};
 
 const DASH = new Set(["相悖","批判"]);
@@ -212,7 +212,7 @@ const links = GRAPH.links.map(d=>Object.assign({},d));
 const nodeById = new Map(nodes.map(n=>[n.id,n]));
 links.forEach(l=>{ l.s=nodeById.get(l.source); l.t=nodeById.get(l.target); if(!l.s||!l.t) console.warn('broken link', l); });
 
-// 度数（节点大小按连接数分层，制造主次/锚点感）
+
 const deg = new Map(nodes.map(n=>[n.id,0]));
 links.forEach(l=>{ const s=l.source,t=l.target; if(s!=null&&t!=null){ deg.set(s,(deg.get(s)||0)+1); deg.set(t,(deg.get(t)||0)+1); } });
 
@@ -223,54 +223,38 @@ if(ch < 300) ch = (window.innerHeight - 70) || 800;
 const W = ()=>cw;
 const H = ()=>ch;
 
-// 节点大小：v25.16 回到 demo 配方 —— 书=22，概念=6+importance（参差 6~14）；视觉主次靠颜色/描边/文字撑起，不靠半径
+
 const radius = n => {
   if(n.type === "book") return 13;
   if(n.status === "referenced") return 3;
   return 3 + (n.importance || 3);
-};  /* v23: 书 13（原 22）、概念 3+importance */;
+};  ;
 
-/* 大类岛心 —— 把每个 category 放到一个椭圆环上 */
+
 const catCenters = {};
-const cats = Array.from(new Set(nodes.filter(n=>n.category && n.type==="book").map(n=>n.category)));  /* v25.36 只收书的分类，排除「跨类桥」概念节点的标识 category，不让它进图例 */
+const cats = Array.from(new Set(nodes.filter(n=>n.category && n.type==="book").map(n=>n.category)));  
 const catCount = Math.max(cats.length, 1);
 cats.forEach((c,i)=>{
-  const ang = (i / catCount) * Math.PI * 2 - Math.PI/2;  /* v25z-fix7d: v25k 顶部为起，按顺时针均匀分布（fix7c 漏减 π/2 导致经济与商业在 3 点钟方向而非 12 点）*/
-  catCenters[c] = { x: Math.cos(ang) * 0.25, y: Math.sin(ang) * 0.22 };  /* v25z-fix7d: ±0.12/±0.10 -> ±0.25/±0.22，让 15 大类在画布上真的分开成"岛"（fix7c 挤在中心 26px 范围肉眼分不开）。屏幕坐标 ≈ ±0.25*0.4*min(W,H) = ±72px @1280x720 */
+  const ang = (i / catCount) * Math.PI * 2 - Math.PI/2;  
+  catCenters[c] = { x: Math.cos(ang) * 0.25, y: Math.sin(ang) * 0.22 };  
 });
 
-/* v25.16 推倒 v25.13/14/15 的"外推/锁中心"机制：删 conceptAnchor + per-book offset + 异化 init，回到 demo 默认
-   真实规律：demo 之所以散得开，是因为**没有专属向心力、距离小、力强、charge 弱**——靠 link 自然约束，不靠额外力推 */
+
 nodes.forEach(n=>{
-  /* v25.48l 初始范围扩大 0.28 -> 0.42 (±400px @1920), 让刷新页面时节点先散开占满画布大半, 不会再挤成一坨. 用户原话 "密集恐惧症, 不要堆在一起, 稍微分散" */
+  
   n.x = W()/2 + (Math.random()-0.5)*W()*0.42;
-  n.y = H()/2 + (Math.random()-0.5)*H()*0.65;  /* 同步 H 方向 0.55 -> 0.65, 上下也散开 */
+  n.y = H()/2 + (Math.random()-0.5)*H()*0.65;  
 });
 
 const svg = d3.select("#svg").attr("width", W()).attr("height", H())
-  .attr("viewBox", `0 0 ${W()} ${H()}`)  /* RC125·v25.47.2d：viewBox 不带偏移 (-W*0.05...)，fitContent 的 translate(W/2 - cx*k, ...) 才正确生效 */
+  .attr("viewBox", `0 0 ${W()} ${H()}`)  
   .attr("preserveAspectRatio", "xMidYMid meet");
 const viewport = svg.append("g").attr("class","viewport");
 
-/* ===== v25.22 改动（RC102 · 应\"Obsidian 无限空间\"诉求）=====
-   1) 删 forceBounds()：节点不再被强锁 viewport pad 内，可自由飞到画外
-   2) center strength 1.0→0.05（默认极弱，不贴边）
-   3) charge -340→-800（947 节点必须推开）
-   4) link dist book-book 170→280 / book-concept 70→95 / concept-concept 55→65（小调整）
-   5) link strength 0.5/0.7→0.20（弱约束，让散不被绑死）
-   6) collide radius+8 → +10、strength 0.7→0.6
-   7) viewBox 扩到 -W -H W*3 H*3（自由散出去的节点仍在画内）
-   8) 初始 zoom scale 0.5（用户进图直接看大范围，用滚轮探索）
-================================================================ */
-/* v25z-fix8: bookAnchor force — slot-based placement（slot 随机化版，源自用户截图反馈"按序号均分 360° 太死板成三角形/正方形"）
-   1) init: 给每个 concept 算 slotAngle/slotDist（基于 concept.id 的可复现哈希种子，不再按书序号均分）
-      - angle: djb2(c.id) → mulberry32 → [0, 2π)（不均分，但 id 锁定，刷新前后稳定，避免出三角/正方/T 字等死板形状）
-      - dist:  (38 + labelLen * 4) × (0.85~1.15) id-seed 随机系数（保留字数梯度，宽窄有起伏）
-   2) tick: 找最近归属书，把 concept 拉向 (book + 极坐标(slotAngle, slotDist))
-   3) 拉力不乘 alpha（永远稳定，不被 charge 平衡掉），strength 0.05（让 charge 也能调）
-   fix7 → fix8 改动只动这一个 force 的 init 公式，其他 5 个 force 全保留。共享 concept 仍按现有行为：取首次进入 map 的 slot。 */
+
+
 const bookAnchor = (() => {
-  // 稳定 PRNG：mulberry32 + djb2 字符串哈希（保证每个 concept.id → 同样的 (angle, dist)，刷新前后不会跳）
+  
   function djb2(s) {
     let h = 5381;
     for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
@@ -285,11 +269,11 @@ const bookAnchor = (() => {
     };
   }
 
-  // 预计算：每个 concept 的 slotAngle/slotDist（init 时一次性算完）
+  
   let _slotMap = new Map();
   function precompute(nodesArr, linksArr) {
     _slotMap.clear();
-    // 第一遍：收集每个 book 的 concepts
+    
     const bookConcepts = new Map();
     for (const l of linksArr) {
       const s = l.s, t = l.t;
@@ -302,22 +286,22 @@ const bookAnchor = (() => {
         bookConcepts.get(t.id).push(s);
       }
     }
-    // 第二遍：基于 concept.id 的可复现 seed 算 slotAngle/slotDist（不按书序号均分，避免多边形）
+    
     for (const [bid, cs] of bookConcepts) {
       cs.sort((a, b) => a.id.localeCompare(b.id));
       cs.forEach((c, i) => {
-        if (_slotMap.has(c.id)) return;  // 多书共享：取首次进入的 slot（沿用 fix7 行为）
+        if (_slotMap.has(c.id)) return;  
         const seed = djb2(c.id);
         const rng = mulberry32(seed);
-        // 角度：[0, 2π) 由 id 锁定，刷新前后稳定
+        
         const angle = rng() * Math.PI * 2;
-        // 距离：38 + labelLen * 4（保留字数梯度），乘 (0.85~1.15) id-seed 随机系数
+        
         const labelLen = (c.label || "").length;
         const dist = (38 + labelLen * 4) * (0.85 + rng() * 0.30);
         _slotMap.set(c.id, { angle, dist, primaryBook: bid });
       });
     }
-    // 没 slot 的 concept（孤儿）：用 id hash 给一个稳定 slot（不再用 Math.random，避免每次刷新跳）
+    
     for (const c of nodesArr) {
       if (c.type === "concept" && !_slotMap.has(c.id)) {
         const seed = djb2(c.id || (Math.random().toString()));
@@ -327,16 +311,14 @@ const bookAnchor = (() => {
     }
   }
   function force(alpha) {
-    /* v25z-fix7b bug 修复：d3 v7 initialize 签名只接 node 单参数，不能用作 precompute 触发。
-       改为 lazy：首次 tick 时检查 _slotMap.size===0 则跑 precompute。
-       此时 d3 早已把 link.source/target 从 string 解析为 node 引用，precompute 用 l.s.type 正常读 */
+    
     if (_slotMap.size === 0 && links.length > 0) precompute(nodes, links);
     for (const c of nodes) {
       if (c.type !== "concept") continue;
       if (c.fx != null) continue;
       const slot = _slotMap.get(c.id);
       if (!slot) continue;
-      // 找最近归属书（可能是 slot 的 primaryBook，也可能是多书共享中的另一本）
+      
       const ownBooks = [];
       for (const l of links) {
         if (l.s === c && l.t && l.t.type === "book") ownBooks.push(l.t);
@@ -350,11 +332,11 @@ const bookAnchor = (() => {
         if (d < minD) { minD = d; nearest = b; }
       }
       if (!nearest) continue;
-      // 目标位置 = nearest 当前位置 + 极坐标(slotAngle, slotDist)
-      // 注意：slotAngle 是相对屏幕的固定方向，不跟着书旋转——这样多书共享 concept 的角度始终一致
+      
+      
       const targetX = nearest.x + Math.cos(slot.angle) * slot.dist;
       const targetY = nearest.y + Math.sin(slot.angle) * slot.dist;
-      // 拉力 = (target - c) * 0.05，不乘 alpha（永远稳定）
+      
       const pullX = (targetX - c.x) * 0.05;
       const pullY = (targetY - c.y) * 0.05;
       c.vx += pullX;
@@ -366,34 +348,33 @@ const bookAnchor = (() => {
 })();
 const sim = d3.forceSimulation(nodes)
   .force("link", d3.forceLink(links).id(d=>d.id)
-      .distance(l=> (l.s.type==="book"&&l.t.type==="book")?150 : (l.t.type==="book"?30:35))  /* v23: book↔book 200→150 */  /* v25.48l 55/40→85/55, book 周围概念不再堆成蜂窝; 140→160, book 之间也不挤 */
-      .strength(l=>{  if(l.relation==="强相似") return 0.7;  if(l.relation==="相似") return 0.5;  if(l.relation==="相关") return 0.15;  return 0.45;})  /* v25b: strength 按 relation 分档 */)  /* v25.48l 0.55→0.45, 弱化 link 黏性, 让 charge 自然推开 */
-  .force("charge", d3.forceManyBody().strength(-260))  /* v23: charge -340→-260 */  /* v25.48l -180→-240 推力加强, 让概念节点不再堆成蜂窝, 但仍比 demo -340 弱 (避免 v25.22 那种外散) */
-  .force("center", d3.forceCenter(W()/2, H()/2).strength(0.45))  /* v25.48l 1.0→0.45, 不再强拉到 (960,505) 死堆, 留充电让 780 nodes 自然分散. 用户原话 "太过密集, 密集恐惧症" */
-  /* v25.27 catCenters 大幅缩小到 0.08/0.06：v25.22 0.18/0.14 让 15 大类分散到画面边缘造成空旷，现在改"小岛心"让大类只在画面内松散聚拢，不挤向边缘 */
-  .force("clusterX", d3.forceX(d=>{ if(d.type==="book"&&d.category&&catCenters[d.category]){ if(selectedCategory===d.category) return W()/2; return W()/2 + catCenters[d.category].x*Math.min(W(),H())*0.4; } return W()/2; }).strength(d=> selectedCategory===d.category ? 0.85 : 0.25))  /* v25z-fix7d: pinner 0.7->0.85 强拉，让 27 本书 bbox 装进 1280x720 视口（offline σy 174->目标 128） */
-  /* v25z-fix7d: 恢复 clusterY（fix7b 缺的，导致书在 Y 方向完全没约束、σy 超画布高）。strength 0.06 -> 0.10，Y 方向更紧；pinner 时 0.4 与 X 一致 */
-  .force("clusterY", d3.forceY(d=>{ if(d.type==="book"&&d.category&&catCenters[d.category]){ if(selectedCategory===d.category) return H()/2; return H()/2 + catCenters[d.category].y*Math.min(W(),H())*0.4; } return H()/2; }).strength(d=> selectedCategory===d.category ? 0.85 : 0.18))  /* v25z-fix7d: pinner 0.7->0.85 */
-  .force("collide", d3.forceCollide().radius(d=>radius(d)+12).strength(0.85))  /* v15 */
-  .force("bookAnchor", bookAnchor)  /* v25z-fix7: 见上方 bookAnchor 定义，slot-based 预设角度+长度梯度，解决 fix6 概念堆同方向重叠问题 */
+      .distance(l=> (l.s.type==="book"&&l.t.type==="book")?150 : (l.t.type==="book"?30:35))    
+      .strength(l=>{  if(l.relation==="强相似") return 0.7;  if(l.relation==="相似") return 0.5;  if(l.relation==="相关") return 0.15;  return 0.45;})  )  
+  .force("charge", d3.forceManyBody().strength(-260))    
+  .force("center", d3.forceCenter(W()/2, H()/2).strength(0.45))  
+  
+  .force("clusterX", d3.forceX(d=>{ if(d.type==="book"&&d.category&&catCenters[d.category]){ if(selectedCategory===d.category) return W()/2; return W()/2 + catCenters[d.category].x*Math.min(W(),H())*0.4; } return W()/2; }).strength(d=> selectedCategory===d.category ? 0.85 : 0.25))  
+  
+  .force("clusterY", d3.forceY(d=>{ if(d.type==="book"&&d.category&&catCenters[d.category]){ if(selectedCategory===d.category) return H()/2; return H()/2 + catCenters[d.category].y*Math.min(W(),H())*0.4; } return H()/2; }).strength(d=> selectedCategory===d.category ? 0.85 : 0.18))  
+  .force("collide", d3.forceCollide().radius(d=>radius(d)+12).strength(0.85))  
+  .force("bookAnchor", bookAnchor)  
   .alpha(0.6)
-  .alphaDecay(0.05)  /* v25.27：0.035→0.05 模拟器更快稳定，减少刷新卡顿 */
-  /* RC125·v25.47.2：simulation 收敛后自动 fit-to-content，让"打开就居中"是默认态（用户原话"左边空这么多"） */
-/* RC125 v25.48: 删 sim.on(end)+setTimeout 自动 fit. 打开就在中央, 只在双击时 fit */
+  .alphaDecay(0.05)  
+  
 
-/* v25.48 让节点起跑就在画布中央附近 (避免 "从边缘展开" 的突兀动画) */
-/* v25.48l fallback 同步改 0.3 -> 0.5, 与主初始化一致 */
+
+
+
 for(const n of nodes){ if(!isFinite(n.x) || !isFinite(n.y)){ n.x = W()/2 + (Math.random()-0.5)*W()*0.5; n.y = H()/2 + (Math.random()-0.5)*H()*0.6; } }
 
-/* 缩放/平移 —— 让用户能飞进一团节点。
-   v25.22：scaleExtent 改成 [0.05, 8] 支持更远缩放（Obsidian 风）；初始就是 scale 0.5 看大范围 */
+
 const zoom = d3.zoom().scaleExtent([0.1, 6])
   .on("zoom", (e)=> viewport.attr("transform", e.transform));
-/* RC125·v25.47.2 fitContent：算所有节点的包围盒，按 padding 自动 fit，让"打开就居中"是默认态（不靠 forceCenter 凑） */
+
 function fitContent(pad=60){
   let xmin=Infinity,ymin=Infinity,xmax=-Infinity,ymax=-Infinity;
   let cnt=0;
-  /* RC125·v25.47.2c：只 fit books（数量有限，可读），不算 concepts（1300+ 节点会把图压成米粒） */
+  
   for(const n of nodes){
     if(n.type!=="book") continue;
     if(!isFinite(n.x)||!isFinite(n.y)) continue;
@@ -406,29 +387,26 @@ function fitContent(pad=60){
   const bw=xmax-xmin, bh=ymax-ymin;
   if(bw<=0||bh<=0) return;
   let k = Math.min((W()-2*pad)/bw, (H()-2*pad)/bh);
-  /* 下限：fit 后最小 0.85x（不要全图被压成米粒看不清字），上限 1.2x（不要让单个书占满屏） */
+  
   if(k < 0.85) k = 0.85;
   if(k > 1.2) k = 1.2;
   const cx=(xmin+xmax)/2, cy=(ymin+ymax)/2;
   const t = d3.zoomIdentity.translate(W()/2 - cx*k, H()/2 - cy*k).scale(k);
   svg.transition().duration(450).call(zoom.transform, t);
 }
-/* v25.48k 修复：initialT 必须不平移！d3 zoom transform 是元素级平移, translate(+W/2, +H/2) 会把节点整体推到右下角 (1920, 1010) 接近, 左半空白 0-960. 现在用 d3.zoomIdentity (0,0) 原点, 节点坐标=渲染坐标, forceCenter 1.0 自然把质心拉到 (W/2, H/2). 用户原话 "为什么总是偏右" 终找到根因 */
+
 const initialT = d3.zoomIdentity;
 svg.call(zoom).call(zoom.transform, initialT);
 svg.on("dblclick.zoom", null);
-svg.on("dblclick", ()=> fitContent(60));  /* 双击复位 = fit 到全部 books */
+svg.on("dblclick", ()=> fitContent(60));  
 
-/* 连线（轻） */
-/* 连线按关系染色（透明 0.55 让差异可见但不抢戏）；浅色主题透明度 0.65（米白底上颜色不用太低） */
+
+
 function relColor(rel){
   const c = REL_COLOR[rel] || "#9C928A";
   return c;
 }
-/* v25.38 连线三档（RC133）：跨书对偶连线最醒目（同色更亮一点，让用户看到关联根线）
-   1) concept↔concept（任意两概念对偶）= 视觉中心，让用户一眼看到「先胜后战 ↔ 某概念」这种关联
-   2) book↔book = 次强（说明两书关系）
-   3) book↔concept = 最弱（仅是该书讲了该观点） */
+
 function linkWidth(d){
   if(d.s.type==="book" && d.t.type==="book") return 2.0;
   if(d.s.type==="concept" && d.t.type==="concept") return 1.6;
@@ -442,10 +420,10 @@ const link = viewport.append("g").attr("class","links")
   .attr("stroke-opacity", linkOpacity)
   .attr("stroke-width", linkWidth)
   .attr("stroke-dasharray", d=> DASH.has(d.relation)?"6 4":null)
-  .style("pointer-events","stroke")  /* v25.38 让 link 可接收 mouseover */
+  .style("pointer-events","stroke")  
   .style("cursor","help")
   .on("mouseover",(e,d)=>{
-    /* v25.38 hover link 显示来源书与对偶说明 */
+    
     const bookLabel = x => x.type==="book" ? x.label : (x.book || "—");
     tip.innerHTML = `<b>${d.s.label}</b><span style="opacity:.55">（${bookLabel(d.s)}）</span> ↔ <b>${d.t.label}</b><span style="opacity:.55">（${bookLabel(d.t)}）</span>${d.concept?` · <span style="opacity:.7">${d.concept}</span>`:""}`;
     tip.style.display = "block";
@@ -454,7 +432,7 @@ const link = viewport.append("g").attr("class","links")
   .on("mousemove",(e)=>positionTip(e, tip))
   .on("mouseout",()=>{ tip.style.display="none"; });
 
-/* 节点 —— 实色填充 + 细白描边（清亮，不灰头巴脸） */
+
 const node = viewport.append("g").attr("class","nodes")
   .selectAll("g").data(nodes).join("g")
   .attr("class", d=> "node "+d.type+(d.status==="referenced"?" referenced":""))
@@ -465,33 +443,32 @@ const node = viewport.append("g").attr("class","nodes")
 
 node.append("circle")
   .attr("r", radius)
-  /* RC300 概念节点颜色继承所属书的 category：先查 concept.category == book.category 一致，否则按 n.book 回查 book 节点的 category 取色（v3 重分类 72 个 concept 没同步遗留） */
+  
   .attr("fill", d=>{
     if(d.status==="referenced") return "#9C928A";
     const cat = CAT_COLOR[d.category] ? d.category : (d.type==="concept" && d.book ? ((nodeById.get(d.book)||{}).category) : null);
     return CAT_COLOR[cat] || "#888";
   })
-  /* v25.38 取消跨类桥节点的特殊描边/金色发光 —— RC133：节点按 type 区分描边强度，与是否跨类无关 */
+  
   .attr("stroke", d=> d.status==="referenced" ? null : (d.type==="book" ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.40)"))
   .attr("stroke-width", d=> d.status==="referenced" ? null : (d.type==="book" ? 2.2 : 0.8))
   .style("filter", d=> d.type==="book" ? "drop-shadow(0 0 7px rgba(255,255,255,0.32))" : null);
 
 node.filter(d=>d.type==="book").append("text")
   .attr("text-anchor","middle").attr("dy", d=>radius(d)+17).text(d=>d.label);
-/* v25.31 概念文字标签：全部都显示文字（user: "光秃秃的点儿上它有文字啊"）
-   v25.38 取消跨类桥文字加亮加粗 —— RC133：所有 concept 平等 */
+
 node.filter(d=>d.type==="concept").append("text")
   .attr("text-anchor","middle").attr("dy", 4)
   .style("font-size", "11px")
   .style("font-weight", 500)
-  .style("fill", dark ? "rgba(232,230,226,0.8)" : "#201914")  /* v25z-fix7c: 浅色模式随主题变黑字（之前写死浅白导致浅色背景看不清），applyTheme 里同步切换 */
+  .style("fill", dark ? "rgba(232,230,226,0.8)" : "#201914")  
   .text(d=>d.label);
 
 const adj = new Map(nodes.map(n=>[n.id,new Set([n.id])]));
 links.forEach(l=>{ if(l.s&&l.t){ adj.get(l.s.id).add(l.t.id); adj.get(l.t.id).add(l.s.id); } });
 
 const tip = document.getElementById("tip");
-/* 类别高亮筛选状态 —— 点类别按钮切换："全部" / "某一类"。hover 优先，mouseout 按此状态恢复（变量声明已上移到 line 146 附近以避开 force 初始化的 TDZ） */
+
 function getCategoryHLSet(){
   const hl = new Set();
   if(!selectedCategory) return hl;
@@ -499,10 +476,7 @@ function getCategoryHLSet(){
   nodes.filter(n => n.type==="concept" && hl.has(n.book || n.books?.[0])).forEach(c => hl.add(c.id));
   return hl;
 }
-/* ===== v25.26 筛选交互（RC107：pan居中 + hl高亮 + 其他类 dim 遮罩）=====
-   用户嘴里的"hover 那套遮罩逻辑搬到选类上来"——选某类时 hl 该类 + 其他类 dim（透明 0.12）
-   hover 优先级更高：hover 节点时以邻接集合为 hl，类别状态作为底色
-================================================================ */
+
 let panT = null;
 let currentHoverId = null;
 function fitCategory(cat){
@@ -510,7 +484,7 @@ function fitCategory(cat){
     if(panT){ svg.transition().duration(450).call(zoom.transform, initialT); panT = null; }
     return;
   }
-  /* RC301 用 bounding box fit（不是单点重心）：取该类所有 book + concept 节点的最小包围盒，按比例缩放居中，确保整组都进屏幕、不是只露一个 */
+  
   const set = nodes.filter(n => n.category === cat && isFinite(n.x) && isFinite(n.y));
   if(!set.length) return;
   let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
@@ -524,12 +498,7 @@ function fitCategory(cat){
   const cx = (minX+maxX)/2, cy = (minY+maxY)/2;
   const boxW = maxX-minX, boxH = maxY-minY;
   if(boxW<=0 || boxH<=0) return;
-  /* v25z-fix7d: 选中分类时温和缩放装下整类——这是"把这类书显示到主屏幕"的最后一公里。
-     算一个能装下 bbox 的 k，限制 [0.55, 1.4]：
-       - 下限 0.55：类太大（如能力提升 27 本高 873 > 画布高 720）也只缩到能看全，不缩到看不清；
-       - 上限 1.4：小类（3~5 本）不无限放大糊脸。
-     若类已能装下（kFit>=1）则 k=1.4 也不放大，等价于"只平移"，遵守 RC303 不主动缩小到看不清。
-     取消选中走 svg 空白点击分支（line 557），不调本函数，镜头不动（RC303 不蹦回）。 */
+  
   const pad = 60;
   const kFit = Math.min(W()/(boxW+pad), H()/(boxH+pad));
   const k = Math.min(Math.max(kFit, 0.55), 1.4);
@@ -541,7 +510,7 @@ function updateVisual(){
   const catHL = getCategoryHLSet();
   const hoverHL = currentHoverId ? adj.get(currentHoverId) : null;
   const searchHLSet = searchHL ? new Set([searchHL]) : null;
-  /* v25.30 hover 永远优先 —— 搜索只是临时定位，hover 到其他书时立刻显示其邻接关系，不被 searchHL 锁死 */
+  
   const isHL = o => {
     if(hoverHL && hoverHL.has(o.id)) return true;
     if(!hoverHL && searchHLSet && searchHLSet.has(o.id)) return true;
@@ -561,9 +530,9 @@ function updateVisual(){
     return false;
   });
 }
-/* tooltip 智能定位：默认右下贴边，右侧/下面超出则翻向  */
+
 function positionTip(e, t){
-  // 先放默认（右下 +14），display:block 已先设
+  
   let x = e.clientX + 14, y = e.clientY + 14;
   t.style.left = x + "px";
   t.style.top = y + "px";
@@ -576,7 +545,7 @@ node.on("mouseover",(e,d)=>{
     currentHoverId = d.id;
     updateVisual();
     let html = `<b>${d.label}</b>`;
-    /* v25.32 hover tooltip 也走清洗（防御性兜底） */
+    
     if(d.type==="book" && d.author){
       const au = (typeof cleanAuthorDisplay==="function") ? cleanAuthorDisplay(d.author) : d.author;
       if(au) html += ` <span style="opacity:.6">${au}</span>`;
@@ -587,34 +556,34 @@ node.on("mouseover",(e,d)=>{
   })
   .on("mousemove",(e)=>positionTip(e, tip))
   .on("mouseout",()=>{ tip.style.display="none"; currentHoverId = null; updateVisual(); });
-/* 节点 click 在下方统一处理（打开卡片 + 阻止冒泡） */
+
 
 sim.on("tick",()=>{
   link.attr("x1",d=>d.s.x).attr("y1",d=>d.s.y).attr("x2",d=>d.t.x).attr("y2",d=>d.t.y);
   node.attr("transform",d=>"translate("+d.x+","+d.y+")");
 });
 
-/* 主题切换：连线颜色按关系染色不变，透明度 / 描边暗度跟随主题微调 */
+
 function applyTheme(isDark){
   dark = isDark;
   document.body.classList.toggle("light", !isDark);
   document.getElementById("themeBtn").textContent = isDark ? "切浅色" : "切深空";
-  link.attr("stroke-opacity", linkOpacity);  /* v25.38 按 link 类型分层（concept↔concept 最亮、book↔book 中、book↔concept 暗）*/
-  /* v25z-fix7c: 概念文字颜色随主题切换（浅色模式黑字，深色模式浅白字），否则浅色背景看不清 */
+  link.attr("stroke-opacity", linkOpacity);  
+  
   svg.selectAll(".node").filter(d=>d.type==="concept").select("text").style("fill", dark ? "rgba(232,230,226,0.8)" : "#201914");
 }
 applyTheme(true);
 document.getElementById("themeBtn").addEventListener("click", ()=> applyTheme(!dark));
 
-/* 关系色过滤 —— 整行已隐藏（RC124）。保留变量+空 hidden Set 避免后续 .link.style 报错。 */
+
 const rels = Array.from(new Set(links.map(l=>l.relation)));
 const fbox = d3.select("#relFilters");
 const hidden = new Set();
-/* 关系按钮整行已隐藏，不再渲染（用户原话："我不需要这些"） */
 
-/* 分类图例 —— 默认无筛选（selectedCategory=null），点哪类突出哪类，再点同一类 / 点空白背景 = 取消 */
+
+
 const dbox = d3.select("#domainLegend");
-/* 统计每类书数（来自 GRAPH.nodes），跟当前图谱显示的书是同一批 */
+
 const catBookCount = {};
 nodes.filter(n=>n.type==="book" && n.category).forEach(n=>{ catBookCount[n.category] = (catBookCount[n.category]||0)+1; });
 cats.forEach(c=>{
@@ -623,8 +592,7 @@ cats.forEach(c=>{
   lab.append("span").attr("class","name").text(c);
   lab.append("span").attr("class","cnt").text(catBookCount[c]||0);
 });
-/* v25.30 点 svg 空白处 = 一键清掉所有筛选（类别 + 搜索 hl + 复位 pan）
-   v25.37 修复：清的是图谱高亮，不是搜索作区——点空白不清空搜索框/下拉列表 */
+
 let hadSelection = false;
 svg.on("click", function(ev){
   hadSelection = !!(selectedCategory || searchHL);
@@ -634,24 +602,23 @@ svg.on("click", function(ev){
       dbox.selectAll(".cat-btn").classed("active", function(){ return (this.dataset.cat || "") === selectedCategory; });
     }
     if(searchHL){
-      searchHL = null;   /* v25.37 只清图谱高亮，绝不清空搜索框和下拉列表 */
+      searchHL = null;   
       if(centerNode._timer){ clearTimeout(centerNode._timer); centerNode._timer = null; }
     }
-    if(hadSelection){ updateVisual(); sim.alpha(0.2).restart(); /* v25z-fix7d: 取消分类时让书散回 catCenters 位置 */ }
+    if(hadSelection){ updateVisual(); sim.alpha(0.2).restart();  }
   }
 });
-/* RC202 类别按钮统一 click handler：再点同一类 = 取消选中但镜头不动（只去掉高亮，回到看全部的状态）；切到新类才平移过去。
-   v25.25 旧逻辑 fitCategory(selectedCategory) 取消时 selectedCategory=null 触发 fitContent 复位，违反"只有双击复位"原则。 */
+
 dbox.selectAll(".cat-btn").on("click",function(ev){
   ev.stopPropagation();
   const cat = this.dataset.cat || null;
-  const newCat = (cat && selectedCategory === cat) ? null : cat;  // 再点同一类=取消；点别的=切换
+  const newCat = (cat && selectedCategory === cat) ? null : cat;  
   selectedCategory = newCat;
   dbox.selectAll(".cat-btn").classed("active", function(){ return (this.dataset.cat || "") === selectedCategory; });
   updateVisual();
-  if(selectedCategory) fitCategory(selectedCategory); sim.alpha(0.2).restart();  // v25z-fix7d: 切换分类后重启 sim，让新的 clusterX/Y 目标（强 pinner / catCenters）生效；取消那一击镜头不动（用户原话"取消选择我看全部了，回到原位干嘛"）
+  if(selectedCategory) fitCategory(selectedCategory); sim.alpha(0.2).restart();  
 });
-/* 点节点时阻止冒泡到外层 svg（避免点 book 节点被同时当成"点空白取消"）*/
+
 node.on("click", function(ev){
   const d = d3.select(this).datum();
   ev.stopPropagation();
@@ -661,7 +628,7 @@ node.on("click", function(ev){
   }
 });
 
-/* 自适应 */
+
 window.addEventListener("resize",()=>{
   cw = document.getElementById("wrap").clientWidth || window.innerWidth;
   ch = document.getElementById("wrap").clientHeight || (window.innerHeight - 70);
@@ -672,7 +639,7 @@ window.addEventListener("resize",()=>{
   sim.alpha(.3).restart();
 });
 
-/* v25.26 演示模式：?demo=<cat> 在 force simulation 稳定后自动 click 该类按钮，验证 hl/dim 效果 */
+
 const _demo = new URLSearchParams(location.search).get('demo');
 if(_demo){
   setTimeout(()=>{
@@ -681,7 +648,7 @@ if(_demo){
   }, 1200);
 }
 
-/* v25.29 搜索功能（移植自 thinking-model growth-brain）—— input 实时模糊匹配书名 + pan 居中 hl + dim 其他 */
+
 let searchHL = null;
 function nodeFillColor(n){
   if(n.type === "concept") return "#" + ((n.id || "x").split("").reduce((a,c)=>a + c.charCodeAt(0), 0) % 0xFFFFFF).toString(16).padStart(6,"0").slice(0,6);
@@ -690,13 +657,13 @@ function nodeFillColor(n){
 function centerNode(n){
   if(!n || !isFinite(n.x) || !isFinite(n.y)) return;
   searchHL = n.id;
-  /* RC130 + RC125：centerNode 只做"居中+高亮"，绝不碰搜索输入框/下拉，避免污染用户的搜索状态 */
+  
   const k = (svg.__zoom && svg.__zoom.k) || 0.95;
   const tx = W()/2 - n.x*k, ty = H()/2 - n.y*k;
   const t = d3.zoomIdentity.translate(tx, ty).scale(k);
   svg.transition().duration(550).call(zoom.transform, t);
   updateVisual();
-  /* v25.30 自动清除：4s 后若鼠标不 hover 该节点，自动清 hl+dim，恢复原图可读；被 hover 打断则继续等 */
+  
   if(centerNode._timer) clearTimeout(centerNode._timer);
   centerNode._timer = setTimeout(()=>{
     if(searchHL === n.id && !currentHoverId){
@@ -708,18 +675,18 @@ function centerNode(n){
 const searchInput = document.getElementById("searchInput");
 const searchDropdown = document.getElementById("searchDropdown");
 
-// v25.32 客户端清洗 author（防御性兜底：万一新插入节点没经过 Python 端清洗）
+
 function cleanAuthorDisplay(a){
   if(!a) return '';
   a = String(a).trim();
-  // 去前缀 [xx]
+  
   while(true){
     const m = a.match(/^\[([^\]]+)\]\s*/);
     if(!m) break;
     a = a.slice(m[0].length);
   }
   if(a.includes('[')) a = a.split(' [')[0];
-  // 多作者分隔
+  
   for(const sep of [' / ',' /','/ ','／']){
     if(a.includes(sep)){ a = a.split(sep)[0]; break; }
   }
@@ -729,30 +696,30 @@ function cleanAuthorDisplay(a){
   for(const sep of [' 与 ',' 和 ',' & ',' &']){
     if(a.includes(sep)){ a = a.split(sep)[0]; break; }
   }
-  // 含 · 后又含「与」「和」无空格的多作者
+  
   if((a.includes('·')||a.includes('．'))){
     for(const sep of ['与','和']){
       if(a.includes(sep)){ a = a.split(sep)[0]; break; }
     }
   }
   a = a.replace(/\s*译\s*$/,'').replace(/\s*著\s*$/,'').replace(/\s*编\s*$/,'').replace(/\s*主编\s*$/,'');
-  // 末端括号备注（如「菲利普·津巴多（Philip G. Zimbardo）」）
+  
   a = a.replace(/[（(][^）)]*[）)]\s*$/,'');
-  // ≥3 chunk 全纯中文 → 多作者，砍第一个
+  
   const chunks = a.split(/\s+/);
   if(chunks.length >= 3 && !/[A-Za-z]/.test(chunks[0])) a = chunks[0];
   a = a.replace(/\s*等\s*$/,'');
-  // v25.33 兜底：剩纯符号/空白视为空（防"/" "-" "—"等裸字符当 author）
+  
   if(!/[\w\u4e00-\u9fff]/.test(a)) return '';
   return a.trim();
 }
 
-/* v25.48m 中文输入法未确认态不触发搜索（避免拼音中间态弹"无匹配内容"一闪而过） */
+
 let _searchComposing = false;
 searchInput.addEventListener("compositionstart", ()=>{ _searchComposing = true; });
 searchInput.addEventListener("compositionend", ()=>{ _searchComposing = false; searchInput.dispatchEvent(new Event("input")); });
 searchInput.addEventListener("input", ()=>{
-  if(_searchComposing) return;  /* 拼音编辑中，跳过本次渲染 */
+  if(_searchComposing) return;  
   const q = searchInput.value.trim().toLowerCase();
   searchDropdown.innerHTML = "";
   searchHL = null;
@@ -761,7 +728,7 @@ searchInput.addEventListener("input", ()=>{
     updateVisual();
     return;
   }
-  /* v25.32 RC124 搜索源铁律：只匹配书名 label，绝不查 author/raw_label/category */
+  
   const bookNodes = nodes.filter(n => n.type === "book");
   const matches = bookNodes.filter(n => {
     const lab = (n.label || "").toLowerCase();
@@ -778,7 +745,7 @@ searchInput.addEventListener("input", ()=>{
       const au = cleanAuthorDisplay(n.author);
       const authorHtml = au ? `<span class="author">${au}</span>` : "";
 
-      // v24: nameWrap 包裹 name + rating（5px 紧贴）；authorSlot 包裹 author + arrow（100px 宽，margin-left:auto 推最右，author 紧贴 dropdown 右边）；hover has-card 时 author 滑出 / arrow 滑入；箭头用 3 键号 ›››
+      
       const ratingHtml = typeof n.rating === "number"
         ? `<span class="metaRating" style="color:${dotColor}">${n.rating.toFixed(1)}</span>`
         : "";
@@ -790,7 +757,7 @@ searchInput.addEventListener("input", ()=>{
 
       item.innerHTML = `<span class="dot" style="background:${dotColor}"></span>` + nameWrapHtml + authorSlotHtml;
 
-      // v20: 角标独立可点（stopPropagation 阻止冒泡到 item.onclick，否则会同时 centerNode + 跳转）
+      
       const arrow = item.querySelector(".metaArrow");
       if(arrow){
         arrow.addEventListener("click", (e) => {
@@ -799,7 +766,7 @@ searchInput.addEventListener("input", ()=>{
           window.open(arrow.href, "_blank", "noopener");
         });
       }
-      // 点击行（非角标）= 选中节点 + 收起下拉
+      
       item.onclick = () => {
         centerNode(n);
         searchDropdown.style.display = "none";
@@ -813,7 +780,7 @@ searchInput.addEventListener("keydown", (e) => {
   if(e.key === "Enter"){
     const q = searchInput.value.trim().toLowerCase();
     if(!q) return;
-    /* v25.32 RC124: Enter 也只查 label */
+    
     const n = nodes.filter(x => x.type === "book").find(x => {
       const lab = (x.label || "").toLowerCase();
       return lab.includes(q);
@@ -835,7 +802,7 @@ document.addEventListener("click", (e) => {
   }
 });
 
-/* v25.29 演示：?search=<q> 自动填入 + 触发 input (打开 dropdown) + 回车 (pan 居中) */
+
 const _sq = new URLSearchParams(location.search).get('search');
 if(_sq){
   setTimeout(()=>{

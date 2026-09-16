@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """从微信读书书架拉全量书籍，剔除纯职业/应试书，按 15 大类映射，
-合并进现有的「书籍核心要点清单.md」（RC133 单一结构，不另起独立区块）。
+合并进现有的「书籍核心要点清单.md」（ 单一结构，不另起独立区块）。
 
 ⚠️ 隐私：本脚本需要 `WEREAD_KEY`（微信读书开放 API 的 Bearer Token）。
    严禁把 Key 写进仓库/提交 git；只通过环境变量传入。
@@ -34,14 +34,14 @@ HARD_DROP_SHELF = {
 }
 
 # v25.51 黑名单：只删「具体平台/职业作手册」，不删「营销/商业底层」
-# 依据 2026-08-26 用户反馈：营销是泛能力（干啥都需要），营销管理/跨越鸿沟/疯传/上瘾
-#   这类讲原理的底层书必须保留；但「抖音/小红书/跨境电商/电商数据」的具体方法=废书，删。
+# 依据 干啥都需要），营销管理/跨越鸿沟/疯传/上瘾
+# 这类讲原理的底层书必须保留；但「抖音/小红书/跨境电商/电商数据」的具体方法=废书，删。
 # 删除范畴：
-#   ① 具体平台运营（抖音/快手/小红书/视频号/公众号的运营/涨粉/爆款/带货/实）
-#   ② 电商与具体平台作（淘宝/天猫/京东/拼多多/Shopee/跨境电商/亚马逊 + 电商产品/运营/后台）
-#   ③ 互联网职业务实（产品经理/增长黑客/用户增长/数据分析/数据中台/UI设计/交互设计/SEO/SEM…）
-#   ④ 技术栈/应试/工具（微服务/DevOps/考研/四六级/Excel/PPT/简历面试…）
-#   ⑤ 具体公司管理法（腾讯方法/重新定义公司/重新定义团队/赋能敏捷团队）
+# ① 具体平台运营（抖音/快手/小红书/视频号/公众号的运营/涨粉/爆款/带货/实）
+# ② 电商与具体平台作（淘宝/天猫/京东/拼多多/Shopee/跨境电商/亚马逊 + 电商产品/运营/后台）
+# ③ 互联网职业务实（产品经理/增长黑客/用户增长/数据分析/数据中台/UI设计/交互设计/SEO/SEM…）
+# ④ 技术栈/应试/工具（微服务/DevOps/考研/四六级/Excel/PPT/简历面试…）
+# ⑤ 具体公司管理法（腾讯方法/重新定义公司/重新定义团队/赋能敏捷团队）
 HARD_DROP_KEYWORDS = re.compile(
     r"^半小时漫画"
     r"|^(语文|数学|英语|物理|化学|生物|历史|地理|政治)\s*[下初高中].*教材"
@@ -188,7 +188,7 @@ def main():
     bd = Path(books_dir)
     if bd.is_dir():
         for d in bd.iterdir():
-            if not d.is_dir() or d.name in ("assets", "book-knowledge-skills"): continue
+            if not d.is_dir() or d.name in ("assets",): continue
             if d.name.startswith(".") or re.match(r'^\d{4}-\d{2}', d.name): continue
             if any(d.glob("*.md")):
                 archived_norm.add(_norm(d.name))
@@ -234,7 +234,7 @@ def main():
     for it in missing:
         by_cat[it["category"]].append(it)
 
-    # 合并进现有 md（RC133 单一结构：找到每个 `## 【分类】（N本）` 章节，append 补充本）
+    # 合并进现有 md（ 单一结构：找到每个 `## 【分类】（N本）` 章节，append 补充本）
     if not os.path.exists(md_path):
         print(f"⚠️ 找不到 {md_path}，先用 build_md.py 生成基底")
         sys.exit(1)

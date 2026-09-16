@@ -6,18 +6,18 @@
 
 ```json
 {
-  "meta": {
-    "version": "1.0",
-    "description": "书籍知识库全局关系网络……",
-    "node_types": ["book", "concept"],
-    "relation_types": ["相似", "相悖", "互补", "应用", "引用", "批判", "包含"],
-    "categories": ["经济与商业", "思维认知", "底层规律", "人性洞察", "文学经典", "能力提升", "习惯养成", "人际关系与沟通", "财富认知", "名人传记", "哲学思辨", "成事方法", "决策避坑", "心理成长", "历史"],
-    "color_by_relation": { "相似": "#7BC47E", "互补": "#5DBDBD", "相悖": "#E8483E", "包含": "#C9B18A", "引用": "#A88BD8", "应用": "#F5C84C", "批判": "#E8483E" },
-    "category_colors": { "经济与商业": "#F5C84C", "思维认知": "#5DBDBD", "底层规律": "#4A9AA8", "人性洞察": "#E85A5A", "文学经典": "#C9B18A", "能力提升": "#8FCB8F", "习惯养成": "#B8E0B8", "人际关系与沟通": "#F4A6B8", "财富认知": "#F9E07A", "名人传记": "#B89ECB", "哲学思辨": "#A89880", "成事方法": "#E87A8A", "决策避坑": "#7ACFE0", "心理成长": "#F2C6C6", "历史": "#D4B896" },
-    "group_colors": { /* category_colors 的别名，兼容旧逻辑 */ }
-  },
-  "nodes": [ /* 见下 */ ],
-  "links": [ /* 见下 */ ]
+ "meta": {
+ "version": "1.0",
+ "description": "书籍知识库全局关系网络……",
+ "node_types": ["book", "concept"],
+ "relation_types": ["相似", "相悖", "互补", "应用", "引用", "批判", "包含"],
+ "categories": ["经济与商业", "思维认知", "底层规律", "人性洞察", "文学经典", "能力提升", "习惯养成", "人际关系与沟通", "财富认知", "名人传记", "哲学思辨", "成事方法", "决策避坑", "心理成长", "历史"],
+ "color_by_relation": { "相似": "#7BC47E", "互补": "#5DBDBD", "相悖": "#E8483E", "包含": "#C9B18A", "引用": "#A88BD8", "应用": "#F5C84C", "批判": "#E8483E" },
+ "category_colors": { "经济与商业": "#F5C84C", "思维认知": "#5DBDBD", "底层规律": "#4A9AA8", "人性洞察": "#E85A5A", "文学经典": "#C9B18A", "能力提升": "#8FCB8F", "习惯养成": "#B8E0B8", "人际关系与沟通": "#F4A6B8", "财富认知": "#F9E07A", "名人传记": "#B89ECB", "哲学思辨": "#A89880", "成事方法": "#E87A8A", "决策避坑": "#7ACFE0", "心理成长": "#F2C6C6", "历史": "#D4B896" },
+ "group_colors": { /* category_colors 的别名，兼容旧逻辑 */ }
+ },
+ "nodes": [ /* 见下 */ ],
+ "links": [ /* 见下 */ ]
 }
 ```
 
@@ -54,32 +54,32 @@
 title: 这就是人性
 author: 王心傲
 year: 2024
-book_id: this-is-human-nature          # 英文/拼音，全局唯一
-category: 人性洞察                     # 大类，15 选 1
-subcategory: 人际洞察                  # 大类下的小类，可选
+book_id: this-is-human-nature # 英文/拼音，全局唯一
+category: 人性洞察 # 大类，15 选 1
+subcategory: 人际洞察 # 大类下的小类，可选
 core_question: 为什么你越好说话，别人越不把你当回事？
 tags: [人性, 人际关系, 价值交换, 边界, 社交圈子, 认知, 成长]
 
-concepts:                              # 每个带 id，跨书精确引用
-  - id: human-nature-base
-    name: 人性底色
-    aliases: [趋利避害, 趋易避难]
-  - id: value-exchange
-    name: 价值交换
-  - id: boundary
-    name: 立边界
+concepts: # 每个带 id，跨书精确引用
+ - id: human-nature-base
+ name: 人性底色
+ aliases: [趋利避害, 趋易避难]
+ - id: value-exchange
+ name: 价值交换
+ - id: boundary
+ name: 立边界
 
-related_books:                         # 结构化对象数组，不是自由文本
-  - book_id: wealth-of-nations
-    book: 国富论
-    relation: 互补
-    concept_link: 价值的本质
-    note: 国富论从国家生产视角拆"金钱≠财富"，本书从个人关系视角拆"价值由对方需要决定"
-  - book_id: sapiens
-    book: 人类简史
-    relation: 相似
-    concept_link: 人性的古老本能
-    note: 都指向"人不是天生善良的协作动物，文明只是薄薄一层壳"
+related_books: # 结构化对象数组，不是自由文本
+ - book_id: wealth-of-nations
+ book: 国富论
+ relation: 互补
+ concept_link: 价值的本质
+ note: 国富论从国家生产视角拆"金钱≠财富"，本书从个人关系视角拆"价值由对方需要决定"
+ - book_id: sapiens
+ book: 人类简史
+ relation: 相似
+ concept_link: 人性的古老本能
+ note: 都指向"人不是天生善良的协作动物，文明只是薄薄一层壳"
 ---
 ```
 
