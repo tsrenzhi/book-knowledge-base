@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>《国富论》· 白板手绘逻辑图</title>
+<style>
+/* 本地后备：霞鹜文楷加载失败时使用系统字体 */
+@font-face{font-family:'LXGW WenKai';src:local('LXGW WenKai'),local('LXGWWenKai-Regular');font-display:swap}
+</style>
+<link href="fonts/lxgw/lxgwwenkai-regular.css" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6F0;
+    --ink:#201914;
+    --muted:#9C928A;
+    --accent:#E0432E;
+    --accent-soft:rgba(224,67,46,.07);
+    --line:#6A6058;
+    --card:#FFFDFA;
+    --font-hand:"LXGW WenKai","PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-hand);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,rgba(224,67,46,.04),transparent 42%),
+      radial-gradient(circle at 86% 82%,rgba(224,67,46,.03),transparent 46%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+  .section{margin-top:48px;scroll-margin-top:96px}
+  .section:first-child{margin-top:0}
+
+  .sec-title{font-size:40px;font-weight:400;color:var(--ink);letter-spacing:1px;display:inline-block;position:relative}
+  .sec-title::after{content:"";position:absolute;left:0;right:-6px;bottom:-9px;height:5px;background:var(--accent);border-radius:3px;transform:rotate(-.6deg)}
+  .sec-sub{margin-top:16px;font-size:22px;color:var(--muted);line-height:1.5}
+
+  .card{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    box-shadow:3px 4px 0 rgba(0,0,0,.06);padding:24px 26px}
+  .item-title{font-size:31px;font-weight:400;color:var(--ink);line-height:1.25}
+  .item-desc{margin-top:10px;font-size:23px;color:var(--muted);line-height:1.5}
+  .red{color:var(--accent);font-weight:400}
+  .strike{position:relative;display:inline-block;color:var(--muted);font-weight:400}
+  .strike::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:4px;background:var(--accent);border-radius:3px;transform:rotate(-2deg)}
+
+  .rise{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+  .rise.show{opacity:1;transform:translateY(0)}
+  .no-anim .rise{opacity:1;transform:none}
+
+  /* HERO：一行红色大字问题 */
+  .hero{text-align:center;padding:4px 0 0}
+  .bigq{margin:0 auto;max-width:920px;font-size:44px;font-weight:400;line-height:1.35;letter-spacing:1px;color:var(--accent)}
+
+  /* 顶部 tab */
+  .tabs{position:sticky;top:0;z-index:30;margin-top:18px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+    background:rgba(251,246,240,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    padding:10px 8px;border-bottom:2px solid var(--line)}
+  .tab{font-size:18px;font-weight:400;color:var(--ink);text-decoration:none;padding:7px 13px;border:2px solid var(--line);border-radius:20px;background:var(--card);transition:all .2s;white-space:nowrap}
+  .tab:hover{border-color:var(--accent);color:var(--accent)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(224,67,46,.25);transform:scale(1.04)}
+
+  .prose{margin-top:24px;font-size:25px;line-height:1.62;color:var(--ink)}
+  .prose p+p{margin-top:14px}
+  .prose .lead{color:var(--accent);font-weight:400}
+  .indent{margin-left:14px;padding-left:18px;border-left:3px solid var(--line);margin-top:16px;color:var(--muted);font-size:23px;line-height:1.55}
+  .indent b{color:var(--ink)}
+
+  .points{margin-top:24px;display:flex;flex-direction:column;gap:11px}
+  .points .pt{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:15px 18px}
+  .points .pt .n{flex:0 0 42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-size:24px;font-weight:400;display:flex;align-items:center;justify-content:center}
+  .points .pt p{font-size:24px;line-height:1.5;color:var(--ink)}
+
+  .quote{margin-top:26px;background:var(--card);border:3px solid var(--accent);border-radius:18px;padding:26px 28px;position:relative}
+  .quote .mark{position:absolute;top:-24px;left:26px;font-size:60px;color:var(--accent);font-weight:400;line-height:1}
+  .quote blockquote{font-size:29px;font-weight:400;line-height:1.55;color:var(--ink)}
+  .quote .ex{margin-top:14px;font-size:23px;color:var(--muted);line-height:1.55}
+
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:2.5px solid var(--line);border-radius:16px;overflow:hidden}
+  .vs .col{padding:20px 22px}
+  .vs .col:first-child{border-right:2.5px dashed var(--line)}
+  .vs .vt{font-size:28px;font-weight:400;color:var(--accent)}
+  .vs .vd{margin-top:10px;font-size:23px;color:var(--ink);line-height:1.5}
+  .vs .ve{margin-top:10px;font-size:21px;color:var(--muted);line-height:1.5}
+  .vs .tag{display:inline-block;font-size:19px;color:#fff;background:var(--line);padding:4px 12px;border-radius:13px;margin-bottom:8px}
+
+  .divider{margin:60px auto 0;max-width:520px;height:26px}
+
+  /* 模块配色：旧观念用原版深棕+红色，保持清晰 */
+  .sec-title.old::after{background:var(--accent)}
+  .vs.old .tag{background:var(--line)}
+  .vs.old .vt{color:var(--accent)}
+
+  /* 核心内容：概念卡 = 标题 + 标签 + 小图 + 一句话，和主线融为一体 */
+  .core-cards{margin-top:30px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .ccard{background:var(--card);border:2.5px solid var(--line);border-radius:14px;
+    padding:18px 14px 20px;box-shadow:3px 4px 0 rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center}
+  .ccard .ctitle{font-size:25px;font-weight:400;color:var(--accent);text-align:center;line-height:1.2}
+  .ccard .ctag{margin-top:7px;font-size:19px;font-weight:400;color:var(--ink);text-align:center;line-height:1.3;min-height:44px;display:flex;align-items:center;justify-content:center}
+  .ccard .cfig{margin-top:10px;width:100%}
+  .ccard .cfig svg{width:100%;height:auto;display:block}
+  .ccard .cdesc{margin-top:10px;font-size:18px;color:var(--muted);text-align:center;line-height:1.45;max-width:180px}
+
+  @media (max-width:900px){.core-cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:720px){
+    .wrap{padding:32px 16px 70px}
+    .bigq{font-size:40px}
+    .sec-title{font-size:34px}
+    .tab{font-size:17px;padding:6px 10px}
+    .vs{grid-template-columns:1fr}
+    .vs .col:first-child{border-right:none;border-bottom:2.5px dashed var(--line)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO：书名 + 作者 + 核心问题 -->
+  <header class="hero rise">
+    <h1 style="font-size:64px;font-weight:400;color:var(--ink);letter-spacing:3px;line-height:1.1">《国富论》</h1>
+    <div style="margin-top:10px;font-size:21px;color:var(--muted);letter-spacing:2px">亚当·斯密 · 1776</div>
+    <div style="margin-top:6px;font-size:20px;color:var(--muted)">全称《国民财富的性质和原因的研究》</div>
+    <div class="bigq" style="margin-top:18px">一个国家，究竟靠什么变富？</div>
+  </header>
+
+  <!-- 顶部 tab 导航 -->
+  <nav class="tabs" id="tabs">
+    <a class="tab" data-target="s1" tabindex="0" role="button">① 书籍定位</a>
+    <a class="tab" data-target="s2" tabindex="0" role="button">② 现实矛盾</a>
+    <a class="tab" data-target="s3" tabindex="0" role="button">③ 旧观念</a>
+    <a class="tab" data-target="s4" tabindex="0" role="button">④ 斯密破局</a>
+    <a class="tab" data-target="s5" tabindex="0" role="button">⑤ 核心内容</a>
+    <a class="tab" data-target="s6" tabindex="0" role="button">⑥ 核心价值</a>
+  </nav>
+
+  <!-- 一、书籍定位：这本书研究什么 -->
+  <section class="section rise" id="s1">
+    <div class="sec-title">一 · 这本书到底研究什么问题</div>
+    <div class="prose">
+      <p>这本书要回答的根本问题，可以简化成两个：</p>
+      <div class="indent"><b>第一，金钱到底是不是财富？</b>如果金银就是财富，那国家只要拼命囤积金银就够了；但如果不是，真正的财富又是什么？</div>
+      <div class="indent"><b>第二，一个国家究竟靠什么变富？</b>是殖民掠夺？是贸易保护？还是土地、劳动、分工、市场？斯密要找出增长的真正原因。</div>
+      <p style="margin-top:12px">一句话：这不是一本教你个人怎么发财的书，而是一本讲清楚<b>财富到底是什么、从何而来、市场和国家各自扮演什么角色</b>的书。</p>
+    </div>
+  </section>
+
+  <!-- 二、当时面对的现实矛盾 -->
+  <section class="section rise" id="s2">
+    <div class="sec-title old">二 · 当时面对的现实矛盾</div>
+    <div class="sec-sub">18 世纪欧洲各国追求的"强国之策"，反而让老百姓的日子越过越差。</div>
+    <div class="prose">
+      <p>当时欧洲普遍奉行重商主义：把"多出口、少进口、囤金银"当作强国之本。殖民扩张、贸易保护、关税壁垒层层加码。表面上看，国库里的金银越来越多。</p>
+      <p>但另一面是：本国消费者能买到的东西变少、价格更贵，正常的跨国贸易被打乱，普通人反而更穷。人们对财富的理解和现实生活明显脱节——这正是斯密要解释、也要打破的局面。</p>
+    </div>
+  </section>
+
+  <!-- 三、两套旧观念 -->
+  <section class="section rise" id="s3">
+    <div class="sec-title old">三 · 两套旧观念：斯密要破的局</div>
+    <div class="sec-sub">在两套主导国策的思路里，斯密找到了同一个盲区。</div>
+    <div class="vs old">
+      <div class="col">
+        <span class="tag">重商主义</span>
+        <div class="vt">认为金银就是财富</div>
+        <div class="vd">把金银当成财富本身，认为国家富强就是囤的金银越多越好，于是靠奖励出口、限制进口来保住本国的金银不外流。</div>
+        <div class="ve">后果：国内消费者选择被压缩、价格更高，正常贸易受阻，变相走向封闭。</div>
+      </div>
+      <div class="col">
+        <span class="tag">重农主义</span>
+        <div class="vt">认为只有土地和农业才能创造财富</div>
+        <div class="vd">工业、商业只是把农产品换个样子、从一个地方运到另一个地方，没有创造额外的财富。</div>
+        <div class="ve">后果：工商业受到压制，除农业之外的生财路子基本被堵死，经济难有增长。</div>
+      </div>
+    </div>
+    <div class="prose">
+      <p>两套观念，一个只认钱，一个只认地，都主导过国家政策，也都让普通人过得更差。它们共同没看到的是：人通过劳动生产出有用的东西，这才是财富真正的来源。斯密正是从这一点出发，推翻了旧观念。</p>
+    </div>
+  </section>
+
+  <!-- 四、斯密的核心主张 -->
+  <section class="section rise" id="s4">
+    <div class="sec-title">四 · 斯密的核心主张</div>
+    <div class="sec-sub">先打破旧观念，再立起四个支点。这四条，就是全书的方法论骨架。</div>
+    <div class="points">
+      <div class="pt"><div class="n">1</div><p><b>分工带来效率。</b>把活拆细、专人专岗，同样的人能造出更多的东西。</p></div>
+      <div class="pt"><div class="n">2</div><p><b>劳动决定价值。</b>一件东西值不值钱，要看它背后凝结了多少劳动，而不是标价多少。</p></div>
+      <div class="pt"><div class="n">3</div><p><b>"看不见的手"。</b>人人都只管自己的利益，市场反而能自己协调起来。</p></div>
+      <div class="pt"><div class="n">4</div><p><b>政府守住边界。</b>只有市场做不好、也做不了的事，才交给国家来管。</p></div>
+    </div>
+
+    <div class="quote">
+      <div class="mark">"</div>
+      <blockquote>"我们每天所需要的饮食，不是出自屠户、酿酒家或烙面师的恩惠，而是出于他们自利的打算。"</blockquote>
+      <div class="ex">这是全书最常被引用的一句话，也是"看不见的手"最直白的一句：面包师想赚钱，才会好好做面包卖给你；他不是出于好心，结果却让所有人都有饭吃。市场就是这样，把每个人的自利，变成了全社会的好处。</div>
+    </div>
+  </section>
+
+  <!-- 五、核心内容 -->
+  <section class="section rise" id="s5">
+    <div class="sec-title">五 · 核心内容</div>
+    <div class="sec-sub">斯密用一条主线串起全书：财富从哪来，市场如何运转。</div>
+
+    <div class="core-cards">
+      <div class="ccard">
+        <div class="ctitle">社会分工</div>
+        <div class="ctag">财富来源于社会分工</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m1" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <line x1="14" y1="104" x2="166" y2="104" stroke="#6A6058" stroke-width="2"/>
+            <rect x="34" y="80" width="28" height="24" fill="rgba(106,96,88,.22)" stroke="#6A6058" stroke-width="2" rx="3"/>
+            <text x="48" y="97" font-size="12" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">一人做</text>
+            <rect x="116" y="34" width="28" height="70" fill="rgba(224,67,46,.16)" stroke="#E0432E" stroke-width="2" rx="3"/>
+            <text x="130" y="97" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">分工做</text>
+            <path d="M72,90 Q82,46 114,52" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m1)"/>
+            <text x="92" y="40" font-size="12" fill="#E0432E" font-family="LXGW WenKai">产量高</text>
+          </svg>
+        </div>
+        <div class="cdesc">一个人从头做到尾，一天产不到 20 枚扣针；拆成 18 道工序后，一人一天能产两千多枚。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">价值与价格</div>
+        <div class="ctag">劳动决定价值</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <line x1="24" y1="34" x2="156" y2="34" stroke="#6A6058" stroke-width="2"/>
+            <path d="M90,18 L84,34 L96,34 Z" fill="#6A6058"/>
+            <line x1="90" y1="34" x2="90" y2="104" stroke="#6A6058" stroke-width="2"/>
+            <line x1="24" y1="34" x2="24" y2="62" stroke="#6A6058" stroke-width="2"/>
+            <ellipse cx="24" cy="66" rx="20" ry="6" fill="rgba(106,96,88,.18)" stroke="#6A6058" stroke-width="2"/>
+            <line x1="156" y1="34" x2="156" y2="48" stroke="#6A6058" stroke-width="2"/>
+            <ellipse cx="156" cy="52" rx="20" ry="6" fill="rgba(224,67,46,.18)" stroke="#E0432E" stroke-width="2"/>
+            <text x="24" y="86" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">水</text>
+            <text x="24" y="100" font-size="10" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">有用·便宜</text>
+            <text x="156" y="76" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">钻石</text>
+            <text x="156" y="90" font-size="10" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">用处小·贵</text>
+          </svg>
+        </div>
+        <div class="cdesc">水很有用却很便宜，钻石用处不大却很贵，因为获得钻石要花更多劳动。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">资本积累</div>
+        <div class="ctag">财富增长来源于资本积累</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="m3a" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker>
+              <marker id="m3b" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#6A6058"/></marker>
+            </defs>
+            <circle cx="34" cy="60" r="18" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2"/>
+            <text x="34" y="64" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">收入</text>
+            <path d="M52,50 Q86,36 120,36" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m3a)"/>
+            <path d="M52,70 Q86,90 120,90" fill="none" stroke="#6A6058" stroke-width="2" marker-end="url(#m3b)"/>
+            <rect x="120" y="22" width="50" height="32" fill="rgba(224,67,46,.12)" stroke="#E0432E" stroke-width="2" rx="3"/>
+            <text x="145" y="34" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">创造</text>
+            <text x="145" y="48" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">价值</text>
+            <rect x="120" y="76" width="50" height="32" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2" rx="3"/>
+            <text x="145" y="88" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">消耗</text>
+            <text x="145" y="102" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">掉</text>
+            <text x="86" y="30" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">生产</text>
+            <text x="86" y="102" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">消费</text>
+          </svg>
+        </div>
+        <div class="cdesc">劳动分两种：生产性劳动能创造价值，非生产性劳动边做边消耗。国家要富，得把收入多投入生产。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">看不见的手</div>
+        <div class="ctag">市场自由调节</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="m4" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#E0432E"/></marker></defs>
+            <rect x="8" y="42" width="44" height="38" rx="5" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <text x="30" y="58" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">人人</text>
+            <text x="30" y="73" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">自利</text>
+            <path d="M54,61 L66,61" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m4)"/>
+            <rect x="68" y="42" width="44" height="38" rx="5" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <text x="90" y="58" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">价格</text>
+            <text x="90" y="73" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">涨落</text>
+            <path d="M114,61 L126,61" fill="none" stroke="#E0432E" stroke-width="2" marker-end="url(#m4)"/>
+            <rect x="128" y="42" width="44" height="38" rx="5" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2"/>
+            <text x="150" y="58" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">资源</text>
+            <text x="150" y="73" font-size="12" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">分配</text>
+            <path d="M150,80 L150,92 L34,92 L34,80" fill="none" stroke="#E0432E" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#m4)"/>
+            <text x="90" y="114" font-size="11" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">社会福利增加</text>
+          </svg>
+        </div>
+        <div class="cdesc">人人都想赚自己的钱，结果价格和供求自动匹配，资源流到了最需要的地方。</div>
+      </div>
+
+      <div class="ccard">
+        <div class="ctitle">政府边界</div>
+        <div class="ctag">国家责任由政府边界划定</div>
+        <div class="cfig">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="18" width="74" height="86" fill="rgba(224,67,46,.10)" stroke="#E0432E" stroke-width="2" rx="6"/>
+            <rect x="96" y="18" width="74" height="86" fill="rgba(106,96,88,.14)" stroke="#6A6058" stroke-width="2" rx="6"/>
+            <text x="47" y="40" font-size="13" fill="#E0432E" text-anchor="middle" font-family="LXGW WenKai">市场</text>
+            <text x="133" y="40" font-size="13" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">政府</text>
+            <text x="47" y="64" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">自由运行</text>
+            <text x="47" y="80" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">也有局限</text>
+            <text x="133" y="64" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">国防</text>
+            <text x="133" y="80" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">司法</text>
+            <text x="133" y="96" font-size="11" fill="#6A6058" text-anchor="middle" font-family="LXGW WenKai">公共工程</text>
+          </svg>
+        </div>
+        <div class="cdesc">市场可以自由运行，但也有局限性。公共工程、司法、国防这些事市场做不好，必须由政府来管控。</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:28px">
+      <p><b style="color:var(--accent)">财富来源于社会分工。</b>国民财富要增长，关键是让劳动分工更精细，生产效率才会更高。书里举了一个扣针工厂的例子：一个人从头做到尾，一天生产不到 20 枚；但是拆成 18 道工序之后，每个人只需要负责其中一道，一人一天就能产出两千多枚。所以，分工让同样一批人做出了更多的东西，整体效率就上去了。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">劳动决定价值。</b>一个东西到底值多少钱，不能只看它的标价，而是要看它背后凝结了多少劳动。比如，水对人的用处很大，却很便宜；钻石用处不大，却很贵。原因是挖钻石要花费更多的劳动，而水相对来说很容易获得。所以，价格并不等于真实价值，劳动才是衡量价值的基础。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">财富增长来源于资本积累。</b>斯密把劳动分成两种：一种是生产性劳动，比如制造东西，能在产品上创造价值；另一种是非生产性劳动，比如家仆服务，一边干活一边就消耗掉了。所以国家要变富，就要把更多的收入变成资本，投到能创造价值的生产性劳动里面去。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">市场靠"看不见的手"自我调节。</b>斯密批评重商主义和重农主义，提出市场自己就能协调。每个人在市场上都想着赚自己的钱、买自己需要的东西，结果价格和供求会自动匹配，社会资源也被引导到了最需要的地方。人人都只顾自己，最后反而让整个社会运转起来，这就是"看不见的手"。</p>
+      <p style="margin-top:10px"><b style="color:var(--accent)">国家责任由政府边界划定。</b>市场可以自由运行，但也有局限性。公共工程、司法、国防这些事市场做不好，必须由政府来管控；其他事情尽量交给市场，政府不要事事插手。</p>
+    </div>
+
+  </section>
+
+  <!-- 六、核心价值 -->
+  <section class="section rise" id="s6">
+    <div class="sec-title">六 · 核心价值</div>
+    <div class="sec-sub">这本书写于 1776 年，但它解决的是一组关于财富的底层认知问题。</div>
+    <div class="prose">
+      <p>斯密想回答的不是某一国的具体政策，而是一组根本问题：财富是怎么产生的、怎么分配的、国家和市场各自该干什么。这套思路放到今天，仍能帮我们看清很多误会。</p>
+      <p>三个最值得记住的核心价值：</p>
+    </div>
+    <div class="points">
+      <div class="pt"><div class="n">①</div><p><b>金钱并不等于财富。</b>真正的财富，是人通过劳动生产出来的、对别人有用的产品和服务，而金钱只是这些财富的一种表现。所以国家变富，不是金银变多，而是能持续产出更多有用的东西。</p></div>
+      <div class="pt"><div class="n">②</div><p><b>分工与比较优势是效率之源。</b>与其事事自己做，不如把精力放在最擅长的一环，其他环节通过交换完成。对个人、企业、国家都是如此——做自己效率最高的事，然后互相交换，整体产出远高于单打独斗。</p></div>
+      <div class="pt"><div class="n">③</div><p><b>市场不是万能的。</b>市场需要自发调节，也需要政府管控。国防、司法、公共工程这些事，市场自己做不了或者做不好，必须由政府来兜底。理解了这一点，就不会简单地把所有问题都推给市场，也不会把所有事都交给政府。</p></div>
+    </div>
+    <div class="indent">它当然也有局限：写于 1776 年，后来的宏观经济学、行为经济学、市场失灵（外部性、垄断、公共品）等内容它都没有涉及。但它讲清楚了经济运转的<b>底层逻辑</b>。把它当作理解经济规律的入门书读，别当现代教科书用。</div>
+  </section>
+
+</div>
+
+<script>
+  function fitStage(wrap){
+    var stage=wrap.querySelector('.stage');
+    var logical=1000;
+    var avail=wrap.clientWidth;
+    var scale=Math.min(1, avail/logical);
+    stage.style.transform='scale('+scale+')';
+    var h=parseFloat(stage.dataset.h)||stage.offsetHeight;
+    wrap.style.height=(h*scale)+'px';
+    wrap.style.width=(logical*scale)+'px';
+  }
+  function fitAll(){document.querySelectorAll('.stage-wrap').forEach(fitStage);}
+  window.addEventListener('resize',fitAll); fitAll();
+
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections=tabs.map(function(t){return document.querySelector('#'+t.dataset.target);}).filter(Boolean);
+  var spy=new IntersectionObserver(function(entries){
+    var best=null,bestRatio=-1;
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio>bestRatio){best=e.target;bestRatio=e.intersectionRatio;}
+    });
+    if(best){
+      var id='#'+best.id;
+      tabs.forEach(function(t){t.classList.toggle('active', '#'+t.dataset.target===id);});
+    }
+  },{rootMargin:'-40% 0px -45% 0px',threshold:[0,0.25,0.5,0.75,1]});
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(e){
+      e.preventDefault();
+      var sec=document.querySelector('#'+t.dataset.target);
+      if(sec){sec.scrollIntoView({behavior:'smooth',block:'start'});}
+    });
+    t.addEventListener('keydown', function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();t.click();}
+    });
+  });
+  sections.forEach(function(s){spy.observe(s);});
+
+  // 内容块默认已可见（CSS .rise opacity:1），不再用 IntersectionObserver 控制显隐，避免滚动时出现空白断层。
+</script>
+</body>
+</html>
